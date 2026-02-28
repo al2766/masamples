@@ -11,6 +11,9 @@ import { ProductDetail } from './pages/ProductDetail';
 import { Inspired } from './pages/Inspired';
 import { NewArrivals } from './pages/NewArrivals';
 import { OrderSuccess } from './pages/OrderSuccess';
+import { Login } from './pages/Login';
+import { SignUp } from './pages/SignUp';
+import { Account } from './pages/Account';
 import { Layout } from './components/Layout';
 
 export const router = createBrowserRouter([
@@ -30,6 +33,9 @@ export const router = createBrowserRouter([
       { path: 'order-success', Component: OrderSuccess },
       { path: 'brand/:brand', Component: Brand },
       { path: 'about', Component: About },
+      { path: 'login', Component: Login },
+      { path: 'signup', Component: SignUp },
+      { path: 'account', Component: Account },
     ],
   },
 ]);

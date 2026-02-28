@@ -7,3 +7,4 @@ dist/
 .env.*
 stripe-keys.md
 vercel-token
+firebaseConfig.js

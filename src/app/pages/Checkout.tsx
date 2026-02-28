@@ -1,14 +1,18 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
+import { db } from '../../lib/firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Separator } from '../components/ui/separator';
 import { toast } from 'sonner';
+import { CheckCircle2 } from 'lucide-react';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
@@ -19,37 +23,86 @@ function CheckoutForm({
   clearCart,
 }: {
   total: number;
-  cart: { id: string; name: string; price: number; quantity: number }[];
+  cart: { id: string; name: string; brand?: string; size?: string; price: number; quantity: number }[];
   clearCart: () => void;
 }) {
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const [loading, setLoading] = useState(false);
 
   const shipping = 2.99;
   const subtotal = total - shipping;
 
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: user?.email || '',
+    address: '',
+    city: '',
+    postcode: '',
+  });
+
+  // Pre-fill email if user logs in while on this page
+  useEffect(() => {
+    if (user?.email) {
+      setFormData((f) => ({ ...f, email: user.email! }));
+    }
+  }, [user]);
+
+  const handleField = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) =>
+    setFormData((f) => ({ ...f, [field]: e.target.value }));
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!stripe || !elements) return;
-
     setLoading(true);
 
     const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
-      confirmParams: {
-        return_url: `${window.location.origin}/order-success`,
-      },
+      confirmParams: { return_url: `${window.location.origin}/order-success` },
       redirect: 'if_required',
     });
 
     if (error) {
       toast.error(error.message ?? 'Payment failed. Please try again.');
       setLoading(false);
-    } else if (paymentIntent?.status === 'succeeded') {
+      return;
+    }
+
+    if (paymentIntent?.status === 'succeeded') {
+      const orderData = {
+        userId: user?.uid || null,
+        email: formData.email,
+        shippingAddress: {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          address: formData.address,
+          city: formData.city,
+          postcode: formData.postcode,
+        },
+        items: cart.map(({ id, name, brand, size, price, quantity }) => ({
+          id, name, brand: brand ?? '', size: size ?? '', price, quantity,
+        })),
+        subtotal,
+        shippingCost: shipping,
+        total,
+        paymentIntentId: paymentIntent.id,
+        createdAt: serverTimestamp(),
+        status: 'confirmed',
+      };
+
+      let orderId = '';
+      try {
+        const docRef = await addDoc(collection(db, 'orders'), orderData);
+        orderId = docRef.id;
+      } catch (err) {
+        console.error('Failed to save order to Firestore:', err);
+      }
+
       clearCart();
-      navigate('/order-success');
+      navigate('/order-success', { state: { order: { ...orderData, id: orderId, createdAt: null } } });
     }
   };
 
@@ -58,6 +111,41 @@ function CheckoutForm({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column */}
         <div className="lg:col-span-2 space-y-6">
+          {/* Auth Banner */}
+          {user ? (
+            <div className="p-4 bg-green-50 border border-green-200 rounded-lg flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-green-600 flex-shrink-0" />
+                <div>
+                  <p className="text-sm font-medium text-green-800">
+                    Signed in as {user.displayName || user.email}
+                  </p>
+                  <p className="text-xs text-green-600">Your order will be saved to your account</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => logout()}
+                className="text-xs text-gray-400 hover:underline ml-4"
+              >
+                Sign out
+              </button>
+            </div>
+          ) : (
+            <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+              <p className="text-sm font-medium mb-3">Have an account? Sign in to track your orders.</p>
+              <div className="flex flex-wrap gap-2 items-center">
+                <Link to="/login" state={{ from: '/checkout' }}>
+                  <Button type="button" variant="outline" size="sm">Sign In</Button>
+                </Link>
+                <Link to="/signup" state={{ from: '/checkout' }}>
+                  <Button type="button" variant="outline" size="sm">Create Account</Button>
+                </Link>
+                <span className="text-xs text-gray-400">or continue as guest below</span>
+              </div>
+            </div>
+          )}
+
           {/* Shipping */}
           <Card>
             <CardHeader>
@@ -67,29 +155,29 @@ function CheckoutForm({
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="firstName">First Name</Label>
-                  <Input id="firstName" required />
+                  <Input id="firstName" value={formData.firstName} onChange={handleField('firstName')} required />
                 </div>
                 <div>
                   <Label htmlFor="lastName">Last Name</Label>
-                  <Input id="lastName" required />
+                  <Input id="lastName" value={formData.lastName} onChange={handleField('lastName')} required />
                 </div>
               </div>
               <div>
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" required />
+                <Input id="email" type="email" value={formData.email} onChange={handleField('email')} required />
               </div>
               <div>
                 <Label htmlFor="address">Address</Label>
-                <Input id="address" required />
+                <Input id="address" value={formData.address} onChange={handleField('address')} required />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="city">City</Label>
-                  <Input id="city" required />
+                  <Input id="city" value={formData.city} onChange={handleField('city')} required />
                 </div>
                 <div>
                   <Label htmlFor="postcode">Postcode</Label>
-                  <Input id="postcode" required />
+                  <Input id="postcode" value={formData.postcode} onChange={handleField('postcode')} required />
                 </div>
               </div>
             </CardContent>
@@ -117,7 +205,7 @@ function CheckoutForm({
                 {cart.map((item) => (
                   <div key={item.id} className="flex justify-between text-sm">
                     <span className="text-gray-600">
-                      {item.name} x {item.quantity}
+                      {item.name} × {item.quantity}
                     </span>
                     <span>£{(item.price * item.quantity).toFixed(2)}</span>
                   </div>
@@ -142,13 +230,16 @@ function CheckoutForm({
                 </div>
               </div>
 
-              <Button type="submit" className="w-full" size="lg" disabled={loading || !stripe}>
+              <Button
+                type="submit"
+                className="w-full bg-amber-400 hover:bg-amber-500 text-black font-semibold"
+                size="lg"
+                disabled={loading || !stripe}
+              >
                 {loading ? 'Processing...' : `Pay £${total.toFixed(2)}`}
               </Button>
 
-              <p className="text-xs text-gray-500 text-center mt-4">
-                Secured by Stripe
-              </p>
+              <p className="text-xs text-gray-500 text-center mt-4">Secured by Stripe</p>
             </CardContent>
           </Card>
         </div>
@@ -169,11 +260,10 @@ export function Checkout() {
 
   useEffect(() => {
     if (cart.length === 0) return;
-
     fetch('/api/create-payment-intent', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ amount: Math.round(total * 100) }), // pence
+      body: JSON.stringify({ amount: Math.round(total * 100) }),
     })
       .then((res) => res.json())
       .then((data) => {

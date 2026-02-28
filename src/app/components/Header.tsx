@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Link } from 'react-router';
-import { Menu, ShoppingCart, ChevronDown, ChevronUp } from 'lucide-react';
+import { Link, useNavigate } from 'react-router';
+import { Menu, ShoppingCart, ChevronDown, ChevronUp, User } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from './ui/sheet';
 import { brands } from '../../data/products';
@@ -9,9 +10,17 @@ import { ImageWithFallback } from './figma/ImageWithFallback';
 
 export function Header() {
   const { getCartCount } = useCart();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [brandsExpanded, setBrandsExpanded] = useState(false);
   const cartCount = getCartCount();
+
+  const handleLogout = async () => {
+    await logout();
+    setMobileMenuOpen(false);
+    navigate('/');
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white">
@@ -36,6 +45,16 @@ export function Header() {
             <Link to="/new-arrivals" className="hover:text-amber-600 transition-colors">
               New Arrivals
             </Link>
+            {user ? (
+              <Link to="/account" className="hover:text-amber-600 transition-colors flex items-center gap-1">
+                <User className="h-4 w-4" />
+                Account
+              </Link>
+            ) : (
+              <Link to="/login" className="hover:text-amber-600 transition-colors">
+                Sign In
+              </Link>
+            )}
           </nav>
 
           {/* Cart & Mobile Menu */}
@@ -113,11 +132,48 @@ export function Header() {
 
                     <Link
                       to="/new-arrivals"
-                      className="block py-3 px-4 text-gray-200 hover:text-amber-400 transition-colors border border-gray-700 rounded"
+                      className="block py-3 px-4 mb-3 text-gray-200 hover:text-amber-400 transition-colors border border-gray-700 rounded"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       New Arrivals
                     </Link>
+
+                    {/* Auth Links */}
+                    {user ? (
+                      <>
+                        <Link
+                          to="/account"
+                          className="block py-3 px-4 mb-3 text-gray-200 hover:text-amber-400 transition-colors border border-gray-700 rounded flex items-center gap-2"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          <User className="h-4 w-4" />
+                          My Account
+                        </Link>
+                        <button
+                          onClick={handleLogout}
+                          className="w-full text-left py-3 px-4 text-gray-400 hover:text-white transition-colors border border-gray-800 rounded text-sm"
+                        >
+                          Sign Out
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <Link
+                          to="/login"
+                          className="block py-3 px-4 mb-3 text-gray-200 hover:text-amber-400 transition-colors border border-gray-700 rounded"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          Sign In
+                        </Link>
+                        <Link
+                          to="/signup"
+                          className="block py-3 px-4 text-gray-200 hover:text-amber-400 transition-colors border border-gray-700 rounded"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          Create Account
+                        </Link>
+                      </>
+                    )}
                   </div>
                 </div>
               </SheetContent>
