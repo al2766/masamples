@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams, Link } from 'react-router';
+import { useParams, Link, useNavigate } from 'react-router';
 import { products } from '../../data/products';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -11,6 +11,7 @@ import { ArrowLeft } from 'lucide-react';
 
 export function ProductDetail() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const product = products.find((p) => p.id === id);
   const { addToCart } = useCart();
   const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0]?.size || product?.size || '5ml');
@@ -47,7 +48,12 @@ export function ProductDetail() {
     };
     
     addToCart(productToAdd);
-    toast.success(`${product.name} (${selectedSize}) added to cart!`);
+    toast.success(`${product.name} (${selectedSize}) added to cart!`, {
+      action: {
+        label: 'View Basket',
+        onClick: () => navigate('/cart'),
+      },
+    });
   };
 
   return (

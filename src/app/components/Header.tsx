@@ -63,7 +63,7 @@ export function Header() {
                 <SheetDescription className="sr-only">
                   Browse our fragrance categories and brands
                 </SheetDescription>
-                <div className="flex flex-col space-y-6 mt-8 px-2">
+                <div className="flex flex-col space-y-6 mt-16 px-2">
                   {/* Main Menu Items */}
                   <div>
                     <Link
