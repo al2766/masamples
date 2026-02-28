@@ -59,10 +59,13 @@ export function Account() {
         setOrders(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as Order)));
       } catch (err: unknown) {
         const msg = (err as Error).message || '';
-        if (msg.includes('index')) {
+        console.error('Firestore error:', msg);
+        if (msg.includes('index') || msg.includes('Index')) {
           setOrdersError('index-needed');
+        } else if (msg.includes('permission') || msg.includes('PERMISSION_DENIED') || msg.includes('insufficient')) {
+          setOrdersError('permissions');
         } else {
-          setOrdersError('Failed to load orders.');
+          setOrdersError(msg || 'Failed to load orders.');
         }
       } finally {
         setOrdersLoading(false);
@@ -115,8 +118,17 @@ export function Account() {
           </Card>
         )}
 
-        {!ordersLoading && ordersError && ordersError !== 'index-needed' && (
-          <p className="text-red-500">{ordersError}</p>
+        {!ordersLoading && ordersError === 'permissions' && (
+          <Card>
+            <CardContent className="py-8 text-center">
+              <p className="text-red-500 font-medium mb-2">Firestore permissions are blocking order reads.</p>
+              <p className="text-sm text-gray-500">Update your Firestore Security Rules — see the instructions shared with you.</p>
+            </CardContent>
+          </Card>
+        )}
+
+        {!ordersLoading && ordersError && ordersError !== 'index-needed' && ordersError !== 'permissions' && (
+          <p className="text-red-500 text-sm">{ordersError}</p>
         )}
 
         {!ordersLoading && !ordersError && orders.length === 0 && (
