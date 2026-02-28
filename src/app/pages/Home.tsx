@@ -36,7 +36,7 @@ export function Home() {
                 </Button>
               </Link>
               <Link to="/new-arrivals">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black">
+                <Button size="lg" variant="outline" className="border-white text-white bg-transparent hover:bg-white hover:text-black">
                   Vote for New Arrivals
                 </Button>
               </Link>
