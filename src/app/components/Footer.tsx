@@ -12,7 +12,7 @@ export function Footer() {
               <div className="w-8 h-8 bg-white rounded flex items-center justify-center">
                 <span className="text-black font-bold">MA</span>
               </div>
-              <h3 className="font-semibold">MA Samples</h3>
+              <h3 className="font-semibold">Samples</h3>
             </div>
             <p className="text-gray-400 text-sm">
               Your premier destination for authentic luxury fragrance samples.
