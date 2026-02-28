@@ -10,6 +10,7 @@ import { About } from './pages/About';
 import { ProductDetail } from './pages/ProductDetail';
 import { Inspired } from './pages/Inspired';
 import { NewArrivals } from './pages/NewArrivals';
+import { OrderSuccess } from './pages/OrderSuccess';
 import { Layout } from './components/Layout';
 
 export const router = createBrowserRouter([
@@ -26,6 +27,7 @@ export const router = createBrowserRouter([
       { path: 'new-arrivals', Component: NewArrivals },
       { path: 'cart', Component: Cart },
       { path: 'checkout', Component: Checkout },
+      { path: 'order-success', Component: OrderSuccess },
       { path: 'brand/:brand', Component: Brand },
       { path: 'about', Component: About },
     ],
