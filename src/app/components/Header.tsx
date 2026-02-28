@@ -22,7 +22,7 @@ export function Header() {
             <div className="w-10 h-10 bg-black rounded flex items-center justify-center">
               <span className="text-white font-bold text-xl">MA</span>
             </div>
-            <div className="text-xl md:text-2xl font-semibold">MA Samples</div>
+            <div className="text-xl md:text-2xl font-semibold">Samples</div>
           </Link>
 
           {/* Desktop Navigation */}
