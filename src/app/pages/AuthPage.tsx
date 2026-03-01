@@ -200,14 +200,14 @@ export function AuthPage() {
         </div>
 
         {/* Animated content — only the form content slides */}
-        <CardContent className="pt-4 pb-8">
+        <CardContent className="px-8 pt-4 pb-10">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={location.pathname}
-              initial={{ opacity: 0, x: 30 }}
+              initial={{ opacity: 0, x: 14 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -30 }}
-              transition={{ duration: 0.22, ease: 'easeInOut' }}
+              exit={{ opacity: 0, x: -14 }}
+              transition={{ duration: 0.18, ease: 'easeOut' }}
             >
               {isLogin
                 ? <LoginForm from={from} />
