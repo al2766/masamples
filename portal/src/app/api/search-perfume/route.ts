@@ -1,56 +1,83 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// Fragrantica is protected by Cloudflare's JS challenge for direct server fetches.
-// We route through allorigins.win which proxies the request from servers that
-// Cloudflare treats as browser traffic, bypassing the challenge.
-async function scrapeUrl(url: string): Promise<string | null> {
-  try {
-    const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
-    const res = await fetch(proxy, { signal: AbortSignal.timeout(12000) });
-    if (!res.ok) return null;
-    const html = await res.text();
-    // Detect if we got a Cloudflare challenge page instead of real content
-    if (html.includes('Just a moment') || html.includes('cf-browser-verification') || html.length < 2000) {
-      return null;
-    }
-    return html;
-  } catch {
-    return null;
-  }
+// Fragrantica's Algolia search credentials — these are public (embedded in
+// their frontend JS and visible in network requests). The API key includes
+// a validUntil restriction; when it stops working, open fragrantica.com,
+// inspect the network tab, find the POST to algolia.net and copy the new
+// x-algolia-api-key value from the request URL.
+const ALGOLIA_APP_ID = 'FGVI612DFZ';
+const ALGOLIA_API_KEY =
+  'NjdkNmM0ZTBjNzJjNzZjZGQ2MTczOGI1NGRlMDMyODgxNjQ3OTQxZGRhYzYwZDhkMzllNDJiY2M3OTQ1MDYzNHZhbGlkVW50aWw9MTc3NDEyNDQyMw==';
+
+function toCategory(spol: string): 'mens' | 'womens' | 'unisex' {
+  if (spol === 'male') return 'mens';
+  if (spol === 'female') return 'womens';
+  return 'unisex';
 }
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const q = searchParams.get('q')?.trim();
-
   if (!q || q.length < 2) return NextResponse.json([]);
 
-  const html = await scrapeUrl(
-    `https://www.fragrantica.com/search/?query=${encodeURIComponent(q)}`
-  );
+  // Build the Algolia params string (same format Fragrantica's frontend uses)
+  const algoliaParams = new URLSearchParams({
+    query: q,
+    hitsPerPage: '12',
+    page: '0',
+    attributesToRetrieve: JSON.stringify([
+      'naslov',       // perfume name
+      'dizajner',     // brand
+      'url.EN',       // fragrantica page URL
+      'thumbnail',    // image
+      'spol',         // gender: male / female / unisex
+      'godina',       // year
+    ]),
+  }).toString();
 
-  if (!html) return NextResponse.json([]);
+  try {
+    const endpoint = `https://${ALGOLIA_APP_ID.toLowerCase()}-dsn.algolia.net/1/indexes/*/queries` +
+      `?x-algolia-application-id=${ALGOLIA_APP_ID}` +
+      `&x-algolia-api-key=${encodeURIComponent(ALGOLIA_API_KEY)}`;
 
-  const results: { id: string; name: string; brand: string; image: string; url: string }[] = [];
-  const seen = new Set<string>();
-
-  // Fragrantica perfume URLs: /perfume/{BrandSlug}/{NameSlug}-{id}.html
-  // The numeric id maps directly to the thumbnail on fimgs.net
-  const linkRe = /href="(\/perfume\/([^/]+)\/([^"]+?)-(\d+)\.html)"/g;
-  let m;
-  while ((m = linkRe.exec(html)) !== null) {
-    if (results.length >= 8) break;
-    const [, path, brandSlug, nameSlug, id] = m;
-    if (seen.has(id)) continue;
-    seen.add(id);
-    results.push({
-      id,
-      name: nameSlug.replace(/-/g, ' '),
-      brand: brandSlug.replace(/-/g, ' '),
-      image: `https://fimgs.net/mdimg/perfume/375x500.${id}.jpg`,
-      url: path,
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        requests: [{ indexName: 'fragrantica_perfumes', params: algoliaParams }],
+      }),
+      signal: AbortSignal.timeout(8000),
     });
-  }
 
-  return NextResponse.json(results);
+    if (!res.ok) return NextResponse.json([]);
+
+    const data = await res.json();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const hits: any[] = data?.results?.[0]?.hits ?? [];
+
+    return NextResponse.json(
+      hits.map((hit) => {
+        // url field comes back as { EN: ["https://..."] }
+        const urlArr: string[] | undefined =
+          hit?.url?.EN ?? hit?.['url.EN'];
+        let path: string | undefined;
+        try {
+          path = urlArr?.[0] ? new URL(urlArr[0]).pathname : undefined;
+        } catch {
+          path = undefined;
+        }
+
+        return {
+          id:       String(hit.objectID ?? ''),
+          name:     String(hit.naslov   ?? ''),
+          brand:    String(hit.dizajner ?? ''),
+          image:    String(hit.thumbnail ?? ''),
+          url:      path,
+          category: toCategory(String(hit.spol ?? '')),
+        };
+      })
+    );
+  } catch {
+    return NextResponse.json([]);
+  }
 }
