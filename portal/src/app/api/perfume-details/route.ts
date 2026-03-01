@@ -32,6 +32,21 @@ function extractIngredients(chunk: string): string[] {
   return out;
 }
 
+// Extract accord names from <span class="truncate">word</span> inside the accords section
+function extractAccords(html: string): string[] {
+  // Find the main accords section — it contains a flex-col div with the bars
+  const accordM = html.match(/main\s+accords([\s\S]*?)(?:Search by accords|<\/section>|accordBox)/i);
+  const block = accordM?.[1] ?? '';
+  const out: string[] = [];
+  const re = /<span\s+class="truncate">([^<]+)<\/span>/g;
+  let m;
+  while ((m = re.exec(block)) !== null) {
+    const v = m[1].trim();
+    if (v) out.push(v);
+  }
+  return out;
+}
+
 interface PerfumeDetails {
   name?: string;
   brand?: string;
@@ -55,8 +70,6 @@ function parseDetails(html: string): PerfumeDetails {
         d.brand = typeof obj.brand === 'string'
           ? obj.brand.trim()
           : obj.brand?.name?.trim();
-        const raw = obj.description ?? '';
-        d.description = stripTags(raw).substring(0, 600) || undefined;
         break;
       }
     } catch { /* malformed JSON-LD */ }
@@ -75,10 +88,24 @@ function parseDetails(html: string): PerfumeDetails {
     }
   }
 
-  // ── Main product image ────────────────────────────────────────────────────
-  // Fragrantica wraps the main image in a div#col2 or uses og:image
-  const ogImg = html.match(/<meta[^>]+property="og:image"[^>]+content="([^"]+)"/i);
-  if (ogImg) d.image = ogImg[1];
+  // ── Description from og:description (concise, pre-formatted) ─────────────
+  const ogDesc = html.match(/<meta[^>]+property="og:description"[^>]+content="([^"]+)"/i)
+    ?? html.match(/<meta[^>]+content="([^"]+)"[^>]+property="og:description"/i);
+  if (ogDesc) d.description = ogDesc[1].trim();
+
+  // ── Main product image: prefer itemprop="image", fall back to og:image ────
+  const itemImg = html.match(/<img[^>]+itemprop="image"[^>]+src="([^"]+)"/i)
+    ?? html.match(/<img[^>]+src="([^"]+)"[^>]+itemprop="image"/i);
+  if (itemImg) {
+    d.image = itemImg[1];
+  } else {
+    const ogImg = html.match(/<meta[^>]+property="og:image"[^>]+content="([^"]+)"/i);
+    if (ogImg) d.image = ogImg[1];
+  }
+
+  // ── Main accords (scent profiles) ─────────────────────────────────────────
+  const accords = extractAccords(html);
+  if (accords.length) d.scentProfiles = accords;
 
   // ── Notes ─────────────────────────────────────────────────────────────────
   // Fragrantica renders notes in a pyramid section. We find the notes box

@@ -239,6 +239,7 @@ export default function ProductsPage() {
             ...f,
             ...(d.image ? { image: d.image } : {}),
             ...(d.description ? { description: d.description } : {}),
+            ...(d.scentProfiles?.length ? { scentProfiles: d.scentProfiles } : {}),
           }));
           if (d.notes?.top?.length)    setTopNotes(d.notes.top.join(', '));
           if (d.notes?.middle?.length) setMiddleNotes(d.notes.middle.join(', '));
