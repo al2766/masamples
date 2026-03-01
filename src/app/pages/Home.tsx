@@ -5,6 +5,7 @@ import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { Sparkles, Package, ShieldCheck } from 'lucide-react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
+import { motion } from 'motion/react';
 
 export function Home() {
   const { products } = useProducts();
@@ -24,13 +25,28 @@ export function Home() {
         </div>
         <div className="relative container mx-auto px-4 py-24 md:py-32">
           <div className="max-w-2xl">
-            <h1 className="text-4xl md:text-6xl mb-6">
+            <motion.h1
+              className="text-4xl md:text-6xl mb-6"
+              initial={{ opacity: 0, y: 32 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: 'easeOut', delay: 0.1 }}
+            >
               Discover Your Signature Scent
-            </h1>
-            <p className="text-xl md:text-2xl mb-8 text-gray-300">
+            </motion.h1>
+            <motion.p
+              className="text-xl md:text-2xl mb-8 text-gray-300"
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: 'easeOut', delay: 0.25 }}
+            >
               Premium fragrance samples from the world's most coveted brands. Try before you buy.
-            </p>
-            <div className="flex flex-wrap gap-4">
+            </motion.p>
+            <motion.div
+              className="flex flex-wrap gap-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: 'easeOut', delay: 0.4 }}
+            >
               <Link to="/shop">
                 <Button size="lg" variant="default" className="bg-amber-400 text-black hover:bg-amber-500 font-semibold">
                   Shop Now
@@ -41,7 +57,7 @@ export function Home() {
                   Vote for New Arrivals
                 </Button>
               </Link>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { scentProfiles } from '../../data/products';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface ScentFilterProps {
   selectedProfiles: string[];
@@ -73,41 +74,52 @@ export function ScentFilter({
                   </button>
 
                   {/* Nested Notes */}
-                  {isExpanded && (
-                    <div className="bg-gray-50 p-3 border-t">
-                      <div className="flex flex-wrap gap-2">
-                        {/* Select All Profile Button */}
-                        <button
-                          onClick={() => onProfileToggle(key)}
-                          className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                            isSelected
-                              ? 'bg-amber-500 text-white'
-                              : 'bg-white border hover:border-amber-500'
-                          }`}
-                        >
-                          All {profile.name}
-                        </button>
-
-                        {/* Individual Notes */}
-                        {profile.notes.map((note) => {
-                          const noteSelected = selectedNotes.includes(note);
-                          return (
+                  <AnimatePresence initial={false}>
+                    {isExpanded && (
+                      <motion.div
+                        key="notes"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.2, ease: 'easeInOut' }}
+                        style={{ overflow: 'hidden' }}
+                      >
+                        <div className="bg-gray-50 p-3 border-t">
+                          <div className="flex flex-wrap gap-2">
+                            {/* Select All Profile Button */}
                             <button
-                              key={note}
-                              onClick={() => onNoteToggle(note)}
-                              className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
-                                noteSelected
-                                  ? 'bg-black text-white'
-                                  : 'bg-white border hover:border-black'
+                              onClick={() => onProfileToggle(key)}
+                              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                                isSelected
+                                  ? 'bg-amber-500 text-white'
+                                  : 'bg-white border hover:border-amber-500'
                               }`}
                             >
-                              {note}
+                              All {profile.name}
                             </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
+
+                            {/* Individual Notes */}
+                            {profile.notes.map((note) => {
+                              const noteSelected = selectedNotes.includes(note);
+                              return (
+                                <button
+                                  key={note}
+                                  onClick={() => onNoteToggle(note)}
+                                  className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
+                                    noteSelected
+                                      ? 'bg-black text-white'
+                                      : 'bg-white border hover:border-black'
+                                  }`}
+                                >
+                                  {note}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               );
             })}
