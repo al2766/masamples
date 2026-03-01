@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import {
   collection,
   getDocs,
@@ -11,7 +11,8 @@ import {
   setDoc,
   serverTimestamp,
 } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { db, storage } from '@/lib/firebase';
 import { Product, ProductSize } from '@/lib/types';
 import Image from 'next/image';
 import {
@@ -23,9 +24,16 @@ import {
   CheckCircle,
   Package,
   Loader2,
-  Wand2,
   Database,
+  ImageIcon,
 } from 'lucide-react';
+
+interface PerfumeResult {
+  id: string;
+  name: string;
+  brand: string;
+  image: string;
+}
 
 // Default product catalogue for one-click seeding
 const DEFAULT_PRODUCTS = [
@@ -78,10 +86,7 @@ const EMPTY_PRODUCT: Omit<Product, 'id'> = {
 };
 
 function notesFromString(s: string): string[] {
-  return s
-    .split(',')
-    .map((n) => n.trim())
-    .filter(Boolean);
+  return s.split(',').map((n) => n.trim()).filter(Boolean);
 }
 
 function notesToString(arr: string[] = []): string {
@@ -98,21 +103,67 @@ export default function ProductsPage() {
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState<string | null>(null);
   const [seeding, setSeeding] = useState(false);
-  const [apiSearch, setApiSearch] = useState('');
-  const [apiLoading, setApiLoading] = useState(false);
-  const [apiError, setApiError] = useState('');
   const [topNotes, setTopNotes] = useState('');
   const [middleNotes, setMiddleNotes] = useState('');
   const [baseNotes, setBaseNotes] = useState('');
 
+  // Image upload
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>('');
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const imageInputRef = useRef<HTMLInputElement>(null);
+
+  // Fragrantica auto-search
+  const [fragranceQuery, setFragranceQuery] = useState('');
+  const [suggestions, setSuggestions] = useState<PerfumeResult[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [searching, setSearching] = useState(false);
+
+  // Debounced Fragrantica search
+  useEffect(() => {
+    const q = fragranceQuery.trim();
+    if (q.length < 2) {
+      setSuggestions([]);
+      setShowSuggestions(false);
+      return;
+    }
+    setSearching(true);
+    const timeoutId = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/search-perfume?q=${encodeURIComponent(q)}`);
+        if (res.ok) {
+          const data = await res.json();
+          setSuggestions(Array.isArray(data) ? data : []);
+          setShowSuggestions(true);
+        }
+      } catch {
+        // silently fail — user can fill manually
+      } finally {
+        setSearching(false);
+      }
+    }, 400);
+    return () => clearTimeout(timeoutId);
+  }, [fragranceQuery]);
+
   const load = useCallback(async () => {
     setLoading(true);
-    const snap = await getDocs(collection(db, 'products'));
-    setProducts(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Product)));
-    setLoading(false);
+    try {
+      const snap = await getDocs(collection(db, 'products'));
+      setProducts(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Product)));
+    } catch (err) {
+      console.error('Failed to load products:', err);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => { load(); }, [load]);
+
+  const clearImageState = () => {
+    if (imagePreview) URL.revokeObjectURL(imagePreview);
+    setImageFile(null);
+    setImagePreview('');
+  };
 
   const openAdd = () => {
     setEditing(null);
@@ -120,8 +171,10 @@ export default function ProductsPage() {
     setTopNotes('');
     setMiddleNotes('');
     setBaseNotes('');
-    setApiSearch('');
-    setApiError('');
+    setFragranceQuery('');
+    setSuggestions([]);
+    setShowSuggestions(false);
+    clearImageState();
     setModalOpen(true);
   };
 
@@ -131,15 +184,52 @@ export default function ProductsPage() {
     setTopNotes(notesToString(p.notes?.top));
     setMiddleNotes(notesToString(p.notes?.middle));
     setBaseNotes(notesToString(p.notes?.base));
-    setApiSearch('');
-    setApiError('');
+    setFragranceQuery('');
+    setSuggestions([]);
+    setShowSuggestions(false);
+    clearImageState();
     setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    clearImageState();
+    setModalOpen(false);
+  };
+
+  const selectSuggestion = (result: PerfumeResult) => {
+    setForm((f) => ({
+      ...f,
+      name: result.name,
+      brand: result.brand,
+      image: result.image,
+    }));
+    clearImageState();
+    setFragranceQuery(`${result.name} — ${result.brand}`);
+    setShowSuggestions(false);
   };
 
   const handleSave = async () => {
     setSaving(true);
+    let imageUrl = form.image;
+
+    if (imageFile) {
+      setUploadingImage(true);
+      try {
+        const path = `products/${Date.now()}-${imageFile.name.replace(/\s+/g, '_')}`;
+        const sRef = storageRef(storage, path);
+        await uploadBytes(sRef, imageFile);
+        imageUrl = await getDownloadURL(sRef);
+      } catch (err) {
+        console.error('Image upload failed:', err);
+        // proceed with existing URL or empty
+      } finally {
+        setUploadingImage(false);
+      }
+    }
+
     const data = {
       ...form,
+      image: imageUrl,
       price: form.sizes?.[0]?.price || form.price,
       notes: {
         top: notesFromString(topNotes),
@@ -153,7 +243,7 @@ export default function ProductsPage() {
       } else {
         await addDoc(collection(db, 'products'), { ...data, createdAt: serverTimestamp() });
       }
-      setModalOpen(false);
+      closeModal();
       await load();
     } finally {
       setSaving(false);
@@ -181,41 +271,6 @@ export default function ProductsPage() {
     await deleteDoc(doc(db, 'products', id));
     setProducts((prev) => prev.filter((p) => p.id !== id));
     setDeleting(null);
-  };
-
-  const handleApiSearch = async () => {
-    if (!apiSearch.trim()) return;
-    setApiLoading(true);
-    setApiError('');
-    try {
-      const res = await fetch(`/api/search-perfume?q=${encodeURIComponent(apiSearch)}`);
-      if (!res.ok) {
-        const data = await res.json();
-        setApiError(data.error || 'Search failed');
-        return;
-      }
-      const data = await res.json();
-      // Adapt response shape to form — adjust field names to match your API
-      const hit = Array.isArray(data) ? data[0] : data?.results?.[0];
-      if (hit) {
-        setForm((f) => ({
-          ...f,
-          name: hit.name || f.name,
-          brand: hit.brand || hit.house || f.brand,
-          description: hit.description || hit.summary || f.description,
-          image: hit.image || hit.imageUrl || f.image,
-        }));
-        if (hit.notes?.top) setTopNotes(Array.isArray(hit.notes.top) ? hit.notes.top.join(', ') : hit.notes.top);
-        if (hit.notes?.middle) setMiddleNotes(Array.isArray(hit.notes.middle) ? hit.notes.middle.join(', ') : hit.notes.middle);
-        if (hit.notes?.base) setBaseNotes(Array.isArray(hit.notes.base) ? hit.notes.base.join(', ') : hit.notes.base);
-      } else {
-        setApiError('No results found. Fill in manually.');
-      }
-    } catch {
-      setApiError('API not reachable. Fill in manually.');
-    } finally {
-      setApiLoading(false);
-    }
   };
 
   const updateSize = (index: number, field: 'size' | 'price', value: string | number) => {
@@ -256,7 +311,6 @@ export default function ProductsPage() {
             <p className="mt-1 text-sm text-gray-500">{products.length} perfume(s) listed</p>
           </div>
           <div className="flex items-center gap-2">
-            {/* Seed — desktop only */}
             <button
               onClick={handleSeedDefaults}
               disabled={seeding}
@@ -274,7 +328,6 @@ export default function ProductsPage() {
             </button>
           </div>
         </div>
-        {/* Seed — mobile full-width */}
         <button
           onClick={handleSeedDefaults}
           disabled={seeding}
@@ -409,7 +462,7 @@ export default function ProductsPage() {
         </>
       )}
 
-      {/* Modal — full-screen on mobile, centered on desktop */}
+      {/* Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50 md:flex md:items-start md:justify-center md:bg-black/40 md:px-4 md:py-8">
           <div className="min-h-screen md:min-h-0 w-full md:max-w-2xl bg-white md:rounded-2xl shadow-2xl">
@@ -418,39 +471,71 @@ export default function ProductsPage() {
               <h2 className="font-semibold text-gray-900">
                 {editing ? `Edit: ${editing.name}` : 'Add New Perfume'}
               </h2>
-              <button onClick={() => setModalOpen(false)} className="text-gray-400 hover:text-gray-600">
+              <button onClick={closeModal} className="text-gray-400 hover:text-gray-600">
                 <X size={20} />
               </button>
             </div>
 
             <div className="space-y-6 px-6 py-6">
 
-              {/* API Search */}
+              {/* Fragrantica Auto-search */}
               <div className="rounded-xl border border-dashed border-amber-200 bg-amber-50 p-4">
                 <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-amber-700">
-                  <Wand2 size={12} className="mr-1 inline" />
-                  Auto-fill from Fragrance API
+                  Auto-fill from Fragrantica
                 </p>
-                <div className="flex gap-2">
-                  <input
-                    value={apiSearch}
-                    onChange={(e) => setApiSearch(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleApiSearch()}
-                    placeholder="Search e.g. Sauvage Dior…"
-                    className="flex-1 rounded-lg border border-amber-200 bg-white px-3 py-2 text-sm outline-none focus:border-amber-400"
-                  />
-                  <button
-                    onClick={handleApiSearch}
-                    disabled={apiLoading}
-                    className="flex items-center gap-1.5 rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-600 disabled:opacity-60"
-                  >
-                    {apiLoading ? <Loader2 size={14} className="animate-spin" /> : <Search size={14} />}
-                    Fill
-                  </button>
+                <div className="relative">
+                  <div className="flex items-center gap-2 rounded-lg border border-amber-200 bg-white px-3">
+                    {searching
+                      ? <Loader2 size={15} className="shrink-0 animate-spin text-amber-400" />
+                      : <Search size={15} className="shrink-0 text-gray-400" />
+                    }
+                    <input
+                      value={fragranceQuery}
+                      onChange={(e) => setFragranceQuery(e.target.value)}
+                      onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
+                      onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                      placeholder="Type to search e.g. Sauvage Dior…"
+                      className="flex-1 bg-transparent py-2.5 text-sm outline-none placeholder:text-gray-400"
+                    />
+                    {fragranceQuery && (
+                      <button
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => { setFragranceQuery(''); setSuggestions([]); setShowSuggestions(false); }}
+                        className="text-gray-300 hover:text-gray-500"
+                      >
+                        <X size={14} />
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Suggestions dropdown */}
+                  {showSuggestions && suggestions.length > 0 && (
+                    <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-xl border border-gray-100 bg-white shadow-lg">
+                      {suggestions.map((result) => (
+                        <button
+                          key={result.id}
+                          onMouseDown={(e) => e.preventDefault()}
+                          onClick={() => selectSuggestion(result)}
+                          className="flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors hover:bg-amber-50"
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={result.image}
+                            alt={result.name}
+                            className="h-10 w-10 shrink-0 rounded-lg bg-gray-100 object-cover"
+                            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                          />
+                          <div className="min-w-0">
+                            <p className="truncate text-sm font-medium text-gray-900">{result.name}</p>
+                            <p className="truncate text-xs text-gray-500">{result.brand}</p>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                {apiError && <p className="mt-2 text-xs text-amber-700">{apiError}</p>}
                 <p className="mt-2 text-xs text-amber-600">
-                  Requires <code>FRAGRANCE_API_KEY</code> in .env.local — or fill manually below.
+                  Select a result to auto-fill name, brand and image — or fill manually below
                 </p>
               </div>
 
@@ -476,7 +561,7 @@ export default function ProductsPage() {
                       placeholder="e.g. Dior"
                     />
                   </div>
-                  <div>
+                  <div className="col-span-2">
                     <label className="mb-1 block text-sm font-medium text-gray-700">Category</label>
                     <select
                       value={form.category}
@@ -487,15 +572,6 @@ export default function ProductsPage() {
                         <option key={c} value={c} className="capitalize">{c}</option>
                       ))}
                     </select>
-                  </div>
-                  <div>
-                    <label className="mb-1 block text-sm font-medium text-gray-700">Image URL</label>
-                    <input
-                      value={form.image}
-                      onChange={(e) => setForm((f) => ({ ...f, image: e.target.value }))}
-                      className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-amber-400"
-                      placeholder="https://…"
-                    />
                   </div>
                 </div>
                 <div className="mt-3">
@@ -508,6 +584,65 @@ export default function ProductsPage() {
                     placeholder="Describe the fragrance…"
                   />
                 </div>
+              </section>
+
+              {/* Product Image */}
+              <section>
+                <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-gray-400">Product Image</h3>
+
+                {/* Hidden file input */}
+                <input
+                  ref={imageInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    if (imagePreview) URL.revokeObjectURL(imagePreview);
+                    setImageFile(file);
+                    setImagePreview(URL.createObjectURL(file));
+                    setForm((f) => ({ ...f, image: '' }));
+                  }}
+                />
+
+                {/* Upload box */}
+                <div
+                  onClick={() => imageInputRef.current?.click()}
+                  className="flex min-h-44 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 transition-colors hover:border-amber-300 hover:bg-amber-50/30"
+                >
+                  {imagePreview || form.image ? (
+                    <>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={imagePreview || form.image}
+                        alt="Product preview"
+                        className="max-h-48 max-w-full rounded-xl object-contain p-2"
+                      />
+                      <p className="mt-2 text-xs text-gray-400">Click to change image</p>
+                    </>
+                  ) : (
+                    <>
+                      <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-sm">
+                        <ImageIcon size={24} className="text-gray-300" />
+                      </div>
+                      <p className="text-sm font-semibold text-gray-500">Add Image</p>
+                      <p className="mt-1 text-xs text-gray-400">Tap to choose from your device</p>
+                      <p className="mt-0.5 text-xs text-gray-300">PNG · JPG · WebP</p>
+                    </>
+                  )}
+                </div>
+
+                {/* Paste URL fallback */}
+                <input
+                  value={imageFile ? '' : (form.image || '')}
+                  onChange={(e) => {
+                    setForm((f) => ({ ...f, image: e.target.value }));
+                    if (imageFile) clearImageState();
+                  }}
+                  className="mt-2 w-full rounded-lg border border-gray-100 bg-gray-50 px-3 py-1.5 text-xs text-gray-400 outline-none focus:border-gray-200 placeholder:text-gray-300"
+                  placeholder="or paste an image URL…"
+                />
               </section>
 
               {/* Sizes & Pricing */}
@@ -531,10 +666,7 @@ export default function ProductsPage() {
                         onChange={(e) => updateSize(i, 'price', parseFloat(e.target.value) || 0)}
                         className="w-28 rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-amber-400"
                       />
-                      <button
-                        onClick={() => removeSizeRow(i)}
-                        className="text-gray-400 hover:text-red-500"
-                      >
+                      <button onClick={() => removeSizeRow(i)} className="text-gray-400 hover:text-red-500">
                         <X size={16} />
                       </button>
                     </div>
@@ -591,7 +723,7 @@ export default function ProductsPage() {
                 </div>
               </section>
 
-              {/* Notes */}
+              {/* Fragrance Notes */}
               <section>
                 <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-gray-400">Fragrance Notes</h3>
                 <p className="mb-3 text-xs text-gray-400">Separate each note with a comma</p>
@@ -618,18 +750,18 @@ export default function ProductsPage() {
             {/* Footer */}
             <div className="flex items-center justify-end gap-3 border-t border-gray-100 px-6 py-4">
               <button
-                onClick={() => setModalOpen(false)}
+                onClick={closeModal}
                 className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSave}
-                disabled={saving || !form.name || !form.brand}
+                disabled={saving || uploadingImage || !form.name || !form.brand}
                 className="flex items-center gap-2 rounded-lg bg-amber-500 px-5 py-2 text-sm font-semibold text-white hover:bg-amber-600 disabled:opacity-60"
               >
-                {saving && <Loader2 size={14} className="animate-spin" />}
-                {editing ? 'Save changes' : 'Add perfume'}
+                {(saving || uploadingImage) && <Loader2 size={14} className="animate-spin" />}
+                {uploadingImage ? 'Uploading…' : saving ? 'Saving…' : editing ? 'Save changes' : 'Add perfume'}
               </button>
             </div>
           </div>
