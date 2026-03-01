@@ -32,7 +32,7 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-30 flex w-60 flex-col bg-[#030213] text-white">
+    <aside className="hidden md:flex fixed inset-y-0 left-0 z-30 w-60 flex-col bg-[#030213] text-white">
       {/* Brand */}
       <div className="flex items-center gap-2.5 border-b border-white/10 px-5 py-5">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500">

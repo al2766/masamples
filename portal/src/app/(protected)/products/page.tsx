@@ -248,32 +248,45 @@ export default function ProductsPage() {
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Products</h1>
-          <p className="mt-1 text-sm text-gray-500">{products.length} perfume(s) listed</p>
+      {/* Header */}
+      <div className="mb-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Products</h1>
+            <p className="mt-1 text-sm text-gray-500">{products.length} perfume(s) listed</p>
+          </div>
+          <div className="flex items-center gap-2">
+            {/* Seed — desktop only */}
+            <button
+              onClick={handleSeedDefaults}
+              disabled={seeding}
+              className="hidden md:flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 disabled:opacity-60"
+            >
+              {seeding ? <Loader2 size={16} className="animate-spin" /> : <Database size={16} />}
+              Seed Defaults
+            </button>
+            <button
+              onClick={openAdd}
+              className="flex items-center gap-2 rounded-xl bg-amber-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-amber-600"
+            >
+              <Plus size={16} />
+              <span className="hidden sm:inline">Add Perfume</span>
+            </button>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={handleSeedDefaults}
-            disabled={seeding}
-            title="Seed all 20 default products from the existing catalogue"
-            className="flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 disabled:opacity-60"
-          >
-            {seeding ? <Loader2 size={16} className="animate-spin" /> : <Database size={16} />}
-            Seed Defaults
-          </button>
-          <button
-            onClick={openAdd}
-            className="flex items-center gap-2 rounded-xl bg-amber-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-amber-600"
-          >
-            <Plus size={16} /> Add Perfume
-          </button>
-        </div>
+        {/* Seed — mobile full-width */}
+        <button
+          onClick={handleSeedDefaults}
+          disabled={seeding}
+          className="md:hidden mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white py-2.5 text-sm font-semibold text-gray-700 shadow-sm disabled:opacity-60"
+        >
+          {seeding ? <Loader2 size={16} className="animate-spin" /> : <Database size={16} />}
+          Seed Default Products
+        </button>
       </div>
 
       {/* Search */}
-      <div className="mb-5 flex items-center gap-3 rounded-xl bg-white px-4 py-2.5 shadow-sm">
+      <div className="mb-4 flex items-center gap-3 rounded-xl bg-white px-4 py-2.5 shadow-sm">
         <Search size={16} className="text-gray-400" />
         <input
           value={search}
@@ -283,90 +296,123 @@ export default function ProductsPage() {
         />
       </div>
 
-      {/* Table */}
-      <div className="rounded-2xl bg-white shadow-sm">
-        {loading ? (
-          <div className="flex justify-center py-16">
-            <Loader2 size={24} className="animate-spin text-gray-300" />
-          </div>
-        ) : filtered.length === 0 ? (
-          <div className="py-16 text-center text-sm text-gray-400">
-            <Package size={40} className="mx-auto mb-3 text-gray-200" />
+      {loading ? (
+        <div className="flex justify-center py-16">
+          <Loader2 size={24} className="animate-spin text-gray-300" />
+        </div>
+      ) : filtered.length === 0 ? (
+        <div className="rounded-2xl bg-white py-16 text-center shadow-sm">
+          <Package size={40} className="mx-auto mb-3 text-gray-200" />
+          <p className="text-sm text-gray-400">
             {search ? 'No products match your search' : 'No products yet — add your first perfume'}
-          </div>
-        ) : (
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-100 text-left text-xs font-medium uppercase tracking-wide text-gray-400">
-                <th className="px-6 py-3">Product</th>
-                <th className="px-6 py-3">Brand</th>
-                <th className="px-6 py-3">Category</th>
-                <th className="px-6 py-3">From</th>
-                <th className="px-6 py-3">Stock</th>
-                <th className="px-6 py-3" />
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-50">
-              {filtered.map((p) => (
-                <tr key={p.id} className="hover:bg-gray-50/50">
-                  <td className="px-6 py-3.5">
-                    <div className="flex items-center gap-3">
-                      {p.image ? (
-                        <Image src={p.image} alt={p.name} width={40} height={40} className="h-10 w-10 rounded-lg object-cover" unoptimized />
-                      ) : (
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 text-gray-300">
-                          <Package size={18} />
-                        </div>
-                      )}
-                      <span className="font-medium text-gray-900">{p.name}</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-3.5 text-gray-600">{p.brand}</td>
-                  <td className="px-6 py-3.5">
-                    <span className="inline-flex rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium capitalize text-gray-600">
-                      {p.category}
-                    </span>
-                  </td>
-                  <td className="px-6 py-3.5 font-medium text-gray-900">£{p.price?.toFixed(2)}</td>
-                  <td className="px-6 py-3.5">
+          </p>
+        </div>
+      ) : (
+        <>
+          {/* Mobile: card list */}
+          <div className="md:hidden space-y-3">
+            {filtered.map((p) => (
+              <div key={p.id} className="flex items-center gap-3 rounded-2xl bg-white p-4 shadow-sm">
+                {p.image ? (
+                  <Image src={p.image} alt={p.name} width={52} height={52} className="h-13 w-13 rounded-xl object-cover shrink-0" unoptimized />
+                ) : (
+                  <div className="flex h-13 w-13 shrink-0 items-center justify-center rounded-xl bg-gray-100">
+                    <Package size={20} className="text-gray-300" />
+                  </div>
+                )}
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-gray-900 truncate">{p.name}</p>
+                  <p className="text-sm text-gray-500 truncate">{p.brand}</p>
+                  <div className="mt-1.5 flex items-center gap-2 flex-wrap">
+                    <span className="text-xs font-semibold text-gray-900">£{p.price?.toFixed(2)}</span>
                     {p.inStock ? (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700">
-                        <CheckCircle size={11} /> In stock
-                      </span>
+                      <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">In stock</span>
                     ) : (
-                      <span className="inline-flex rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-600">
-                        Sold out
-                      </span>
+                      <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-600">Sold out</span>
                     )}
-                  </td>
-                  <td className="px-6 py-3.5">
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => openEdit(p)}
-                        className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-700"
-                      >
-                        <Pencil size={15} />
-                      </button>
-                      <button
-                        onClick={() => p.id && handleDelete(p.id)}
-                        disabled={deleting === p.id}
-                        className="rounded-lg p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-500"
-                      >
-                        {deleting === p.id ? <Loader2 size={15} className="animate-spin" /> : <Trash2 size={15} />}
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
+                    <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs capitalize text-gray-600">{p.category}</span>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1 shrink-0">
+                  <button onClick={() => openEdit(p)} className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-700">
+                    <Pencil size={15} />
+                  </button>
+                  <button onClick={() => p.id && handleDelete(p.id)} disabled={deleting === p.id} className="rounded-lg p-2 text-gray-400 hover:bg-red-50 hover:text-red-500">
+                    {deleting === p.id ? <Loader2 size={15} className="animate-spin" /> : <Trash2 size={15} />}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
 
-      {/* Modal */}
+          {/* Desktop: table */}
+          <div className="hidden md:block rounded-2xl bg-white shadow-sm">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-100 text-left text-xs font-medium uppercase tracking-wide text-gray-400">
+                  <th className="px-6 py-3">Product</th>
+                  <th className="px-6 py-3">Brand</th>
+                  <th className="px-6 py-3">Category</th>
+                  <th className="px-6 py-3">From</th>
+                  <th className="px-6 py-3">Stock</th>
+                  <th className="px-6 py-3" />
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-50">
+                {filtered.map((p) => (
+                  <tr key={p.id} className="hover:bg-gray-50/50">
+                    <td className="px-6 py-3.5">
+                      <div className="flex items-center gap-3">
+                        {p.image ? (
+                          <Image src={p.image} alt={p.name} width={40} height={40} className="h-10 w-10 rounded-lg object-cover" unoptimized />
+                        ) : (
+                          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 text-gray-300">
+                            <Package size={18} />
+                          </div>
+                        )}
+                        <span className="font-medium text-gray-900">{p.name}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-3.5 text-gray-600">{p.brand}</td>
+                    <td className="px-6 py-3.5">
+                      <span className="inline-flex rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium capitalize text-gray-600">
+                        {p.category}
+                      </span>
+                    </td>
+                    <td className="px-6 py-3.5 font-medium text-gray-900">£{p.price?.toFixed(2)}</td>
+                    <td className="px-6 py-3.5">
+                      {p.inStock ? (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700">
+                          <CheckCircle size={11} /> In stock
+                        </span>
+                      ) : (
+                        <span className="inline-flex rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-600">
+                          Sold out
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-6 py-3.5">
+                      <div className="flex items-center gap-2">
+                        <button onClick={() => openEdit(p)} className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-700">
+                          <Pencil size={15} />
+                        </button>
+                        <button onClick={() => p.id && handleDelete(p.id)} disabled={deleting === p.id} className="rounded-lg p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-500">
+                          {deleting === p.id ? <Loader2 size={15} className="animate-spin" /> : <Trash2 size={15} />}
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
+
+      {/* Modal — full-screen on mobile, centered on desktop */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/40 px-4 py-8">
-          <div className="w-full max-w-2xl rounded-2xl bg-white shadow-2xl">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50 md:flex md:items-start md:justify-center md:bg-black/40 md:px-4 md:py-8">
+          <div className="min-h-screen md:min-h-0 w-full md:max-w-2xl bg-white md:rounded-2xl shadow-2xl">
             {/* Header */}
             <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
               <h2 className="font-semibold text-gray-900">
@@ -377,7 +423,7 @@ export default function ProductsPage() {
               </button>
             </div>
 
-            <div className="space-y-6 overflow-y-auto px-6 py-6" style={{ maxHeight: '75vh' }}>
+            <div className="space-y-6 px-6 py-6">
 
               {/* API Search */}
               <div className="rounded-xl border border-dashed border-amber-200 bg-amber-50 p-4">

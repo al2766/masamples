@@ -104,8 +104,8 @@ export default function OrdersPage() {
 
                 {/* Expanded detail */}
                 {isOpen && (
-                  <div className="border-t border-gray-100 px-6 pb-5 pt-4">
-                    <div className="grid grid-cols-2 gap-6 lg:grid-cols-3">
+                  <div className="border-t border-gray-100 px-4 md:px-6 pb-5 pt-4">
+                    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
                       {/* Shipping */}
                       <div>
                         <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-gray-400">Shipping</p>
@@ -130,7 +130,7 @@ export default function OrdersPage() {
                       </div>
 
                       {/* Items */}
-                      <div className="col-span-2 lg:col-span-1">
+                      <div className="sm:col-span-2 lg:col-span-1">
                         <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-gray-400">Items</p>
                         <ul className="space-y-1.5">
                           {order.items?.map((item, i) => (

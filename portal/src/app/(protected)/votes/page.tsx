@@ -118,8 +118,31 @@ export default function VotesPage() {
               </button>
 
               {expanded === group.productId && (
-                <div className="border-t border-gray-100 px-6 pb-4 pt-3">
-                  <table className="w-full text-sm">
+                <div className="border-t border-gray-100 px-4 md:px-6 pb-4 pt-3">
+                  {/* Mobile: simple list */}
+                  <div className="md:hidden divide-y divide-gray-50">
+                    {group.votes.map((vote) => (
+                      <div key={vote.id} className="flex items-center justify-between py-2.5">
+                        <div>
+                          <p className="text-sm text-gray-700">{vote.email}</p>
+                          <p className="text-xs text-gray-400">
+                            {vote.createdAt?.seconds
+                              ? format(new Date(vote.createdAt.seconds * 1000), 'd MMM yyyy')
+                              : '—'}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => vote.id && handleDelete(vote.id)}
+                          disabled={deleting === vote.id}
+                          className="ml-3 shrink-0 text-gray-300 hover:text-red-400"
+                        >
+                          {deleting === vote.id ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  {/* Desktop: table */}
+                  <table className="hidden md:table w-full text-sm">
                     <thead>
                       <tr className="text-left text-xs font-medium uppercase tracking-wide text-gray-400">
                         <th className="pb-2">Email</th>
@@ -142,11 +165,7 @@ export default function VotesPage() {
                               disabled={deleting === vote.id}
                               className="text-gray-300 hover:text-red-400"
                             >
-                              {deleting === vote.id ? (
-                                <Loader2 size={14} className="animate-spin" />
-                              ) : (
-                                <Trash2 size={14} />
-                              )}
+                              {deleting === vote.id ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
                             </button>
                           </td>
                         </tr>

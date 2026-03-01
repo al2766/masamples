@@ -168,8 +168,8 @@ export default function BannersPage() {
 
       {/* Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-          <div className="w-full max-w-md rounded-2xl bg-white shadow-2xl">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50 md:flex md:items-center md:justify-center md:bg-black/40 md:px-4">
+          <div className="min-h-screen md:min-h-0 w-full md:max-w-md bg-white md:rounded-2xl shadow-2xl">
             <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
               <h2 className="font-semibold text-gray-900">{editing ? 'Edit Banner' : 'New Banner'}</h2>
               <button onClick={() => setModalOpen(false)} className="text-gray-400 hover:text-gray-600">
