@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { products } from '../../data/products';
+import { useProducts } from '../../context/ProductsContext';
 import { ProductCard } from '../components/ProductCard';
 import { ScentFilter } from '../components/ScentFilter';
 import { Button } from '../components/ui/button';
 
 export function Shop() {
+  const { products, loading } = useProducts();
   const [filter, setFilter] = useState<'all' | 'instock' | 'soldout'>('all');
   const [selectedProfiles, setSelectedProfiles] = useState<string[]>([]);
   const [selectedNotes, setSelectedNotes] = useState<string[]>([]);
@@ -100,29 +101,38 @@ export function Shop() {
       <div className="container mx-auto px-4 py-8">
         <div className="mb-6">
           <p className="text-gray-600">
-            Showing {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'}
+            {loading ? 'Loading…' : `Showing ${filteredProducts.length} ${filteredProducts.length === 1 ? 'product' : 'products'}`}
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-          {filteredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-
-        {filteredProducts.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-gray-600 text-lg">No products match your filters</p>
-            <button
-              onClick={() => {
-                handleClearFilters();
-                setFilter('all');
-              }}
-              className="mt-4 text-amber-600 hover:text-amber-700 font-medium"
-            >
-              Clear all filters
-            </button>
+        {loading ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="aspect-square animate-pulse rounded-lg bg-gray-200" />
+            ))}
           </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+              {filteredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+            {filteredProducts.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-gray-600 text-lg">No products match your filters</p>
+                <button
+                  onClick={() => {
+                    handleClearFilters();
+                    setFilter('all');
+                  }}
+                  className="mt-4 text-amber-600 hover:text-amber-700 font-medium"
+                >
+                  Clear all filters
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

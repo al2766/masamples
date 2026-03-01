@@ -1,42 +1,39 @@
 import { useState } from 'react';
-import { products } from '../../data/products';
+import { useProducts } from '../../context/ProductsContext';
 import { ProductCard } from '../components/ProductCard';
 import { ScentFilter } from '../components/ScentFilter';
 
 export function Inspired() {
+  const { products, loading } = useProducts();
   const [selectedProfiles, setSelectedProfiles] = useState<string[]>([]);
   const [selectedNotes, setSelectedNotes] = useState<string[]>([]);
 
-  // Filter products that are inspired by designer fragrances
-  // For now, showing all products - in CMS you'll use isInspiredBy flag
-  let filteredProducts = products;
+  // Show products marked isInspiredBy (falls back to all if none tagged yet)
+  const baseProducts = products.some((p) => p.isInspiredBy)
+    ? products.filter((p) => p.isInspiredBy)
+    : products;
 
-  // Apply scent profile filters
+  let filteredProducts = baseProducts;
+
   if (selectedProfiles.length > 0 || selectedNotes.length > 0) {
     filteredProducts = filteredProducts.filter((product) => {
-      const matchesProfile = selectedProfiles.length === 0 || 
+      const matchesProfile = selectedProfiles.length === 0 ||
         selectedProfiles.some(profile => product.scentProfiles?.includes(profile));
-      
       const matchesNote = selectedNotes.length === 0 ||
         selectedNotes.some(note => product.specificNotes?.includes(note));
-
       return matchesProfile || matchesNote;
     });
   }
 
   const handleProfileToggle = (profile: string) => {
     setSelectedProfiles(prev =>
-      prev.includes(profile)
-        ? prev.filter(p => p !== profile)
-        : [...prev, profile]
+      prev.includes(profile) ? prev.filter(p => p !== profile) : [...prev, profile]
     );
   };
 
   const handleNoteToggle = (note: string) => {
     setSelectedNotes(prev =>
-      prev.includes(note)
-        ? prev.filter(n => n !== note)
-        : [...prev, note]
+      prev.includes(note) ? prev.filter(n => n !== note) : [...prev, note]
     );
   };
 
@@ -70,26 +67,35 @@ export function Inspired() {
       <div className="container mx-auto px-4 py-8">
         <div className="mb-6">
           <p className="text-gray-600">
-            Showing {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'}
+            {loading ? 'Loading…' : `Showing ${filteredProducts.length} ${filteredProducts.length === 1 ? 'product' : 'products'}`}
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-          {filteredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-
-        {filteredProducts.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-gray-600 text-lg">No products match your filters</p>
-            <button
-              onClick={handleClearFilters}
-              className="mt-4 text-amber-600 hover:text-amber-700 font-medium"
-            >
-              Clear all filters
-            </button>
+        {loading ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="aspect-square animate-pulse rounded-lg bg-gray-200" />
+            ))}
           </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+              {filteredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+            {filteredProducts.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-gray-600 text-lg">No products match your filters</p>
+                <button
+                  onClick={handleClearFilters}
+                  className="mt-4 text-amber-600 hover:text-amber-700 font-medium"
+                >
+                  Clear all filters
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

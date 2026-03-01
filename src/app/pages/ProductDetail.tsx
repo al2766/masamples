@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router';
-import { products } from '../../data/products';
+import { useProducts } from '../../context/ProductsContext';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
@@ -12,6 +12,7 @@ import { ArrowLeft } from 'lucide-react';
 export function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { products } = useProducts();
   const product = products.find((p) => p.id === id);
   const { addToCart } = useCart();
   const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0]?.size || product?.size || '5ml');

@@ -1,0 +1,44 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Only the admin email can write to admin-managed collections
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email == 'alselini@mail.com';
+    }
+
+    // Products: anyone can read (shop needs it), only admin can write
+    match /products/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Banners: anyone can read (main site displays them), only admin can write
+    match /banners/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Orders: guests and logged-in users can create, users can read their own,
+    // admin can read and update all
+    match /orders/{id} {
+      allow create: if true;
+      allow read: if isAdmin()
+        || (request.auth != null && resource.data.userId == request.auth.uid);
+      allow update, delete: if isAdmin();
+    }
+
+    // Votes: anyone can read and submit, only admin can delete
+    match /votes/{id} {
+      allow read: if true;
+      allow create: if true;
+      allow delete: if isAdmin();
+    }
+
+    // User cart persistence
+    match /carts/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}

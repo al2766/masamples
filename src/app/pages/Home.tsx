@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import { products } from '../../data/products';
+import { useProducts } from '../../context/ProductsContext';
 import { ProductCard } from '../components/ProductCard';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
@@ -7,8 +7,9 @@ import { Sparkles, Package, ShieldCheck } from 'lucide-react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 
 export function Home() {
+  const { products } = useProducts();
   const bestSellers = products.filter((p) => p.isBestSeller && p.inStock).slice(0, 6);
-  const newArrivals = products.filter((p) => p.inStock).slice(0, 4);
+  const inStockNow = products.filter((p) => p.inStock).slice(0, 4);
 
   return (
     <div className="min-h-screen">
@@ -81,24 +82,26 @@ export function Home() {
       </section>
 
       {/* Best Sellers */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h2 className="text-3xl mb-2">Best Sellers</h2>
-              <p className="text-gray-600">Our most popular fragrance samples</p>
+      {bestSellers.length > 0 && (
+        <section className="py-16">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 className="text-3xl mb-2">Best Sellers</h2>
+                <p className="text-gray-600">Our most popular fragrance samples</p>
+              </div>
+              <Link to="/bestsellers">
+                <Button variant="outline">View All</Button>
+              </Link>
             </div>
-            <Link to="/bestsellers">
-              <Button variant="outline">View All</Button>
-            </Link>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+              {bestSellers.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-            {bestSellers.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Categories */}
       <section className="py-16 bg-gray-50">
@@ -156,20 +159,22 @@ export function Home() {
         </div>
       </section>
 
-      {/* New Arrivals */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="mb-8">
-            <h2 className="text-3xl mb-2">In Stock Now</h2>
-            <p className="text-gray-600">Get them while they last</p>
+      {/* In Stock Now */}
+      {inStockNow.length > 0 && (
+        <section className="py-16">
+          <div className="container mx-auto px-4">
+            <div className="mb-8">
+              <h2 className="text-3xl mb-2">In Stock Now</h2>
+              <p className="text-gray-600">Get them while they last</p>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+              {inStockNow.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-            {newArrivals.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* CTA Section */}
       <section className="py-16 bg-black text-white">
