@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 async function scrapeUrl(url: string): Promise<string | null> {
   try {
     const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
-    const res = await fetch(proxy, { signal: AbortSignal.timeout(15000) });
+    const res = await fetch(proxy, { signal: AbortSignal.timeout(8000) });
     if (!res.ok) return null;
     const html = await res.text();
     if (html.includes('Just a moment') || html.includes('cf-browser-verification') || html.length < 2000) {
@@ -15,15 +15,15 @@ async function scrapeUrl(url: string): Promise<string | null> {
   }
 }
 
-// Strip HTML tags from a string
-function stripTags(s: string) {
+// Strip HTML tags and collapse whitespace
+function stripTags(s: string): string {
   return s.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
-// Extract all itemprop="ingredient" values from an HTML chunk
-function extractIngredients(chunk: string): string[] {
+// Extract note names from <span class="pyramid-note-label ...">name</span>
+function extractPyramidLabels(chunk: string): string[] {
   const out: string[] = [];
-  const re = /itemprop="ingredient"[^>]*>\s*([^<]+?)\s*</g;
+  const re = /<span[^>]+class="pyramid-note-label[^"]*"[^>]*>\s*([^<]+?)\s*<\/span>/g;
   let m;
   while ((m = re.exec(chunk)) !== null) {
     const v = m[1].trim();
@@ -32,15 +32,30 @@ function extractIngredients(chunk: string): string[] {
   return out;
 }
 
-// Parse notes from the og:description text.
-// Example: "Top note is Lavender; middle notes are Iris, Amber; base notes are Musk."
-function parseNotesFromDescription(desc: string): { top: string[]; middle: string[]; base: string[] } | null {
-  const split = (raw: string) =>
-    raw.split(/,|;| and /).map((s) => s.trim()).filter(Boolean);
+// Primary: extract notes from <pyramid-level-new notes="top|middle|base"> sections
+function extractPyramidNotes(html: string): { top: string[]; middle: string[]; base: string[] } | null {
+  const topM    = html.match(/<pyramid-level-new[^>]+notes="top"[^>]*>([\s\S]*?)<\/pyramid-level-new>/i);
+  const middleM = html.match(/<pyramid-level-new[^>]+notes="middle"[^>]*>([\s\S]*?)<\/pyramid-level-new>/i);
+  const baseM   = html.match(/<pyramid-level-new[^>]+notes="base"[^>]*>([\s\S]*?)<\/pyramid-level-new>/i);
 
-  const topM    = desc.match(/[Tt]op notes?\s+(?:is|are)\s+([^;.]+)/i);
-  const middleM = desc.match(/(?:[Mm]iddle|[Hh]eart) notes?\s+(?:is|are)\s+([^;.]+)/i);
-  const baseM   = desc.match(/[Bb]ase notes?\s+(?:is|are)\s+([^;.]+)/i);
+  if (!topM && !middleM && !baseM) return null;
+
+  return {
+    top:    topM    ? extractPyramidLabels(topM[1])    : [],
+    middle: middleM ? extractPyramidLabels(middleM[1]) : [],
+    base:   baseM   ? extractPyramidLabels(baseM[1])   : [],
+  };
+}
+
+// Fallback: parse notes from the factual description sentence.
+// e.g. "Top notes are Bergamot and Pepper; middle notes are Lavender; base notes are Cedar."
+function parseNotesFromText(text: string): { top: string[]; middle: string[]; base: string[] } | null {
+  const split = (raw: string) =>
+    raw.split(/,| and /).map((s) => s.replace(/;.*$/, '').trim()).filter(Boolean);
+
+  const topM    = text.match(/[Tt]op notes?\s+(?:is|are)\s+([^;.]+)/i);
+  const middleM = text.match(/(?:[Mm]iddle|[Hh]eart) notes?\s+(?:is|are)\s+([^;.]+)/i);
+  const baseM   = text.match(/[Bb]ase notes?\s+(?:is|are)\s+([^;.]+)/i);
 
   if (!topM && !middleM && !baseM) return null;
   return {
@@ -52,7 +67,6 @@ function parseNotesFromDescription(desc: string): { top: string[]; middle: strin
 
 // Extract accord names from <span class="truncate">word</span> inside the accords section
 function extractAccords(html: string): string[] {
-  // Find the main accords section — it contains a flex-col div with the bars
   const accordM = html.match(/main\s+accords([\s\S]*?)(?:Search by accords|<\/section>|accordBox)/i);
   const block = accordM?.[1] ?? '';
   const out: string[] = [];
@@ -97,7 +111,6 @@ function parseDetails(html: string): PerfumeDetails {
   if (!d.name) {
     const titleM = html.match(/<title[^>]*>([^<]+)<\/title>/i);
     if (titleM) {
-      // Title is usually "Name by Brand - Fragrantica"
       const parts = titleM[1].split(' by ');
       if (parts.length >= 2) {
         d.name = parts[0].trim();
@@ -106,10 +119,20 @@ function parseDetails(html: string): PerfumeDetails {
     }
   }
 
-  // ── Description from og:description (concise, pre-formatted) ─────────────
-  const ogDesc = html.match(/<meta[^>]+property="og:description"[^>]+content="([^"]+)"/i)
-    ?? html.match(/<meta[^>]+content="([^"]+)"[^>]+property="og:description"/i);
-  if (ogDesc) d.description = ogDesc[1].trim();
+  // ── Description from itemprop="description" (first <p>, stripped) ─────────
+  const descDivM = html.match(/itemprop="description"[^>]*>([\s\S]*?)<\/div>/i);
+  if (descDivM) {
+    const firstP = descDivM[1].match(/<p[^>]*>([\s\S]*?)<\/p>/i);
+    if (firstP) {
+      d.description = stripTags(firstP[1]).substring(0, 500) || undefined;
+    }
+  }
+  // Fallback to og:description if itemprop extraction failed
+  if (!d.description) {
+    const ogDesc = html.match(/<meta[^>]+property="og:description"[^>]+content="([^"]+)"/i)
+      ?? html.match(/<meta[^>]+content="([^"]+)"[^>]+property="og:description"/i);
+    if (ogDesc) d.description = ogDesc[1].trim();
+  }
 
   // ── Main product image: prefer itemprop="image", fall back to og:image ────
   const itemImg = html.match(/<img[^>]+itemprop="image"[^>]+src="([^"]+)"/i)
@@ -125,48 +148,37 @@ function parseDetails(html: string): PerfumeDetails {
   const accords = extractAccords(html);
   if (accords.length) d.scentProfiles = accords;
 
-  // ── Notes: Stage 1 — parse from og:description text ──────────────────────
+  // ── Notes: Stage 1 — pyramid-level-new sections (most accurate) ──────────
+  const pyramidNotes = extractPyramidNotes(html);
+  if (pyramidNotes && (pyramidNotes.top.length || pyramidNotes.middle.length || pyramidNotes.base.length)) {
+    d.notes = pyramidNotes;
+    return d;
+  }
+
+  // ── Notes: Stage 2 — parse from description text ─────────────────────────
   if (d.description) {
-    const fromDesc = parseNotesFromDescription(d.description);
+    const fromDesc = parseNotesFromText(d.description);
     if (fromDesc) {
       d.notes = fromDesc;
       return d;
     }
   }
 
-  // ── Notes: Stage 2 — HTML itemprop="ingredient" extraction ───────────────
-  // Find the notes pyramid section then split by top/heart/base headers.
-  const notesBoxM = html.match(/notesBoxContent([\s\S]*?)(?:accordBox|<\/section>|$)/i);
-  const notesBlock = notesBoxM?.[1] ?? html;
-
-  const topIdx    = notesBlock.search(/top\s+notes?/i);
-  const heartIdx  = notesBlock.search(/(?:heart|middle)\s+notes?/i);
-  const baseIdx   = notesBlock.search(/base\s+notes?/i);
-
-  if (topIdx !== -1 && heartIdx !== -1 && baseIdx !== -1) {
-    d.notes = {
-      top:    extractIngredients(notesBlock.slice(topIdx, heartIdx)),
-      middle: extractIngredients(notesBlock.slice(heartIdx, baseIdx)),
-      base:   extractIngredients(notesBlock.slice(baseIdx)),
-    };
-  } else {
-    // Flat fallback: divide all ingredients roughly into thirds
-    const all = extractIngredients(notesBlock);
-    const t = Math.ceil(all.length / 3);
-    d.notes = {
-      top:    all.slice(0, t),
-      middle: all.slice(t, t * 2),
-      base:   all.slice(t * 2),
-    };
+  // ── Notes: Stage 3 — search full HTML for the description paragraph ───────
+  const descText = html.match(/itemprop="description"[\s\S]*?<p[^>]*>([\s\S]*?)<\/p>/i);
+  if (descText) {
+    const plain = stripTags(descText[1]);
+    const fromFullDesc = parseNotesFromText(plain);
+    if (fromFullDesc) d.notes = fromFullDesc;
   }
 
   return d;
 }
 
-// GET /api/perfume-details?url=/perfume/Dior/Sauvage-72187.html
+// GET /api/perfume-details?url=/perfume/Dior/Sauvage-31861.html
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const path = searchParams.get('url'); // relative Fragrantica path
+  const path = searchParams.get('url');
 
   if (!path || !path.startsWith('/perfume/')) {
     return NextResponse.json({ error: 'Invalid url' }, { status: 400 });
