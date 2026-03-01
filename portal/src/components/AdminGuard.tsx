@@ -7,34 +7,46 @@ import { auth } from '@/lib/firebase';
 
 const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL;
 
+function isAdmin(user: User | null) {
+  return !!user && user.email === ADMIN_EMAIL;
+}
+
 export default function AdminGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const [status, setStatus] = useState<'loading' | 'authorized' | 'unauthorized'>('loading');
+
+  // Synchronous check: Firebase restores auth.currentUser from localStorage
+  // before the first render on return visits — this lets us skip the loading
+  // flash entirely for users who are already logged in.
+  const [status, setStatus] = useState<'loading' | 'authorized' | 'unauthorized'>(() => {
+    try {
+      return isAdmin(auth.currentUser) ? 'authorized' : 'loading';
+    } catch {
+      return 'loading';
+    }
+  });
 
   useEffect(() => {
-    // Safety timeout — if Firebase auth hasn't resolved in 10 s, redirect to login
-    const timeout = setTimeout(() => router.replace('/login'), 10000);
+    if (status === 'authorized') return; // already resolved synchronously
+
+    // Safety net: redirect to login if Firebase doesn't resolve within 8 s
+    const timeout = setTimeout(() => router.replace('/login'), 8000);
 
     const unsubscribe = onAuthStateChanged(
       auth,
       (user: User | null) => {
         clearTimeout(timeout);
-        if (!user) { router.replace('/login'); return; }
-        if (user.email !== ADMIN_EMAIL) { router.replace('/login?error=unauthorized'); return; }
+        if (!isAdmin(user)) { router.replace('/login'); return; }
         setStatus('authorized');
       },
       () => { clearTimeout(timeout); router.replace('/login'); }
     );
     return () => { unsubscribe(); clearTimeout(timeout); };
-  }, [router]);
+  }, [router, status]);
 
   if (status === 'loading') {
     return (
-      <div className="flex h-screen items-center justify-center bg-gray-50">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-gray-200 border-t-amber-500" />
-          <p className="text-sm text-gray-500">Loading portal…</p>
-        </div>
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <div className="h-7 w-7 animate-spin rounded-full border-2 border-gray-200 border-t-amber-500" />
       </div>
     );
   }

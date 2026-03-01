@@ -27,7 +27,19 @@ import {
   Database,
   ImageIcon,
 } from 'lucide-react';
-import { searchPerfumes, LocalPerfume } from '@/data/perfumes';
+import { searchPerfumes } from '@/data/perfumes';
+
+interface PerfumeSuggestion {
+  id?: string;
+  name: string;
+  brand: string;
+  image?: string;
+  url?: string;           // Fragrantica relative URL path
+  category?: 'mens' | 'womens' | 'unisex';
+  scentProfiles?: string[];
+  notes?: { top?: string[]; middle?: string[]; base?: string[] };
+  source: 'fragrantica' | 'local';
+}
 
 // Default product catalogue for one-click seeding
 const DEFAULT_PRODUCTS = [
@@ -107,16 +119,46 @@ export default function ProductsPage() {
   const [uploadingImage, setUploadingImage] = useState(false);
   const imageInputRef = useRef<HTMLInputElement>(null);
 
-  // Local perfume database search
+  // Perfume auto-search state
   const [fragranceQuery, setFragranceQuery] = useState('');
-  const [suggestions, setSuggestions] = useState<LocalPerfume[]>([]);
+  const [suggestions, setSuggestions] = useState<PerfumeSuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [searching, setSearching] = useState(false);
+  const [fetchingDetails, setFetchingDetails] = useState(false);
 
-  // Instant local search — no debounce or API call needed
+  // Show local DB results instantly, then swap with Fragrantica results when ready
   useEffect(() => {
-    const results = searchPerfumes(fragranceQuery);
-    setSuggestions(results);
-    setShowSuggestions(results.length > 0 && fragranceQuery.trim().length >= 2);
+    const q = fragranceQuery.trim();
+    if (q.length < 2) {
+      setSuggestions([]);
+      setShowSuggestions(false);
+      setSearching(false);
+      return;
+    }
+
+    // Immediate local results as placeholder
+    const local = searchPerfumes(q).map(p => ({ ...p, source: 'local' as const }));
+    setSuggestions(local);
+    setShowSuggestions(local.length > 0);
+
+    // Fragrantica via proxy — debounced 600 ms
+    setSearching(true);
+    const id = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/search-perfume?q=${encodeURIComponent(q)}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            setSuggestions(data.map((r: Omit<PerfumeSuggestion, 'source'>) => ({ ...r, source: 'fragrantica' as const })));
+            setShowSuggestions(true);
+          }
+          // if Fragrantica returned empty, keep local results
+        }
+      } catch { /* keep local results */ }
+      finally { setSearching(false); }
+    }, 600);
+
+    return () => { clearTimeout(id); setSearching(false); };
   }, [fragranceQuery]);
 
   const load = useCallback(async () => {
@@ -170,19 +212,41 @@ export default function ProductsPage() {
     setModalOpen(false);
   };
 
-  const selectSuggestion = (result: LocalPerfume) => {
+  const selectSuggestion = async (result: PerfumeSuggestion) => {
+    // Fill known fields immediately
     setForm((f) => ({
       ...f,
       name: result.name,
       brand: result.brand,
-      category: result.category || f.category,
-      scentProfiles: result.scentProfiles || f.scentProfiles,
+      category: result.category ?? f.category,
+      scentProfiles: result.scentProfiles ?? f.scentProfiles,
+      ...(result.image ? { image: result.image } : {}),
     }));
     if (result.notes?.top)    setTopNotes(result.notes.top.join(', '));
     if (result.notes?.middle) setMiddleNotes(result.notes.middle.join(', '));
     if (result.notes?.base)   setBaseNotes(result.notes.base.join(', '));
     setFragranceQuery(`${result.name} — ${result.brand}`);
     setShowSuggestions(false);
+
+    // For Fragrantica results, fetch full details (notes, description, image)
+    if (result.source === 'fragrantica' && result.url) {
+      setFetchingDetails(true);
+      try {
+        const res = await fetch(`/api/perfume-details?url=${encodeURIComponent(result.url)}`);
+        if (res.ok) {
+          const d = await res.json();
+          setForm((f) => ({
+            ...f,
+            ...(d.image ? { image: d.image } : {}),
+            ...(d.description ? { description: d.description } : {}),
+          }));
+          if (d.notes?.top?.length)    setTopNotes(d.notes.top.join(', '));
+          if (d.notes?.middle?.length) setMiddleNotes(d.notes.middle.join(', '));
+          if (d.notes?.base?.length)   setBaseNotes(d.notes.base.join(', '));
+        }
+      } catch { /* details fetch failed — keep what we have */ }
+      finally { setFetchingDetails(false); }
+    }
   };
 
   const handleSave = async () => {
@@ -457,12 +521,22 @@ export default function ProductsPage() {
 
               {/* Fragrantica Auto-search */}
               <div className="rounded-xl border border-dashed border-amber-200 bg-amber-50 p-4">
-                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-amber-700">
-                  Auto-fill from Fragrantica
-                </p>
+                <div className="mb-2 flex items-center justify-between">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">
+                    Auto-fill from Fragrantica
+                  </p>
+                  {fetchingDetails && (
+                    <span className="flex items-center gap-1 text-xs text-amber-600">
+                      <Loader2 size={11} className="animate-spin" /> Loading details…
+                    </span>
+                  )}
+                </div>
                 <div className="relative">
                   <div className="flex items-center gap-2 rounded-lg border border-amber-200 bg-white px-3">
-                    <Search size={15} className="shrink-0 text-gray-400" />
+                    {searching
+                      ? <Loader2 size={15} className="shrink-0 animate-spin text-amber-400" />
+                      : <Search size={15} className="shrink-0 text-gray-400" />
+                    }
                     <input
                       value={fragranceQuery}
                       onChange={(e) => setFragranceQuery(e.target.value)}
@@ -487,17 +561,33 @@ export default function ProductsPage() {
                     <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-xl border border-gray-100 bg-white shadow-lg">
                       {suggestions.map((result) => (
                         <button
-                          key={`${result.brand}-${result.name}`}
+                          key={`${result.source}-${result.id ?? result.brand}-${result.name}`}
                           onMouseDown={(e) => e.preventDefault()}
                           onClick={() => selectSuggestion(result)}
                           className="flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors hover:bg-amber-50"
                         >
-                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-100">
-                            <Package size={14} className="text-amber-500" />
-                          </div>
-                          <div className="min-w-0">
+                          {result.image ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={result.image}
+                              alt={result.name}
+                              className="h-10 w-10 shrink-0 rounded-lg bg-gray-100 object-cover"
+                              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                            />
+                          ) : (
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-100">
+                              <Package size={14} className="text-amber-500" />
+                            </div>
+                          )}
+                          <div className="min-w-0 flex-1">
                             <p className="truncate text-sm font-medium text-gray-900">{result.name}</p>
-                            <p className="truncate text-xs text-gray-500">{result.brand} · <span className="capitalize">{result.category}</span></p>
+                            <p className="truncate text-xs text-gray-500">
+                              {result.brand}
+                              {result.category && <> · <span className="capitalize">{result.category}</span></>}
+                              {result.source === 'fragrantica' && (
+                                <span className="ml-1 text-amber-500">· Fragrantica</span>
+                              )}
+                            </p>
                           </div>
                         </button>
                       ))}
@@ -505,7 +595,7 @@ export default function ProductsPage() {
                   )}
                 </div>
                 <p className="mt-2 text-xs text-amber-600">
-                  Select a result to auto-fill name, brand and image — or fill manually below
+                  Results from Fragrantica — click to auto-fill name, brand, image &amp; notes
                 </p>
               </div>
 

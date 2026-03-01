@@ -1,63 +1,56 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-interface PerfumeResult {
-  id: string;
-  name: string;
-  brand: string;
-  image: string;
+// Fragrantica is protected by Cloudflare's JS challenge for direct server fetches.
+// We route through allorigins.win which proxies the request from servers that
+// Cloudflare treats as browser traffic, bypassing the challenge.
+async function scrapeUrl(url: string): Promise<string | null> {
+  try {
+    const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+    const res = await fetch(proxy, { signal: AbortSignal.timeout(12000) });
+    if (!res.ok) return null;
+    const html = await res.text();
+    // Detect if we got a Cloudflare challenge page instead of real content
+    if (html.includes('Just a moment') || html.includes('cf-browser-verification') || html.length < 2000) {
+      return null;
+    }
+    return html;
+  } catch {
+    return null;
+  }
 }
 
-// Scrapes Fragrantica search results server-side (no API key required).
-// Returns up to 8 perfume suggestions matching the query.
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const q = searchParams.get('q')?.trim();
 
   if (!q || q.length < 2) return NextResponse.json([]);
 
-  try {
-    const res = await fetch(
-      `https://www.fragrantica.com/search/?query=${encodeURIComponent(q)}`,
-      {
-        headers: {
-          'User-Agent':
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
-          Accept:
-            'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-          'Accept-Language': 'en-US,en;q=0.9',
-        },
-        signal: AbortSignal.timeout(8000),
-      }
-    );
+  const html = await scrapeUrl(
+    `https://www.fragrantica.com/search/?query=${encodeURIComponent(q)}`
+  );
 
-    if (!res.ok) return NextResponse.json([]);
+  if (!html) return NextResponse.json([]);
 
-    const html = await res.text();
-    const results: PerfumeResult[] = [];
-    const seen = new Set<string>();
+  const results: { id: string; name: string; brand: string; image: string; url: string }[] = [];
+  const seen = new Set<string>();
 
-    // Fragrantica perfume page URLs follow: /perfume/{BrandSlug}/{NameSlug}-{id}.html
-    // The ID is the unique numeric identifier — we use it to build the thumbnail URL too.
-    const linkRegex = /href="\/perfume\/([^/]+)\/([^"]+)-(\d+)\.html"/g;
-    let match;
-
-    while ((match = linkRegex.exec(html)) !== null) {
-      if (results.length >= 8) break;
-      const [, brandSlug, nameSlug, id] = match;
-      if (seen.has(id)) continue;
-      seen.add(id);
-
-      const brand = brandSlug.replace(/-/g, ' ');
-      const name = nameSlug.replace(/-/g, ' ');
-      // Fragrantica hosts thumbnails at a predictable URL based on the numeric ID
-      const image = `https://fimgs.net/mdimg/perfume/375x500.${id}.jpg`;
-
-      results.push({ id, name, brand, image });
-    }
-
-    return NextResponse.json(results);
-  } catch {
-    // Fragrantica unreachable or blocked — return empty so user can fill manually
-    return NextResponse.json([]);
+  // Fragrantica perfume URLs: /perfume/{BrandSlug}/{NameSlug}-{id}.html
+  // The numeric id maps directly to the thumbnail on fimgs.net
+  const linkRe = /href="(\/perfume\/([^/]+)\/([^"]+?)-(\d+)\.html)"/g;
+  let m;
+  while ((m = linkRe.exec(html)) !== null) {
+    if (results.length >= 8) break;
+    const [, path, brandSlug, nameSlug, id] = m;
+    if (seen.has(id)) continue;
+    seen.add(id);
+    results.push({
+      id,
+      name: nameSlug.replace(/-/g, ' '),
+      brand: brandSlug.replace(/-/g, ' '),
+      image: `https://fimgs.net/mdimg/perfume/375x500.${id}.jpg`,
+      url: path,
+    });
   }
+
+  return NextResponse.json(results);
 }
