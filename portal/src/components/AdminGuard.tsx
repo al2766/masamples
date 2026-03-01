@@ -12,18 +12,20 @@ export default function AdminGuard({ children }: { children: React.ReactNode }) 
   const [status, setStatus] = useState<'loading' | 'authorized' | 'unauthorized'>('loading');
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
-      if (!user) {
-        router.replace('/login');
-        return;
-      }
-      if (user.email !== ADMIN_EMAIL) {
-        router.replace('/login?error=unauthorized');
-        return;
-      }
-      setStatus('authorized');
-    });
-    return () => unsubscribe();
+    // Safety timeout — if Firebase auth hasn't resolved in 10 s, redirect to login
+    const timeout = setTimeout(() => router.replace('/login'), 10000);
+
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (user: User | null) => {
+        clearTimeout(timeout);
+        if (!user) { router.replace('/login'); return; }
+        if (user.email !== ADMIN_EMAIL) { router.replace('/login?error=unauthorized'); return; }
+        setStatus('authorized');
+      },
+      () => { clearTimeout(timeout); router.replace('/login'); }
+    );
+    return () => { unsubscribe(); clearTimeout(timeout); };
   }, [router]);
 
   if (status === 'loading') {

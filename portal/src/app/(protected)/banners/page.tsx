@@ -37,9 +37,14 @@ export default function BannersPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const snap = await getDocs(collection(db, 'banners'));
-    setBanners(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Banner)));
-    setLoading(false);
+    try {
+      const snap = await getDocs(collection(db, 'banners'));
+      setBanners(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Banner)));
+    } catch (err) {
+      console.error('Failed to load banners:', err);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => { load(); }, [load]);

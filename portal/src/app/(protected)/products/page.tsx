@@ -27,13 +27,7 @@ import {
   Database,
   ImageIcon,
 } from 'lucide-react';
-
-interface PerfumeResult {
-  id: string;
-  name: string;
-  brand: string;
-  image: string;
-}
+import { searchPerfumes, LocalPerfume } from '@/data/perfumes';
 
 // Default product catalogue for one-click seeding
 const DEFAULT_PRODUCTS = [
@@ -113,36 +107,16 @@ export default function ProductsPage() {
   const [uploadingImage, setUploadingImage] = useState(false);
   const imageInputRef = useRef<HTMLInputElement>(null);
 
-  // Fragrantica auto-search
+  // Local perfume database search
   const [fragranceQuery, setFragranceQuery] = useState('');
-  const [suggestions, setSuggestions] = useState<PerfumeResult[]>([]);
+  const [suggestions, setSuggestions] = useState<LocalPerfume[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [searching, setSearching] = useState(false);
 
-  // Debounced Fragrantica search
+  // Instant local search — no debounce or API call needed
   useEffect(() => {
-    const q = fragranceQuery.trim();
-    if (q.length < 2) {
-      setSuggestions([]);
-      setShowSuggestions(false);
-      return;
-    }
-    setSearching(true);
-    const timeoutId = setTimeout(async () => {
-      try {
-        const res = await fetch(`/api/search-perfume?q=${encodeURIComponent(q)}`);
-        if (res.ok) {
-          const data = await res.json();
-          setSuggestions(Array.isArray(data) ? data : []);
-          setShowSuggestions(true);
-        }
-      } catch {
-        // silently fail — user can fill manually
-      } finally {
-        setSearching(false);
-      }
-    }, 400);
-    return () => clearTimeout(timeoutId);
+    const results = searchPerfumes(fragranceQuery);
+    setSuggestions(results);
+    setShowSuggestions(results.length > 0 && fragranceQuery.trim().length >= 2);
   }, [fragranceQuery]);
 
   const load = useCallback(async () => {
@@ -196,14 +170,17 @@ export default function ProductsPage() {
     setModalOpen(false);
   };
 
-  const selectSuggestion = (result: PerfumeResult) => {
+  const selectSuggestion = (result: LocalPerfume) => {
     setForm((f) => ({
       ...f,
       name: result.name,
       brand: result.brand,
-      image: result.image,
+      category: result.category || f.category,
+      scentProfiles: result.scentProfiles || f.scentProfiles,
     }));
-    clearImageState();
+    if (result.notes?.top)    setTopNotes(result.notes.top.join(', '));
+    if (result.notes?.middle) setMiddleNotes(result.notes.middle.join(', '));
+    if (result.notes?.base)   setBaseNotes(result.notes.base.join(', '));
     setFragranceQuery(`${result.name} — ${result.brand}`);
     setShowSuggestions(false);
   };
@@ -485,10 +462,7 @@ export default function ProductsPage() {
                 </p>
                 <div className="relative">
                   <div className="flex items-center gap-2 rounded-lg border border-amber-200 bg-white px-3">
-                    {searching
-                      ? <Loader2 size={15} className="shrink-0 animate-spin text-amber-400" />
-                      : <Search size={15} className="shrink-0 text-gray-400" />
-                    }
+                    <Search size={15} className="shrink-0 text-gray-400" />
                     <input
                       value={fragranceQuery}
                       onChange={(e) => setFragranceQuery(e.target.value)}
@@ -513,21 +487,17 @@ export default function ProductsPage() {
                     <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-xl border border-gray-100 bg-white shadow-lg">
                       {suggestions.map((result) => (
                         <button
-                          key={result.id}
+                          key={`${result.brand}-${result.name}`}
                           onMouseDown={(e) => e.preventDefault()}
                           onClick={() => selectSuggestion(result)}
                           className="flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors hover:bg-amber-50"
                         >
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={result.image}
-                            alt={result.name}
-                            className="h-10 w-10 shrink-0 rounded-lg bg-gray-100 object-cover"
-                            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                          />
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-100">
+                            <Package size={14} className="text-amber-500" />
+                          </div>
                           <div className="min-w-0">
                             <p className="truncate text-sm font-medium text-gray-900">{result.name}</p>
-                            <p className="truncate text-xs text-gray-500">{result.brand}</p>
+                            <p className="truncate text-xs text-gray-500">{result.brand} · <span className="capitalize">{result.category}</span></p>
                           </div>
                         </button>
                       ))}

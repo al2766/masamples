@@ -15,9 +15,14 @@ export default function OrdersPage() {
 
   useEffect(() => {
     const load = async () => {
-      const snap = await getDocs(query(collection(db, 'orders'), orderBy('createdAt', 'desc')));
-      setOrders(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Order)));
-      setLoading(false);
+      try {
+        const snap = await getDocs(query(collection(db, 'orders'), orderBy('createdAt', 'desc')));
+        setOrders(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Order)));
+      } catch (err) {
+        console.error('Failed to load orders:', err);
+      } finally {
+        setLoading(false);
+      }
     };
     load();
   }, []);
