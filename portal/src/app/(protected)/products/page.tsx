@@ -4,11 +4,11 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import {
   collection,
   getDocs,
+  getDoc,
   addDoc,
   updateDoc,
   deleteDoc,
   doc,
-  setDoc,
   serverTimestamp,
 } from 'firebase/firestore';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -24,7 +24,6 @@ import {
   CheckCircle,
   Package,
   Loader2,
-  Database,
   ImageIcon,
 } from 'lucide-react';
 import { searchPerfumes } from '@/data/perfumes';
@@ -34,36 +33,31 @@ interface PerfumeSuggestion {
   name: string;
   brand: string;
   image?: string;
-  url?: string;           // Fragrantica relative URL path
+  url?: string;
   category?: 'mens' | 'womens' | 'unisex';
   scentProfiles?: string[];
   notes?: { top?: string[]; middle?: string[]; base?: string[] };
   source: 'fragrantica' | 'local';
 }
 
-// Default product catalogue for one-click seeding
-const DEFAULT_PRODUCTS = [
-  { id: '1', name: 'Silver Onyx', brand: 'Khadlaj', price: 4.99, size: '5ml', category: 'mens', inStock: true, image: 'https://images.unsplash.com/photo-1769625310883-6c87ed402d6f?w=400', description: 'A sophisticated woody fragrance with notes of amber and musk', isBestSeller: true, notes: { top: ['Bergamot'], middle: ['Amber', 'Musk'], base: ['Cedarwood'] }, sizes: [{ size: '5ml', price: 4.99 }, { size: '10ml', price: 8.99 }, { size: '15ml', price: 12.99 }], scentProfiles: ['woody', 'ambery'], specificNotes: ['Cedarwood', 'Amber', 'Musk'] },
-  { id: '2', name: 'Liquid Brun', brand: 'Liquid Brun', price: 5.99, size: '5ml', category: 'unisex', inStock: true, image: 'https://images.unsplash.com/photo-1767187861728-942f561b7103?w=400', description: 'Rich and warm oriental scent with vanilla and spice', isBestSeller: true, notes: { top: ['Saffron'], middle: ['Vanilla', 'Tonka Bean'], base: ['Amber', 'Spices'] }, sizes: [{ size: '5ml', price: 5.99 }, { size: '10ml', price: 9.99 }, { size: '15ml', price: 14.99 }], scentProfiles: ['ambery', 'aromatic'], specificNotes: ['Vanilla', 'Amber', 'Tonka Bean', 'Spices'] },
-  { id: '3', name: 'Terra', brand: 'Rayhaan', price: 4.49, size: '5ml', category: 'mens', inStock: true, image: 'https://images.unsplash.com/photo-1761659760494-32b921a2449f?w=400', description: 'Earthy and fresh with citrus top notes', isBestSeller: false, notes: { top: ['Lemon', 'Bergamot'], middle: ['Green Notes'], base: ['Vetiver'] }, sizes: [{ size: '5ml', price: 4.49 }, { size: '10ml', price: 7.99 }, { size: '15ml', price: 11.49 }], scentProfiles: ['fresh', 'aromatic'], specificNotes: ['Citrus', 'Vetiver', 'Green'] },
-  { id: '4', name: 'Invictus Victory', brand: 'Paco Rabanne', price: 6.99, size: '5ml', category: 'mens', inStock: true, image: 'https://images.unsplash.com/photo-1769625310883-6c87ed402d6f?w=400', description: 'Powerful and energetic with vanilla and tonka bean', isBestSeller: true, notes: { top: ['Lemon', 'Pink Pepper'], middle: ['Lavender'], base: ['Vanilla', 'Tonka Bean'] }, sizes: [{ size: '5ml', price: 6.99 }, { size: '10ml', price: 11.99 }, { size: '15ml', price: 16.99 }], scentProfiles: ['ambery', 'aromatic'], specificNotes: ['Vanilla', 'Tonka Bean', 'Lavender'] },
-  { id: '5', name: 'Acqua Di Gio EDT', brand: 'Giorgio Armani', price: 7.99, size: '5ml', category: 'mens', inStock: true, image: 'https://images.unsplash.com/photo-1707920961189-290d19b363f3?w=400', description: 'Fresh aquatic fragrance with marine notes', isBestSeller: true, notes: { top: ['Bergamot', 'Neroli'], middle: ['Marine Notes'], base: ['Cedarwood', 'Patchouli'] }, sizes: [{ size: '5ml', price: 7.99 }, { size: '10ml', price: 13.99 }, { size: '15ml', price: 19.99 }], scentProfiles: ['fresh'], specificNotes: ['Aquatic', 'Marine', 'Citrus'] },
-  { id: '6', name: 'Stronger With You Intensely', brand: 'Emporio Armani', price: 6.99, size: '5ml', category: 'mens', inStock: true, image: 'https://images.unsplash.com/photo-1767187861728-942f561b7103?w=400', description: 'Intense woody fragrance with vanilla and chestnut', isBestSeller: false, notes: { top: ['Pink Pepper', 'Juniper'], middle: ['Cinnamon', 'Sage'], base: ['Vanilla', 'Tonka Bean', 'Amber'] }, sizes: [{ size: '5ml', price: 6.99 }, { size: '10ml', price: 11.99 }, { size: '15ml', price: 16.99 }], scentProfiles: ['ambery', 'aromatic'], specificNotes: ['Vanilla', 'Tonka Bean', 'Amber', 'Cinnamon'] },
-  { id: '7', name: 'Y Eau de Parfum', brand: 'Yves Saint Laurent', price: 7.99, size: '5ml', category: 'mens', inStock: true, image: 'https://images.unsplash.com/photo-1761659760494-32b921a2449f?w=400', description: 'Modern and fresh with apple and sage', isBestSeller: true, notes: { top: ['Apple', 'Ginger'], middle: ['Sage', 'Juniper'], base: ['Cedarwood', 'Vetiver'] }, sizes: [{ size: '5ml', price: 7.99 }, { size: '10ml', price: 13.99 }, { size: '15ml', price: 19.99 }], scentProfiles: ['fresh', 'aromatic'], specificNotes: ['Sage', 'Fruity', 'Herbal'] },
-  { id: '8', name: 'Hero EDP', brand: 'Burberry', price: 7.49, size: '5ml', category: 'mens', inStock: true, image: 'https://images.unsplash.com/photo-1769625310883-6c87ed402d6f?w=400', description: 'Bold and confident with cedarwood', isBestSeller: false, notes: { top: ['Bergamot'], middle: ['Juniper', 'Black Pepper'], base: ['Cedarwood'] }, sizes: [{ size: '5ml', price: 7.49 }, { size: '10ml', price: 12.99 }, { size: '15ml', price: 18.49 }], scentProfiles: ['woody', 'aromatic'], specificNotes: ['Cedarwood', 'Juniper', 'Pepper'] },
-  { id: '9', name: 'Thriller', brand: 'Maison Asrar', price: 5.99, size: '5ml', category: 'unisex', inStock: true, image: 'https://images.unsplash.com/photo-1707920961189-290d19b363f3?w=400', description: 'Mysterious and captivating oriental blend', isBestSeller: false, notes: { top: ['Cardamom', 'Saffron'], middle: ['Rose', 'Jasmine'], base: ['Amber', 'Oud', 'Musk'] }, sizes: [{ size: '5ml', price: 5.99 }, { size: '10ml', price: 10.99 }, { size: '15ml', price: 15.99 }], scentProfiles: ['ambery', 'floral'], specificNotes: ['Amber', 'Oud', 'Musk', 'Rose', 'Jasmine'] },
-  { id: '10', name: 'Man in Black', brand: 'Bvlgari', price: 7.99, size: '5ml', category: 'mens', inStock: true, image: 'https://images.unsplash.com/photo-1767187861728-942f561b7103?w=400', description: 'Dark and seductive with rum and spices', isBestSeller: false, notes: { top: ['Spices', 'Rum'], middle: ['Leather', 'Tuberose'], base: ['Tonka Bean', 'Guaiac Wood'] }, sizes: [{ size: '5ml', price: 7.99 }, { size: '10ml', price: 13.99 }, { size: '15ml', price: 19.99 }], scentProfiles: ['ambery', 'aromatic'], specificNotes: ['Spices', 'Tonka Bean', 'Rum'] },
-  { id: '11', name: 'Born in Rome Intense', brand: 'Valentino', price: 7.49, size: '5ml', category: 'mens', inStock: true, image: 'https://images.unsplash.com/photo-1761659760494-32b921a2449f?w=400', description: 'Elegant and sophisticated with violet leaf', isBestSeller: false, notes: { top: ['Ginger', 'Violet Leaf'], middle: ['Sage'], base: ['Vetiver', 'Patchouli'] }, sizes: [{ size: '5ml', price: 7.49 }, { size: '10ml', price: 12.99 }, { size: '15ml', price: 18.49 }], scentProfiles: ['aromatic', 'woody'], specificNotes: ['Violet', 'Sage', 'Vetiver', 'Patchouli'] },
-  { id: '12', name: 'Sauvage EDP', brand: 'Dior', price: 8.99, size: '5ml', category: 'mens', inStock: false, image: 'https://images.unsplash.com/photo-1769625310883-6c87ed402d6f?w=400', description: 'Iconic fresh spicy fragrance', isBestSeller: true, scentProfiles: ['aromatic', 'fresh'], specificNotes: ['Pepper', 'Bergamot', 'Ambroxan'] },
-  { id: '13', name: 'Bleu de Chanel EDP', brand: 'Chanel', price: 9.99, size: '5ml', category: 'mens', inStock: false, image: 'https://images.unsplash.com/photo-1767187861728-942f561b7103?w=400', description: 'Timeless woody aromatic scent', isBestSeller: true, scentProfiles: ['woody', 'aromatic'], specificNotes: ['Cedarwood', 'Sandalwood', 'Ginger'] },
-  { id: '14', name: 'Oud Wood', brand: 'Tom Ford', price: 12.99, size: '5ml', category: 'unisex', inStock: false, image: 'https://images.unsplash.com/photo-1707920961189-290d19b363f3?w=400', description: 'Luxurious oud with exotic woods', isBestSeller: true, scentProfiles: ['woody', 'ambery'], specificNotes: ['Oud', 'Sandalwood', 'Vetiver'] },
-  { id: '15', name: 'Aventus', brand: 'Creed', price: 14.99, size: '5ml', category: 'mens', inStock: false, image: 'https://images.unsplash.com/photo-1761659760494-32b921a2449f?w=400', description: 'Legendary fruity fragrance', isBestSeller: true, scentProfiles: ['fresh', 'fruity'], specificNotes: ['Pineapple', 'Birch', 'Musk'] },
-  { id: '16', name: 'Eros EDT', brand: 'Versace', price: 6.99, size: '5ml', category: 'mens', inStock: false, image: 'https://images.unsplash.com/photo-1769625310883-6c87ed402d6f?w=400', description: 'Fresh and vibrant with mint', isBestSeller: true, scentProfiles: ['fresh', 'aromatic'], specificNotes: ['Mint', 'Green Apple', 'Vanilla'] },
-  { id: '17', name: 'One Million', brand: 'Paco Rabanne', price: 6.99, size: '5ml', category: 'mens', inStock: false, image: 'https://images.unsplash.com/photo-1767187861728-942f561b7103?w=400', description: 'Sweet and spicy with cinnamon', isBestSeller: true, scentProfiles: ['aromatic', 'ambery'], specificNotes: ['Cinnamon', 'Rose', 'Patchouli'] },
-  { id: '18', name: 'La Vie Est Belle', brand: 'Lancôme', price: 7.99, size: '5ml', category: 'womens', inStock: false, image: 'https://images.unsplash.com/photo-1707920961189-290d19b363f3?w=400', description: 'Sweet floral with iris and patchouli', isBestSeller: true, scentProfiles: ['floral', 'ambery'], specificNotes: ['Iris', 'Patchouli', 'Vanilla'] },
-  { id: '19', name: 'Good Girl', brand: 'Carolina Herrera', price: 8.99, size: '5ml', category: 'womens', inStock: false, image: 'https://images.unsplash.com/photo-1761659760494-32b921a2449f?w=400', description: 'Elegant with jasmine and tonka bean', isBestSeller: true, scentProfiles: ['floral', 'ambery'], specificNotes: ['Jasmine', 'Tonka Bean', 'Almond'] },
-  { id: '20', name: 'Baccarat Rouge 540', brand: 'Maison Francis Kurkdjian', price: 15.99, size: '5ml', category: 'unisex', inStock: false, image: 'https://images.unsplash.com/photo-1767187861728-942f561b7103?w=400', description: 'Luxurious amber and saffron', isBestSeller: true, scentProfiles: ['ambery', 'floral'], specificNotes: ['Saffron', 'Amber', 'Cedarwood', 'Jasmine'] },
-];
+interface PricingSettings {
+  costPerMl: number;
+  packagingCost: number;
+  shippingCost: number;
+  extraFees: number;
+  profitMargin: number;
+}
+
+function calcPrice(ml: number, p: PricingSettings): number {
+  if (p.profitMargin >= 100 || ml <= 0) return 0;
+  const cost = ml * p.costPerMl + p.packagingCost + p.shippingCost + p.extraFees;
+  return Math.round((cost / (1 - p.profitMargin / 100)) * 100) / 100;
+}
+
+function parseMl(sizeStr: string): number {
+  const m = sizeStr.match(/(\d+(?:\.\d+)?)\s*ml/i);
+  return m ? parseFloat(m[1]) : 0;
+}
 
 const CATEGORIES = ['mens', 'womens', 'unisex'] as const;
 const SCENT_PROFILES = ['floral', 'ambery', 'woody', 'fresh', 'aromatic'];
@@ -108,10 +102,10 @@ export default function ProductsPage() {
   const [form, setForm] = useState<Omit<Product, 'id'>>(EMPTY_PRODUCT);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState<string | null>(null);
-  const [seeding, setSeeding] = useState(false);
   const [topNotes, setTopNotes] = useState('');
   const [middleNotes, setMiddleNotes] = useState('');
   const [baseNotes, setBaseNotes] = useState('');
+  const [pricing, setPricing] = useState<PricingSettings | null>(null);
 
   // Image upload
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -126,7 +120,7 @@ export default function ProductsPage() {
   const [searching, setSearching] = useState(false);
   const [fetchingDetails, setFetchingDetails] = useState(false);
 
-  // Show local DB results instantly, then swap with Fragrantica results when ready
+  // Fragrantica first, local DB as fallback if empty/error
   useEffect(() => {
     const q = fragranceQuery.trim();
     if (q.length < 2) {
@@ -136,12 +130,6 @@ export default function ProductsPage() {
       return;
     }
 
-    // Immediate local results as placeholder
-    const local = searchPerfumes(q).map(p => ({ ...p, source: 'local' as const }));
-    setSuggestions(local);
-    setShowSuggestions(local.length > 0);
-
-    // Fragrantica via proxy — debounced 600 ms
     setSearching(true);
     const id = setTimeout(async () => {
       try {
@@ -151,23 +139,35 @@ export default function ProductsPage() {
           if (Array.isArray(data) && data.length > 0) {
             setSuggestions(data.map((r: Omit<PerfumeSuggestion, 'source'>) => ({ ...r, source: 'fragrantica' as const })));
             setShowSuggestions(true);
+            return;
           }
-          // if Fragrantica returned empty, keep local results
         }
-      } catch { /* keep local results */ }
-      finally { setSearching(false); }
+      } catch { /* fall through to local */ }
+      // Fragrantica returned nothing — show local fallback
+      const local = searchPerfumes(q).map((p) => ({ ...p, source: 'local' as const }));
+      setSuggestions(local);
+      setShowSuggestions(local.length > 0);
     }, 600);
 
     return () => { clearTimeout(id); setSearching(false); };
   }, [fragranceQuery]);
 
+  // Clear searching state when effect cleanup runs
+  useEffect(() => {
+    if (fragranceQuery.trim().length < 2) setSearching(false);
+  }, [fragranceQuery]);
+
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const snap = await getDocs(collection(db, 'products'));
+      const [snap, settingsSnap] = await Promise.all([
+        getDocs(collection(db, 'products')),
+        getDoc(doc(db, 'settings', 'pricing')),
+      ]);
       setProducts(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Product)));
+      if (settingsSnap.exists()) setPricing(settingsSnap.data() as PricingSettings);
     } catch (err) {
-      console.error('Failed to load products:', err);
+      console.error('Failed to load:', err);
     } finally {
       setLoading(false);
     }
@@ -183,7 +183,14 @@ export default function ProductsPage() {
 
   const openAdd = () => {
     setEditing(null);
-    setForm(EMPTY_PRODUCT);
+    // Apply auto-priced default sizes if pricing available
+    const sizes = pricing
+      ? DEFAULT_SIZES.map((s) => {
+          const ml = parseMl(s.size);
+          return { ...s, price: ml ? calcPrice(ml, pricing) : s.price };
+        })
+      : DEFAULT_SIZES;
+    setForm({ ...EMPTY_PRODUCT, sizes });
     setTopNotes('');
     setMiddleNotes('');
     setBaseNotes('');
@@ -210,10 +217,10 @@ export default function ProductsPage() {
   const closeModal = () => {
     clearImageState();
     setModalOpen(false);
+    setEditing(null);
   };
 
   const selectSuggestion = async (result: PerfumeSuggestion) => {
-    // Fill known fields immediately
     setForm((f) => ({
       ...f,
       name: result.name,
@@ -228,7 +235,6 @@ export default function ProductsPage() {
     setFragranceQuery(`${result.name} — ${result.brand}`);
     setShowSuggestions(false);
 
-    // For Fragrantica results, fetch full details (notes, description, image)
     if (result.source === 'fragrantica' && result.url) {
       setFetchingDetails(true);
       try {
@@ -245,7 +251,7 @@ export default function ProductsPage() {
           if (d.notes?.middle?.length) setMiddleNotes(d.notes.middle.join(', '));
           if (d.notes?.base?.length)   setBaseNotes(d.notes.base.join(', '));
         }
-      } catch { /* details fetch failed — keep what we have */ }
+      } catch { /* keep what we have */ }
       finally { setFetchingDetails(false); }
     }
   };
@@ -263,7 +269,6 @@ export default function ProductsPage() {
         imageUrl = await getDownloadURL(sRef);
       } catch (err) {
         console.error('Image upload failed:', err);
-        // proceed with existing URL or empty
       } finally {
         setUploadingImage(false);
       }
@@ -279,32 +284,19 @@ export default function ProductsPage() {
         base: notesFromString(baseNotes),
       },
     };
+
     try {
       if (editing?.id) {
         await updateDoc(doc(db, 'products', editing.id), { ...data, updatedAt: serverTimestamp() });
+        setProducts((ps) => ps.map((p) => p.id === editing.id ? { ...data, id: editing.id } : p));
       } else {
-        await addDoc(collection(db, 'products'), { ...data, createdAt: serverTimestamp() });
+        const ref = await addDoc(collection(db, 'products'), { ...data, createdAt: serverTimestamp() });
+        setProducts((ps) => [...ps, { ...data, id: ref.id }]);
       }
       closeModal();
-      await load();
     } finally {
       setSaving(false);
     }
-  };
-
-  const handleSeedDefaults = async () => {
-    if (!confirm(`Seed ${DEFAULT_PRODUCTS.length} default products from the existing catalogue? Products that already exist will be skipped.`)) return;
-    setSeeding(true);
-    const existing = new Set(products.map((p) => p.id));
-    let added = 0;
-    for (const { id, ...data } of DEFAULT_PRODUCTS) {
-      if (existing.has(id)) continue;
-      await setDoc(doc(db, 'products', id), { ...data, createdAt: new Date() });
-      added++;
-    }
-    await load();
-    setSeeding(false);
-    alert(`Done! Added ${added} products.`);
   };
 
   const handleDelete = async (id: string) => {
@@ -318,7 +310,13 @@ export default function ProductsPage() {
   const updateSize = (index: number, field: 'size' | 'price', value: string | number) => {
     setForm((f) => {
       const sizes = [...(f.sizes || [])];
-      sizes[index] = { ...sizes[index], [field]: value };
+      const updated = { ...sizes[index], [field]: value };
+      // Auto-calculate price when size label changes and pricing is loaded
+      if (field === 'size' && pricing) {
+        const ml = parseMl(String(value));
+        if (ml > 0) updated.price = calcPrice(ml, pricing);
+      }
+      sizes[index] = updated;
       return { ...f, sizes, price: sizes[0]?.price || f.price };
     });
   };
@@ -346,37 +344,17 @@ export default function ProductsPage() {
   return (
     <div>
       {/* Header */}
-      <div className="mb-5">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Products</h1>
-            <p className="mt-1 text-sm text-gray-500">{products.length} perfume(s) listed</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleSeedDefaults}
-              disabled={seeding}
-              className="hidden md:flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 disabled:opacity-60"
-            >
-              {seeding ? <Loader2 size={16} className="animate-spin" /> : <Database size={16} />}
-              Seed Defaults
-            </button>
-            <button
-              onClick={openAdd}
-              className="flex items-center gap-2 rounded-xl bg-amber-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-amber-600"
-            >
-              <Plus size={16} />
-              <span className="hidden sm:inline">Add Perfume</span>
-            </button>
-          </div>
+      <div className="mb-5 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Products</h1>
+          <p className="mt-1 text-sm text-gray-500">{products.length} perfume(s) listed</p>
         </div>
         <button
-          onClick={handleSeedDefaults}
-          disabled={seeding}
-          className="md:hidden mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white py-2.5 text-sm font-semibold text-gray-700 shadow-sm disabled:opacity-60"
+          onClick={openAdd}
+          className="flex items-center gap-2 rounded-xl bg-amber-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-amber-600"
         >
-          {seeding ? <Loader2 size={16} className="animate-spin" /> : <Database size={16} />}
-          Seed Default Products
+          <Plus size={16} />
+          <span className="hidden sm:inline">Add Perfume</span>
         </button>
       </div>
 
@@ -506,8 +484,11 @@ export default function ProductsPage() {
 
       {/* Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50 md:flex md:items-start md:justify-center md:bg-black/40 md:px-4 md:py-8">
-          <div className="min-h-screen md:min-h-0 w-full md:max-w-2xl bg-white md:rounded-2xl shadow-2xl">
+        <div
+          className="fixed inset-0 z-50 overflow-y-auto bg-black/50 md:flex md:items-start md:justify-center md:bg-black/40 md:px-4 md:py-8"
+          onClick={(e) => { if (e.target === e.currentTarget) closeModal(); }}
+        >
+          <div className="modal-enter min-h-screen md:min-h-0 w-full md:max-w-2xl bg-white md:rounded-2xl shadow-2xl">
             {/* Header */}
             <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
               <h2 className="font-semibold text-gray-900">
@@ -520,84 +501,65 @@ export default function ProductsPage() {
 
             <div className="space-y-6 px-6 py-6">
 
-              {/* Fragrantica Auto-search */}
-              <div className="rounded-xl border border-dashed border-amber-200 bg-amber-50 p-4">
-                <div className="mb-2 flex items-center justify-between">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">
-                    Auto-fill from Fragrantica
-                  </p>
-                  {fetchingDetails && (
-                    <span className="flex items-center gap-1 text-xs text-amber-600">
-                      <Loader2 size={11} className="animate-spin" /> Loading details…
-                    </span>
+              {/* Perfume search */}
+              <div className="relative">
+                <div className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3">
+                  {searching || fetchingDetails
+                    ? <Loader2 size={15} className="shrink-0 animate-spin text-gray-400" />
+                    : <Search size={15} className="shrink-0 text-gray-400" />
+                  }
+                  <input
+                    value={fragranceQuery}
+                    onChange={(e) => setFragranceQuery(e.target.value)}
+                    onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
+                    onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                    placeholder="Search perfume to auto-fill…"
+                    className="flex-1 bg-transparent py-2.5 text-sm outline-none placeholder:text-gray-400"
+                  />
+                  {fragranceQuery && (
+                    <button
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => { setFragranceQuery(''); setSuggestions([]); setShowSuggestions(false); }}
+                      className="text-gray-300 hover:text-gray-500"
+                    >
+                      <X size={14} />
+                    </button>
                   )}
                 </div>
-                <div className="relative">
-                  <div className="flex items-center gap-2 rounded-lg border border-amber-200 bg-white px-3">
-                    {searching
-                      ? <Loader2 size={15} className="shrink-0 animate-spin text-amber-400" />
-                      : <Search size={15} className="shrink-0 text-gray-400" />
-                    }
-                    <input
-                      value={fragranceQuery}
-                      onChange={(e) => setFragranceQuery(e.target.value)}
-                      onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
-                      onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
-                      placeholder="Type to search e.g. Sauvage Dior…"
-                      className="flex-1 bg-transparent py-2.5 text-sm outline-none placeholder:text-gray-400"
-                    />
-                    {fragranceQuery && (
-                      <button
-                        onMouseDown={(e) => e.preventDefault()}
-                        onClick={() => { setFragranceQuery(''); setSuggestions([]); setShowSuggestions(false); }}
-                        className="text-gray-300 hover:text-gray-500"
-                      >
-                        <X size={14} />
-                      </button>
-                    )}
-                  </div>
 
-                  {/* Suggestions dropdown */}
-                  {showSuggestions && suggestions.length > 0 && (
-                    <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-xl border border-gray-100 bg-white shadow-lg">
-                      {suggestions.map((result) => (
-                        <button
-                          key={`${result.source}-${result.id ?? result.brand}-${result.name}`}
-                          onMouseDown={(e) => e.preventDefault()}
-                          onClick={() => selectSuggestion(result)}
-                          className="flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors hover:bg-amber-50"
-                        >
-                          {result.image ? (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img
-                              src={result.image}
-                              alt={result.name}
-                              className="h-10 w-10 shrink-0 rounded-lg bg-gray-100 object-cover"
-                              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                            />
-                          ) : (
-                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-100">
-                              <Package size={14} className="text-amber-500" />
-                            </div>
-                          )}
-                          <div className="min-w-0 flex-1">
-                            <p className="truncate text-sm font-medium text-gray-900">{result.name}</p>
-                            <p className="truncate text-xs text-gray-500">
-                              {result.brand}
-                              {result.category && <> · <span className="capitalize">{result.category}</span></>}
-                              {result.source === 'fragrantica' && (
-                                <span className="ml-1 text-amber-500">· Fragrantica</span>
-                              )}
-                            </p>
+                {showSuggestions && suggestions.length > 0 && (
+                  <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-xl border border-gray-100 bg-white shadow-lg">
+                    {suggestions.map((result) => (
+                      <button
+                        key={`${result.source}-${result.id ?? result.brand}-${result.name}`}
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => selectSuggestion(result)}
+                        className="flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors hover:bg-gray-50"
+                      >
+                        {result.image ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={result.image}
+                            alt={result.name}
+                            className="h-10 w-10 shrink-0 rounded-lg bg-gray-100 object-cover"
+                            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                          />
+                        ) : (
+                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-100">
+                            <Package size={14} className="text-gray-400" />
                           </div>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                <p className="mt-2 text-xs text-amber-600">
-                  Results from Fragrantica — click to auto-fill name, brand, image &amp; notes
-                </p>
+                        )}
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-medium text-gray-900">{result.name}</p>
+                          <p className="truncate text-xs text-gray-500">
+                            {result.brand}
+                            {result.category && <> · <span className="capitalize">{result.category}</span></>}
+                          </p>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Basic Info */}
@@ -651,7 +613,6 @@ export default function ProductsPage() {
               <section>
                 <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-gray-400">Product Image</h3>
 
-                {/* Hidden file input */}
                 <input
                   ref={imageInputRef}
                   type="file"
@@ -667,7 +628,6 @@ export default function ProductsPage() {
                   }}
                 />
 
-                {/* Upload box */}
                 <div
                   onClick={() => imageInputRef.current?.click()}
                   className="flex min-h-44 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 transition-colors hover:border-amber-300 hover:bg-amber-50/30"
@@ -694,7 +654,6 @@ export default function ProductsPage() {
                   )}
                 </div>
 
-                {/* Paste URL fallback */}
                 <input
                   value={imageFile ? '' : (form.image || '')}
                   onChange={(e) => {
@@ -715,7 +674,7 @@ export default function ProductsPage() {
                       <input
                         value={s.size}
                         onChange={(e) => updateSize(i, 'size', e.target.value)}
-                        placeholder="Size (e.g. 5ml)"
+                        placeholder="e.g. 5ml"
                         className="w-28 rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-amber-400"
                       />
                       <span className="text-gray-400">£</span>
@@ -787,7 +746,6 @@ export default function ProductsPage() {
               {/* Fragrance Notes */}
               <section>
                 <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-gray-400">Fragrance Notes</h3>
-                <p className="mb-3 text-xs text-gray-400">Separate each note with a comma</p>
                 <div className="space-y-3">
                   {[
                     { label: 'Top notes', value: topNotes, set: setTopNotes },

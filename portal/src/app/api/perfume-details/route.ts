@@ -32,6 +32,24 @@ function extractIngredients(chunk: string): string[] {
   return out;
 }
 
+// Parse notes from the og:description text.
+// Example: "Top note is Lavender; middle notes are Iris, Amber; base notes are Musk."
+function parseNotesFromDescription(desc: string): { top: string[]; middle: string[]; base: string[] } | null {
+  const split = (raw: string) =>
+    raw.split(/,|;| and /).map((s) => s.trim()).filter(Boolean);
+
+  const topM    = desc.match(/[Tt]op notes?\s+(?:is|are)\s+([^;.]+)/i);
+  const middleM = desc.match(/(?:[Mm]iddle|[Hh]eart) notes?\s+(?:is|are)\s+([^;.]+)/i);
+  const baseM   = desc.match(/[Bb]ase notes?\s+(?:is|are)\s+([^;.]+)/i);
+
+  if (!topM && !middleM && !baseM) return null;
+  return {
+    top:    topM    ? split(topM[1])    : [],
+    middle: middleM ? split(middleM[1]) : [],
+    base:   baseM   ? split(baseM[1])   : [],
+  };
+}
+
 // Extract accord names from <span class="truncate">word</span> inside the accords section
 function extractAccords(html: string): string[] {
   // Find the main accords section — it contains a flex-col div with the bars
@@ -107,24 +125,30 @@ function parseDetails(html: string): PerfumeDetails {
   const accords = extractAccords(html);
   if (accords.length) d.scentProfiles = accords;
 
-  // ── Notes ─────────────────────────────────────────────────────────────────
-  // Fragrantica renders notes in a pyramid section. We find the notes box
-  // then split it into three sections (top / heart / base) by their headers.
-  const notesBoxM = html.match(/notesBoxContent([\s\S]*?)(?:id="[^"]+"|<\/section>|accordBox|$)/i);
+  // ── Notes: Stage 1 — parse from og:description text ──────────────────────
+  if (d.description) {
+    const fromDesc = parseNotesFromDescription(d.description);
+    if (fromDesc) {
+      d.notes = fromDesc;
+      return d;
+    }
+  }
+
+  // ── Notes: Stage 2 — HTML itemprop="ingredient" extraction ───────────────
+  // Find the notes pyramid section then split by top/heart/base headers.
+  const notesBoxM = html.match(/notesBoxContent([\s\S]*?)(?:accordBox|<\/section>|$)/i);
   const notesBlock = notesBoxM?.[1] ?? html;
 
-  // Split the block by the three category headers
-  // Fragrantica uses labels like "Top Notes", "Heart Notes", "Base Notes"
   const topIdx    = notesBlock.search(/top\s+notes?/i);
   const heartIdx  = notesBlock.search(/(?:heart|middle)\s+notes?/i);
   const baseIdx   = notesBlock.search(/base\s+notes?/i);
 
-  let topChunk = '', middleChunk = '', baseChunk = '';
-
   if (topIdx !== -1 && heartIdx !== -1 && baseIdx !== -1) {
-    topChunk    = notesBlock.slice(topIdx, heartIdx);
-    middleChunk = notesBlock.slice(heartIdx, baseIdx);
-    baseChunk   = notesBlock.slice(baseIdx);
+    d.notes = {
+      top:    extractIngredients(notesBlock.slice(topIdx, heartIdx)),
+      middle: extractIngredients(notesBlock.slice(heartIdx, baseIdx)),
+      base:   extractIngredients(notesBlock.slice(baseIdx)),
+    };
   } else {
     // Flat fallback: divide all ingredients roughly into thirds
     const all = extractIngredients(notesBlock);
@@ -134,14 +158,7 @@ function parseDetails(html: string): PerfumeDetails {
       middle: all.slice(t, t * 2),
       base:   all.slice(t * 2),
     };
-    return d;
   }
-
-  d.notes = {
-    top:    extractIngredients(topChunk),
-    middle: extractIngredients(middleChunk),
-    base:   extractIngredients(baseChunk),
-  };
 
   return d;
 }

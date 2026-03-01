@@ -1,9 +1,10 @@
 import { useParams } from 'react-router';
-import { products } from '../../data/products';
+import { useProducts } from '../../context/ProductsContext';
 import { ProductCard } from '../components/ProductCard';
 
 export function Category() {
   const { category } = useParams<{ category: string }>();
+  const { products } = useProducts();
 
   const filteredProducts = products.filter(
     (product) => product.category === category

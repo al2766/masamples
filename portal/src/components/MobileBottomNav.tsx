@@ -8,6 +8,7 @@ import {
   ShoppingBag,
   Megaphone,
   Star,
+  Settings,
 } from 'lucide-react';
 
 const tabs = [
@@ -16,6 +17,7 @@ const tabs = [
   { href: '/orders', icon: ShoppingBag, label: 'Orders' },
   { href: '/banners', icon: Megaphone, label: 'Banners' },
   { href: '/votes', icon: Star, label: 'Votes' },
+  { href: '/settings', icon: Settings, label: 'Settings' },
 ];
 
 export default function MobileBottomNav() {

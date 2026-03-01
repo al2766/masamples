@@ -1,9 +1,10 @@
 import { useParams } from 'react-router';
-import { products } from '../../data/products';
+import { useProducts } from '../../context/ProductsContext';
 import { ProductCard } from '../components/ProductCard';
 
 export function Brand() {
   const { brand } = useParams<{ brand: string }>();
+  const { products } = useProducts();
 
   const brandName = brand?.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) || '';
 

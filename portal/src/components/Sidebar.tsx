@@ -10,6 +10,7 @@ import {
   ShoppingBag,
   Megaphone,
   Star,
+  Settings,
   LogOut,
   Sparkles,
 } from 'lucide-react';
@@ -20,6 +21,7 @@ const navItems = [
   { href: '/orders', label: 'Orders', icon: ShoppingBag },
   { href: '/banners', label: 'Banners & Promos', icon: Megaphone },
   { href: '/votes', label: 'Votes & Wishlist', icon: Star },
+  { href: '/settings', label: 'Settings', icon: Settings },
 ];
 
 export default function Sidebar() {
