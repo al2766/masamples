@@ -27,17 +27,17 @@ export function Home() {
           <div className="max-w-2xl">
             <motion.h1
               className="text-4xl md:text-6xl mb-6"
-              initial={{ opacity: 0, y: 32 }}
+              initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: 'easeOut', delay: 0.1 }}
+              transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
             >
               Discover Your Signature Scent
             </motion.h1>
             <motion.p
               className="text-xl md:text-2xl mb-8 text-gray-300"
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: 'easeOut', delay: 0.25 }}
+              transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: 0.12 }}
             >
               Premium fragrance samples from the world's most coveted brands. Try before you buy.
             </motion.p>
@@ -45,7 +45,7 @@ export function Home() {
               className="flex flex-wrap gap-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: 'easeOut', delay: 0.4 }}
+              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
             >
               <Link to="/shop">
                 <Button size="lg" variant="default" className="bg-amber-400 text-black hover:bg-amber-500 font-semibold">
