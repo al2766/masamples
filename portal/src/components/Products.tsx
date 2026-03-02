@@ -168,29 +168,17 @@ export default function Products() {
 
     setFetchingDetails(true);
     try {
-      // Fetch from browser via CORS proxy — bypasses Cloudflare server-IP blocking.
-      // Browser has your real IP; the CORS proxy adds the Access-Control-Allow-Origin header.
-      const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(s.url)}`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const html = await res.text();
+      // Use server-side API route — it handles Cloudflare blocking and has Jina.ai as fallback
+      const res = await fetch(`/api/perfume-details?url=${encodeURIComponent(s.url)}`);
+      const data = await res.json();
 
-      // Parse with the browser's native DOMParser
-      const doc = new DOMParser().parseFromString(html, 'text/html');
+      if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
 
-      const description = doc.querySelector('#perfume-description-content p')?.textContent?.trim() ?? '';
+      const { description = '', notes, image } = data;
+      const top = notes?.top ?? [];
+      const middle = notes?.middle ?? [];
+      const base = notes?.base ?? [];
 
-      function notesForTier(tier: string): string[] {
-        const level = doc.querySelector(`pyramid-level-new[notes="${tier}"]`);
-        if (!level) return [];
-        return Array.from(level.querySelectorAll('.pyramid-note-label'))
-          .map((el) => el.textContent?.trim() ?? '')
-          .filter(Boolean);
-      }
-      const top = notesForTier('top');
-      const middle = notesForTier('middle');
-      const base = notesForTier('base');
-
-      // Show what was found in the debug box
       setDebugUrl(
         `URL: ${s.url}\n` +
         `Description: ${description || '(not found)'}\n` +
@@ -206,6 +194,7 @@ export default function Products() {
           topNotes: top.join(', ') || f.topNotes,
           middleNotes: middle.join(', ') || f.middleNotes,
           baseNotes: base.join(', ') || f.baseNotes,
+          image: image || f.image,
         }));
       } else {
         setDetailsFailed(true);
