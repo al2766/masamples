@@ -4,17 +4,48 @@ import * as cheerio from 'cheerio';
 
 export const maxDuration = 45;
 
-// Shared cheerio parser — works on both direct HTML and Jina.ai rendered HTML
+// Splits comma / "and" / · separated note strings into an array
+function split(raw: string): string[] {
+  return raw
+    .split(/[,·]|\band\b/)
+    .map((s) => s.replace(/[;|(].*/g, '').trim())
+    .filter((s) => s.length > 1 && s.length < 40);
+}
+
+// Extracts top/middle/base notes from any text (meta description, plain text, markdown)
+function extractNotes(text: string) {
+  const topM  = text.match(/[Tt]op\s+[Nn]otes?\s+(?:are|is|:)\s*([^;.\n]+)/i)
+             ?? text.match(/\*\*Top\s+Notes?\*\*[:\s]+([^\n]+)/i);
+  const midM  = text.match(/(?:[Mm]iddle|[Hh]eart)\s+[Nn]otes?\s+(?:are|is|:)\s*([^;.\n]+)/i)
+             ?? text.match(/\*\*(?:Middle|Heart)\s+Notes?\*\*[:\s]+([^\n]+)/i);
+  const baseM = text.match(/[Bb]ase\s+[Nn]otes?\s+(?:are|is|:)\s*([^;.\n]+)/i)
+             ?? text.match(/\*\*Base\s+Notes?\*\*[:\s]+([^\n]+)/i);
+
+  if (!topM && !midM && !baseM) return undefined;
+  return {
+    top:    topM  ? split(topM[1])  : [],
+    middle: midM  ? split(midM[1])  : [],
+    base:   baseM ? split(baseM[1]) : [],
+  };
+}
+
+// Parse HTML with cheerio — works on both direct Fragrantica HTML and Jina.ai rendered HTML
 function parseHtml(html: string) {
   const $ = cheerio.load(html);
 
+  // Description: dedicated content block, then meta tags as fallback
   const description =
-    $('#perfume-description-content p').first().text().trim().substring(0, 600) || undefined;
+    $('#perfume-description-content p').first().text().trim().substring(0, 600)
+    || $('meta[name="description"]').attr('content')?.substring(0, 600)
+    || $('meta[property="og:description"]').attr('content')?.substring(0, 600)
+    || undefined;
 
+  // Image
   const image =
     $('img[itemprop="image"]').attr('src') ??
     $('meta[property="og:image"]').attr('content');
 
+  // Notes from pyramid custom elements (works on direct HTML)
   function notesForTier(tier: string): string[] {
     return $(`pyramid-level-new[notes="${tier}"] .pyramid-note-label`)
       .map((_, el) => $(el).text().trim())
@@ -22,43 +53,34 @@ function parseHtml(html: string) {
       .filter(Boolean);
   }
 
-  const top    = notesForTier('top');
-  const middle = notesForTier('middle');
-  const base   = notesForTier('base');
-  const notes  = (top.length || middle.length || base.length)
+  let top    = notesForTier('top');
+  let middle = notesForTier('middle');
+  let base   = notesForTier('base');
+
+  // If pyramid elements empty, try parsing notes out of the meta description text
+  // Fragrantica's meta description usually contains the full notes sentence:
+  // "Sauvage is a fragrance... Top notes are Bergamot; middle notes are..."
+  if (!top.length && !middle.length && !base.length) {
+    const metaText =
+      $('meta[name="description"]').attr('content') ??
+      $('meta[property="og:description"]').attr('content') ??
+      '';
+    const notes = extractNotes(metaText);
+    if (notes) ({ top, middle, base } = notes);
+  }
+
+  const notes = (top.length || middle.length || base.length)
     ? { top, middle, base }
     : undefined;
 
-  return { description, notes, image };
+  return { description: description || undefined, notes, image };
 }
 
-// Regex parser for Jina.ai plain-text / markdown output
+// Parse plain text / markdown (Jina.ai text output)
 function parseText(text: string) {
-  const split = (raw: string) =>
-    raw.split(/,| and /).map((s) => s.replace(/[;|].*/g, '').trim()).filter(Boolean);
-
-  // "Top notes are X, Y and Z"
-  const topM  = text.match(/[Tt]op notes?\s+(?:is|are)\s+([^;.\n]+)/i);
-  const midM  = text.match(/(?:[Mm]iddle|[Hh]eart) notes?\s+(?:is|are)\s+([^;.\n]+)/i);
-  const baseM = text.match(/[Bb]ase notes?\s+(?:is|are)\s+([^;.\n]+)/i);
-
-  // Markdown bold headers: "**Top Notes**: X, Y"
-  const topM2  = text.match(/\*\*Top Notes?\*\*\s*[:\-]\s*([^\n]+)/i);
-  const midM2  = text.match(/\*\*(?:Middle|Heart) Notes?\*\*\s*[:\-]\s*([^\n]+)/i);
-  const baseM2 = text.match(/\*\*Base Notes?\*\*\s*[:\-]\s*([^\n]+)/i);
-
-  const topRaw    = topM?.[1]  ?? topM2?.[1]  ?? '';
-  const middleRaw = midM?.[1]  ?? midM2?.[1]  ?? '';
-  const baseRaw   = baseM?.[1] ?? baseM2?.[1] ?? '';
-
-  const notes = (topRaw || middleRaw || baseRaw)
-    ? { top: split(topRaw), middle: split(middleRaw), base: split(baseRaw) }
-    : undefined;
-
-  // First sentence that mentions fragrance / perfume / scent
-  const descM = text.match(/[A-Z][^.!?]*(?:fragrance|perfume|scent)[^.!?]*[.!?]/i);
+  const notes = extractNotes(text);
+  const descM = text.match(/[A-Z][^.!?]*(?:fragrance|perfume|scent|cologne)[^.!?]*[.!?]/i);
   const description = descM ? descM[0].trim().substring(0, 600) : undefined;
-
   return { description, notes };
 }
 
@@ -71,8 +93,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid url' }, { status: 400 });
   }
 
+  const debug: string[] = [];
+
   // ── 1. Direct axios + cheerio ─────────────────────────────────────────────
-  // Works when Cloudflare doesn't block (e.g. Vercel's IPs aren't flagged yet)
   try {
     const response = await axios.get(targetUrl, {
       headers: {
@@ -87,40 +110,49 @@ export async function GET(request: NextRequest) {
       },
       timeout: 8000,
     });
-
+    debug.push(`direct: OK ${response.status}, ${response.data.length} bytes`);
     const { description, notes, image } = parseHtml(response.data);
+    debug.push(`direct: desc=${description ? 'yes' : 'no'}, notes=${JSON.stringify(notes)}`);
     if (description || notes) return NextResponse.json({ description, notes, image });
-  } catch { /* Cloudflare blocked or timed out — fall through */ }
+    debug.push('direct: parsed but found nothing');
+  } catch (e: unknown) {
+    const err = e as { response?: { status: number }; message?: string };
+    debug.push(`direct: error ${err?.response?.status ?? err?.message}`);
+  }
 
   // ── 2. Jina.ai HTML render + cheerio ─────────────────────────────────────
-  // Jina uses a headless browser so it bypasses Cloudflare and executes JS,
-  // including Angular custom elements like <pyramid-level-new>. Requesting
-  // HTML format lets us reuse the same cheerio selectors from step 1.
+  // Jina uses headless Chromium so it bypasses Cloudflare and executes JS.
+  // Requesting HTML lets us reuse the same cheerio selectors + meta tag parsing.
   try {
     const res = await axios.get(`https://r.jina.ai/${targetUrl}`, {
-      headers: {
-        Accept: 'text/html',
-        'X-Return-Format': 'html',
-      },
+      headers: { Accept: 'text/html', 'X-Return-Format': 'html' },
       timeout: 25000,
     });
-
+    debug.push(`jina-html: OK ${res.status}, ${res.data.length} bytes`);
     const { description, notes, image } = parseHtml(res.data);
+    debug.push(`jina-html: desc=${description ? 'yes' : 'no'}, notes=${JSON.stringify(notes)}`);
     if (description || notes) return NextResponse.json({ description, notes, image });
-  } catch { /* ignore */ }
+    debug.push('jina-html: parsed but found nothing');
+  } catch (e: unknown) {
+    const err = e as { response?: { status: number }; message?: string };
+    debug.push(`jina-html: error ${err?.response?.status ?? err?.message}`);
+  }
 
   // ── 3. Jina.ai markdown text + regex ─────────────────────────────────────
-  // Last resort: if the HTML selectors couldn't find the data (e.g. Jina
-  // stripped the custom elements), try regex on the plain-text markdown.
   try {
     const res = await axios.get(`https://r.jina.ai/${targetUrl}`, {
       headers: { Accept: 'text/plain', 'X-Return-Format': 'text' },
       timeout: 20000,
     });
-
+    debug.push(`jina-text: OK ${res.status}, ${res.data.length} bytes`);
     const { description, notes } = parseText(res.data);
+    debug.push(`jina-text: desc=${description ? 'yes' : 'no'}, notes=${JSON.stringify(notes)}`);
     if (description || notes) return NextResponse.json({ description, notes });
-  } catch { /* ignore */ }
+    debug.push('jina-text: parsed but found nothing');
+  } catch (e: unknown) {
+    const err = e as { response?: { status: number }; message?: string };
+    debug.push(`jina-text: error ${err?.response?.status ?? err?.message}`);
+  }
 
-  return NextResponse.json({ error: 'Could not fetch perfume page' }, { status: 502 });
+  return NextResponse.json({ error: 'Could not fetch perfume page', debug }, { status: 502 });
 }

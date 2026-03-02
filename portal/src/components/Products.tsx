@@ -172,7 +172,15 @@ export default function Products() {
       const res = await fetch(`/api/perfume-details?url=${encodeURIComponent(s.url)}`);
       const data = await res.json();
 
-      if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+      if (!res.ok) {
+        const debugLines: string[] = data.debug ?? [];
+        setDebugUrl(
+          `URL: ${s.url}\nError: ${data.error || `HTTP ${res.status}`}\n\n` +
+          (debugLines.length ? `Steps:\n${debugLines.join('\n')}` : '')
+        );
+        setDetailsFailed(true);
+        return;
+      }
 
       const { description = '', notes, image } = data;
       const top = notes?.top ?? [];
