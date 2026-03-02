@@ -320,19 +320,19 @@ export async function GET(request: NextRequest) {
 
   const targetUrl = `https://www.fragrantica.com${path}`;
 
-  // Try HTML proxies first (all run in parallel — fastest wins).
-  // If Cloudflare blocks all of them, fall back to Jina.ai which runs
-  // a real headless browser and can pass the JS challenge.
-  const html = await scrapeHtml(targetUrl);
-  if (html) {
-    return NextResponse.json(parseHtml(html));
-  }
+  // Start both in parallel so Jina's headless browser warms up immediately
+  // instead of waiting for all HTML proxies to fail first.
+  // Vercel's cloud IPs are often blocked by Cloudflare; Jina bypasses that.
+  // If HTML wins (faster, ~5s), we return immediately and cancel Jina.
+  // If HTML fails, Jina already has a 5s head start (max wait: ~18s total).
+  const htmlPromise = scrapeHtml(targetUrl);
+  const jinaPromise = fetchViaJina(targetUrl);
 
-  // HTML scraping failed → try Jina.ai reader
-  const jinaText = await fetchViaJina(targetUrl);
-  if (jinaText) {
-    return NextResponse.json(parseJinaText(jinaText));
-  }
+  const html = await htmlPromise;
+  if (html) return NextResponse.json(parseHtml(html));
+
+  const jinaText = await jinaPromise;
+  if (jinaText) return NextResponse.json(parseJinaText(jinaText));
 
   return NextResponse.json({ error: 'Could not fetch perfume page' }, { status: 502 });
 }
