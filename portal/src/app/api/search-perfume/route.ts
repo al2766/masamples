@@ -57,22 +57,16 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(
       hits.map((hit) => {
-        // url field comes back as { EN: ["https://..."] }
+        // url field comes back as { EN: ["https://www.fragrantica.com/perfume/..."] }
         const urlArr: string[] | undefined =
           hit?.url?.EN ?? hit?.['url.EN'];
-        let path: string | undefined;
-        try {
-          path = urlArr?.[0] ? new URL(urlArr[0]).pathname : undefined;
-        } catch {
-          path = undefined;
-        }
 
         return {
           id:       String(hit.objectID ?? ''),
           name:     String(hit.naslov   ?? ''),
           brand:    String(hit.dizajner ?? ''),
           image:    String(hit.thumbnail ?? ''),
-          url:      path,
+          url:      urlArr?.[0] ?? undefined,
           category: toCategory(String(hit.spol ?? '')),
         };
       })

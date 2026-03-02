@@ -51,20 +51,21 @@ function parseHtml(html: string): PerfumeDetails {
   return d;
 }
 
-// GET /api/perfume-details?url=/perfume/Dior/Sauvage-31861.html
+// GET /api/perfume-details?url=https://www.fragrantica.com/perfume/Dior/Sauvage-31861.html
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const path = searchParams.get('url');
+  const targetUrl = searchParams.get('url');
 
-  if (!path || !path.startsWith('/perfume/')) {
+  if (!targetUrl || !targetUrl.startsWith('https://www.fragrantica.com/perfume/')) {
     return NextResponse.json({ error: 'Invalid url' }, { status: 400 });
   }
 
-  const targetUrl = `https://www.fragrantica.com${path}`;
-
-  // Simple fetch — same as what Postman does
+  // Plain GET with a User-Agent — exactly what Postman does
   try {
-    const res = await fetch(targetUrl, { signal: AbortSignal.timeout(10000) });
+    const res = await fetch(targetUrl, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36' },
+      signal: AbortSignal.timeout(10000),
+    });
     if (res.ok) {
       const html = await res.text();
       const data = parseHtml(html);
