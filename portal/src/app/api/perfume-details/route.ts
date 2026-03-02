@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { parse as parseHtml5 } from 'node-html-parser';
 
 export const maxDuration = 30;
 
@@ -90,45 +91,7 @@ async function fetchViaJina(url: string): Promise<string | null> {
 
 // ── HTML parsers ──────────────────────────────────────────────────────────────
 
-function stripTags(s: string): string {
-  return s.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
-}
-
-/** Extract note names from <span class="pyramid-note-label ...">name</span> */
-function extractPyramidLabels(chunk: string): string[] {
-  const out: string[] = [];
-  const re =
-    /<span[^>]+class="pyramid-note-label[^"]*"[^>]*>\s*([^<]+?)\s*<\/span>/g;
-  let m;
-  while ((m = re.exec(chunk)) !== null) {
-    const v = m[1].trim();
-    if (v) out.push(v);
-  }
-  return out;
-}
-
-/** Primary: extract from <pyramid-level-new notes="top/middle/base"> sections */
-function extractPyramidNotes(
-  html: string
-): { top: string[]; middle: string[]; base: string[] } | null {
-  const topM = html.match(
-    /<pyramid-level-new[^>]+notes="top"[^>]*>([\s\S]*?)<\/pyramid-level-new>/i
-  );
-  const middleM = html.match(
-    /<pyramid-level-new[^>]+notes="middle"[^>]*>([\s\S]*?)<\/pyramid-level-new>/i
-  );
-  const baseM = html.match(
-    /<pyramid-level-new[^>]+notes="base"[^>]*>([\s\S]*?)<\/pyramid-level-new>/i
-  );
-  if (!topM && !middleM && !baseM) return null;
-  return {
-    top: topM ? extractPyramidLabels(topM[1]) : [],
-    middle: middleM ? extractPyramidLabels(middleM[1]) : [],
-    base: baseM ? extractPyramidLabels(baseM[1]) : [],
-  };
-}
-
-/** Extract accord names from the main accords section */
+/** Extract accord names from the main accords section (regex — no reliable DOM selector) */
 function extractAccords(html: string): string[] {
   const accordM = html.match(
     /main\s+accords([\s\S]*?)(?:Search by accords|<\/section>|accordBox)/i
@@ -220,21 +183,19 @@ interface PerfumeDetails {
   scentProfiles?: string[];
 }
 
-// ── Full HTML parser ──────────────────────────────────────────────────────────
+// ── Full HTML parser (DOM-based) ──────────────────────────────────────────────
 
 function parseHtml(html: string): PerfumeDetails {
+  const root = parseHtml5(html);
   const d: PerfumeDetails = {};
 
   // Name & brand from JSON-LD
-  const ldRe = /<script[^>]+type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g;
-  let ldM;
-  while ((ldM = ldRe.exec(html)) !== null) {
+  for (const s of root.querySelectorAll('script[type="application/ld+json"]')) {
     try {
-      const obj = JSON.parse(ldM[1]);
+      const obj = JSON.parse(s.rawText);
       if (obj['@type'] === 'Product') {
         d.name = obj.name?.trim();
-        d.brand =
-          typeof obj.brand === 'string' ? obj.brand.trim() : obj.brand?.name?.trim();
+        d.brand = typeof obj.brand === 'string' ? obj.brand.trim() : obj.brand?.name?.trim();
         break;
       }
     } catch { /* malformed */ }
@@ -242,9 +203,9 @@ function parseHtml(html: string): PerfumeDetails {
 
   // Fallback: <title>
   if (!d.name) {
-    const titleM = html.match(/<title[^>]*>([^<]+)<\/title>/i);
-    if (titleM) {
-      const parts = titleM[1].split(' by ');
+    const titleText = root.querySelector('title')?.text;
+    if (titleText) {
+      const parts = titleText.split(' by ');
       if (parts.length >= 2) {
         d.name = parts[0].trim();
         d.brand = parts[1].split(' - ')[0].trim();
@@ -252,58 +213,45 @@ function parseHtml(html: string): PerfumeDetails {
     }
   }
 
-  // Description: id="perfume-description-content" → first <p>
-  const descById = html.match(
-    /id="perfume-description-content"[^>]*>([\s\S]*?)<\/div>/i
-  );
-  if (descById) {
-    const firstP = descById[1].match(/<p[^>]*>([\s\S]*?)<\/p>/i);
-    if (firstP) {
-      d.description = stripTags(firstP[1]).substring(0, 600) || undefined;
-    }
-  }
-
-  // Fallback: itemprop="description"
-  if (!d.description) {
-    const descM = html.match(/itemprop="description"[^>]*>([\s\S]*?)<\/div>/i);
-    if (descM) {
-      const firstP = descM[1].match(/<p[^>]*>([\s\S]*?)<\/p>/i);
-      if (firstP) {
-        d.description = stripTags(firstP[1]).substring(0, 600) || undefined;
-      }
-    }
+  // Description: #perfume-description-content p:first-child
+  const descP = root.querySelector('#perfume-description-content p');
+  if (descP) {
+    d.description = descP.text.trim().substring(0, 600) || undefined;
   }
 
   // Fallback: og:description
   if (!d.description) {
-    const ogM =
-      html.match(/<meta[^>]+property="og:description"[^>]+content="([^"]+)"/i) ??
-      html.match(/<meta[^>]+content="([^"]+)"[^>]+property="og:description"/i);
-    if (ogM) d.description = ogM[1].trim();
+    d.description = root.querySelector('meta[property="og:description"]')
+      ?.getAttribute('content')?.trim();
   }
 
   // Image: itemprop="image" then og:image
-  const itemImg =
-    html.match(/<img[^>]+itemprop="image"[^>]+src="([^"]+)"/i) ??
-    html.match(/<img[^>]+src="([^"]+)"[^>]+itemprop="image"/i);
+  const itemImg = root.querySelector('img[itemprop="image"]');
   if (itemImg) {
-    d.image = itemImg[1];
+    d.image = itemImg.getAttribute('src');
   } else {
-    const ogImg = html.match(/<meta[^>]+property="og:image"[^>]+content="([^"]+)"/i);
-    if (ogImg) d.image = ogImg[1];
+    d.image = root.querySelector('meta[property="og:image"]')?.getAttribute('content');
   }
 
-  // Accords
+  // Scent profiles / accords (regex — no reliable DOM selector known)
   const accords = extractAccords(html);
   if (accords.length) d.scentProfiles = accords;
 
-  // Notes: pyramid sections (most accurate)
-  const pyramidNotes = extractPyramidNotes(html);
-  if (
-    pyramidNotes &&
-    (pyramidNotes.top.length || pyramidNotes.middle.length || pyramidNotes.base.length)
-  ) {
-    d.notes = pyramidNotes;
+  // Notes: <pyramid-level-new notes="top/middle/base"> .pyramid-note-label
+  function notesForTier(tier: string): string[] {
+    const level = root.querySelector(`pyramid-level-new[notes="${tier}"]`);
+    if (!level) return [];
+    return level.querySelectorAll('.pyramid-note-label')
+      .map(el => el.text.trim())
+      .filter(Boolean);
+  }
+
+  const top = notesForTier('top');
+  const middle = notesForTier('middle');
+  const base = notesForTier('base');
+
+  if (top.length || middle.length || base.length) {
+    d.notes = { top, middle, base };
     return d;
   }
 
@@ -313,13 +261,9 @@ function parseHtml(html: string): PerfumeDetails {
     if (fromDesc) { d.notes = fromDesc; return d; }
   }
 
-  // Fallback: search full HTML for description paragraph
-  const descPara = html.match(/itemprop="description"[\s\S]*?<p[^>]*>([\s\S]*?)<\/p>/i);
-  if (descPara) {
-    const plain = stripTags(descPara[1]);
-    const fromFull = parseNotesFromText(plain);
-    if (fromFull) d.notes = fromFull;
-  }
+  // Fallback: parse notes from full-text search in raw HTML
+  const fromFull = parseNotesFromText(root.querySelector('[itemprop="description"] p')?.text ?? '');
+  if (fromFull) d.notes = fromFull;
 
   return d;
 }
