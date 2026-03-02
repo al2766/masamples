@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+export const maxDuration = 30;
+
 // ── HTML fetch strategies ─────────────────────────────────────────────────────
 
 const BROWSER_HEADERS = {
@@ -23,7 +25,7 @@ function isValidHtml(html: string): boolean {
 
 async function fetchDirect(url: string): Promise<string | null> {
   try {
-    const res = await fetch(url, { headers: BROWSER_HEADERS, signal: AbortSignal.timeout(7000) });
+    const res = await fetch(url, { headers: BROWSER_HEADERS, signal: AbortSignal.timeout(5000) });
     if (!res.ok) return null;
     const html = await res.text();
     return isValidHtml(html) ? html : null;
@@ -34,7 +36,7 @@ async function fetchAllOrigins(url: string): Promise<string | null> {
   try {
     const res = await fetch(
       `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-      { signal: AbortSignal.timeout(7000) }
+      { signal: AbortSignal.timeout(5000) }
     );
     if (!res.ok) return null;
     const html = await res.text();
@@ -46,7 +48,7 @@ async function fetchCorsproxy(url: string): Promise<string | null> {
   try {
     const res = await fetch(
       `https://corsproxy.io/?${encodeURIComponent(url)}`,
-      { signal: AbortSignal.timeout(7000) }
+      { signal: AbortSignal.timeout(5000) }
     );
     if (!res.ok) return null;
     const html = await res.text();
@@ -77,7 +79,7 @@ async function fetchViaJina(url: string): Promise<string | null> {
   try {
     const res = await fetch(`https://r.jina.ai/${url}`, {
       headers: { Accept: 'text/plain', 'X-Return-Format': 'text' },
-      signal: AbortSignal.timeout(20000),
+      signal: AbortSignal.timeout(18000),
     });
     if (!res.ok) return null;
     const text = await res.text();

@@ -50,7 +50,7 @@ export default function Settings() {
         if (cached.exists() && !cancelled)
           setForm(applyDefaults(cached.data() as Partial<Pricing>));
         if (!cancelled) setLoading(false);
-      } catch { /* no cache */ }
+      } catch { if (!cancelled) setLoading(false); /* no cache */ }
 
       // Network refresh
       try {

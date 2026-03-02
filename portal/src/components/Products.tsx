@@ -95,6 +95,7 @@ export default function Products() {
   const [suggestions, setSuggestions] = useState<SearchResult[]>([]);
   const [fetchingSearch, setFetchingSearch] = useState(false);
   const [fetchingDetails, setFetchingDetails] = useState(false);
+  const [detailsFailed, setDetailsFailed] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState<string | null>(null);
@@ -115,7 +116,7 @@ export default function Products() {
           if (pricingCached.exists()) setPricing({ ...PRICING_DEFAULTS, ...(pricingCached.data() as Partial<Pricing>) });
           setLoading(false);
         }
-      } catch { /* no cache yet */ }
+      } catch { if (!cancelled) setLoading(false); /* no cache yet */ }
 
       // Then fetch fresh from network
       try {
@@ -159,12 +160,15 @@ export default function Products() {
   async function handleSuggestionClick(s: SearchResult) {
     setSuggestions([]);
     setSearch('');
+    setDetailsFailed(false);
     setForm((f) => ({ ...f, name: s.name, brand: s.brand, image: s.image, category: s.category }));
     if (s.url) {
       setFetchingDetails(true);
       try {
         const res = await fetch(`/api/perfume-details?url=${encodeURIComponent(s.url)}`);
+        if (!res.ok) { setDetailsFailed(true); return; }
         const d = await res.json();
+        if (!d.description && !d.notes) { setDetailsFailed(true); return; }
         setForm((f) => ({
           ...f,
           description: d.description || f.description,
@@ -174,7 +178,7 @@ export default function Products() {
           baseNotes: d.notes?.base?.join(', ') || f.baseNotes,
           scentProfiles: d.scentProfiles?.join(', ') || f.scentProfiles,
         }));
-      } catch { /* keep existing */ } finally {
+      } catch { setDetailsFailed(true); } finally {
         setFetchingDetails(false);
       }
     }
@@ -201,6 +205,7 @@ export default function Products() {
     setEditing(null);
     setSearch('');
     setSuggestions([]);
+    setDetailsFailed(false);
   }
 
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -424,6 +429,11 @@ export default function Products() {
                     <p className="text-xs text-amber-600 mt-1.5 flex items-center gap-1.5">
                       <span className="inline-block w-3 h-3 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
                       Fetching description and notes…
+                    </p>
+                  )}
+                  {detailsFailed && !fetchingDetails && (
+                    <p className="text-xs text-red-500 mt-1.5">
+                      Could not auto-fill details — fill in manually below.
                     </p>
                   )}
                 </div>
