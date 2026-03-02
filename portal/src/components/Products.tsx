@@ -96,6 +96,7 @@ export default function Products() {
   const [fetchingSearch, setFetchingSearch] = useState(false);
   const [fetchingDetails, setFetchingDetails] = useState(false);
   const [detailsFailed, setDetailsFailed] = useState(false);
+  const [debugUrl, setDebugUrl] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState<string | null>(null);
@@ -161,6 +162,7 @@ export default function Products() {
     setSuggestions([]);
     setSearch('');
     setDetailsFailed(false);
+    setDebugUrl(s.url ?? '(no url in search result)');
     setForm((f) => ({ ...f, name: s.name, brand: s.brand, image: s.image, category: s.category }));
     if (s.url) {
       setFetchingDetails(true);
@@ -189,6 +191,7 @@ export default function Products() {
     setForm({ ...BASE_FORM, sizes: defaultSizes(pricing) });
     setSearch('');
     setSuggestions([]);
+    setDebugUrl('');
     setModalOpen(true);
   }
 
@@ -206,6 +209,7 @@ export default function Products() {
     setSearch('');
     setSuggestions([]);
     setDetailsFailed(false);
+    setDebugUrl('');
   }
 
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -392,6 +396,10 @@ export default function Products() {
               {/* Fragrantica search — add mode only */}
               {!editing && (
                 <div className="relative">
+                  {/* Debug: shows the Fragrantica URL fetched on suggestion click */}
+                  <div className="mb-2 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg font-mono text-xs text-gray-500 break-all min-h-[32px]">
+                    {debugUrl || 'Click a suggestion to see the URL being fetched…'}
+                  </div>
                   <input
                     type="text"
                     placeholder="Search Fragrantica to auto-fill…"
