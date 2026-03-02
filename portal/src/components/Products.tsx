@@ -162,27 +162,59 @@ export default function Products() {
     setSuggestions([]);
     setSearch('');
     setDetailsFailed(false);
-    setDebugUrl(s.url ?? '(no url in search result)');
+    setDebugUrl(`Fetching: ${s.url ?? '(no url)'}`);
     setForm((f) => ({ ...f, name: s.name, brand: s.brand, image: s.image, category: s.category }));
-    if (s.url) {
-      setFetchingDetails(true);
-      try {
-        const res = await fetch(`/api/perfume-details?url=${encodeURIComponent(s.url)}`);
-        if (!res.ok) { setDetailsFailed(true); return; }
-        const d = await res.json();
-        if (!d.description && !d.notes) { setDetailsFailed(true); return; }
+    if (!s.url) return;
+
+    setFetchingDetails(true);
+    try {
+      // Fetch from browser via CORS proxy — bypasses Cloudflare server-IP blocking.
+      // Browser has your real IP; the CORS proxy adds the Access-Control-Allow-Origin header.
+      const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(s.url)}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const html = await res.text();
+
+      // Parse with the browser's native DOMParser
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+
+      const description = doc.querySelector('#perfume-description-content p')?.textContent?.trim() ?? '';
+
+      function notesForTier(tier: string): string[] {
+        const level = doc.querySelector(`pyramid-level-new[notes="${tier}"]`);
+        if (!level) return [];
+        return Array.from(level.querySelectorAll('.pyramid-note-label'))
+          .map((el) => el.textContent?.trim() ?? '')
+          .filter(Boolean);
+      }
+      const top = notesForTier('top');
+      const middle = notesForTier('middle');
+      const base = notesForTier('base');
+
+      // Show what was found in the debug box
+      setDebugUrl(
+        `URL: ${s.url}\n` +
+        `Description: ${description || '(not found)'}\n` +
+        `Top: ${top.join(', ') || '(none)'}\n` +
+        `Middle: ${middle.join(', ') || '(none)'}\n` +
+        `Base: ${base.join(', ') || '(none)'}`
+      );
+
+      if (description || top.length || middle.length || base.length) {
         setForm((f) => ({
           ...f,
-          description: d.description || f.description,
-          image: d.image || f.image,
-          topNotes: d.notes?.top?.join(', ') || f.topNotes,
-          middleNotes: d.notes?.middle?.join(', ') || f.middleNotes,
-          baseNotes: d.notes?.base?.join(', ') || f.baseNotes,
-          scentProfiles: d.scentProfiles?.join(', ') || f.scentProfiles,
+          description: description || f.description,
+          topNotes: top.join(', ') || f.topNotes,
+          middleNotes: middle.join(', ') || f.middleNotes,
+          baseNotes: base.join(', ') || f.baseNotes,
         }));
-      } catch { setDetailsFailed(true); } finally {
-        setFetchingDetails(false);
+      } else {
+        setDetailsFailed(true);
       }
+    } catch (err) {
+      setDebugUrl(`URL: ${s.url}\nError: ${err}`);
+      setDetailsFailed(true);
+    } finally {
+      setFetchingDetails(false);
     }
   }
 
@@ -396,10 +428,10 @@ export default function Products() {
               {/* Fragrantica search — add mode only */}
               {!editing && (
                 <div className="relative">
-                  {/* Debug: shows the Fragrantica URL fetched on suggestion click */}
-                  <div className="mb-2 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg font-mono text-xs text-gray-500 break-all min-h-[32px]">
-                    {debugUrl || 'Click a suggestion to see the URL being fetched…'}
-                  </div>
+                  {/* Debug: shows URL + what was extracted on suggestion click */}
+                  <pre className="mb-2 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg font-mono text-xs text-gray-500 whitespace-pre-wrap break-all min-h-[32px]">
+                    {debugUrl || 'Click a suggestion — this box will show the URL and what was extracted'}
+                  </pre>
                   <input
                     type="text"
                     placeholder="Search Fragrantica to auto-fill…"
