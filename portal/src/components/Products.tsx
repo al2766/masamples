@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import {
   collection,
   getDocs,
+  getDocsFromCache,
+  getDocFromCache,
   addDoc,
   updateDoc,
   deleteDoc,
@@ -13,14 +15,7 @@ import {
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '@/lib/firebase';
 import type { Product, ProductNotes } from '@/lib/types';
-
-interface Pricing {
-  costPerMl: number;
-  packagingCost: number;
-  shippingCost: number;
-  extraFees: number;
-  profitMargin: number;
-}
+import { calcPrice, type Pricing } from './Settings';
 
 interface SearchResult {
   id: string;
@@ -31,7 +26,17 @@ interface SearchResult {
   category: 'mens' | 'womens' | 'unisex';
 }
 
-const EMPTY_FORM = {
+const PRICING_DEFAULTS: Pricing = {
+  oilCost: 10,
+  oilVolume: 50,
+  costPerMl: 0.2,
+  packagingCost: 2.25,
+  shippingCost: 1.55,
+  extraFees: 0,
+  profitMargin: 40,
+};
+
+const BASE_FORM = {
   name: '',
   brand: '',
   description: '',
@@ -47,24 +52,17 @@ const EMPTY_FORM = {
   scentProfiles: '',
   sizes: [{ size: '', price: 0 }],
 };
-type FormData = typeof EMPTY_FORM;
+type FormData = typeof BASE_FORM;
 
-function calcAutoPrice(sizeStr: string, pricing: Pricing): number {
-  const ml = parseFloat(sizeStr.replace(/[^\d.]/g, ''));
-  if (!ml) return 0;
-  const cost =
-    ml * pricing.costPerMl +
-    pricing.packagingCost +
-    pricing.shippingCost +
-    pricing.extraFees;
-  return Math.round((cost / (1 - pricing.profitMargin / 100)) * 100) / 100;
+function defaultSizes(pricing: Pricing): { size: string; price: number }[] {
+  return Array.from({ length: 10 }, (_, i) => {
+    const ml = i + 1;
+    return { size: `${ml}ml`, price: calcPrice(ml, pricing) };
+  });
 }
 
 function splitComma(s: string): string[] {
-  return s
-    .split(',')
-    .map((x) => x.trim())
-    .filter(Boolean);
+  return s.split(',').map((x) => x.trim()).filter(Boolean);
 }
 
 function productToForm(p: Product): FormData {
@@ -82,19 +80,17 @@ function productToForm(p: Product): FormData {
     middleNotes: p.notes?.middle?.join(', ') || '',
     baseNotes: p.notes?.base?.join(', ') || '',
     scentProfiles: p.scentProfiles?.join(', ') || '',
-    sizes: p.sizes?.length
-      ? p.sizes
-      : [{ size: p.size || '', price: p.price || 0 }],
+    sizes: p.sizes?.length ? p.sizes : [{ size: p.size || '', price: p.price || 0 }],
   };
 }
 
 export default function Products() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [pricing, setPricing] = useState<Pricing | null>(null);
+  const [pricing, setPricing] = useState<Pricing>(PRICING_DEFAULTS);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<Product | null>(null);
-  const [form, setForm] = useState<FormData>(EMPTY_FORM);
+  const [form, setForm] = useState<FormData>(BASE_FORM);
   const [search, setSearch] = useState('');
   const [suggestions, setSuggestions] = useState<SearchResult[]>([]);
   const [fetchingSearch, setFetchingSearch] = useState(false);
@@ -104,27 +100,42 @@ export default function Products() {
   const [deleting, setDeleting] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Load products and pricing settings in parallel
   useEffect(() => {
+    let cancelled = false;
+
     async function load() {
+      // Cache-first: serve instantly from IndexedDB if available
+      try {
+        const [prodCached, pricingCached] = await Promise.all([
+          getDocsFromCache(collection(db, 'products')),
+          getDocFromCache(doc(db, 'settings', 'pricing')),
+        ]);
+        if (!cancelled) {
+          setProducts(prodCached.docs.map((d) => ({ id: d.id, ...d.data() } as Product)));
+          if (pricingCached.exists()) setPricing({ ...PRICING_DEFAULTS, ...(pricingCached.data() as Partial<Pricing>) });
+          setLoading(false);
+        }
+      } catch { /* no cache yet */ }
+
+      // Then fetch fresh from network
       try {
         const [prodSnap, pricingSnap] = await Promise.all([
           getDocs(collection(db, 'products')),
           getDoc(doc(db, 'settings', 'pricing')),
         ]);
-        setProducts(
-          prodSnap.docs.map((d) => ({ id: d.id, ...d.data() } as Product))
-        );
-        if (pricingSnap.exists())
-          setPricing(pricingSnap.data() as Pricing);
-      } finally {
-        setLoading(false);
+        if (!cancelled) {
+          setProducts(prodSnap.docs.map((d) => ({ id: d.id, ...d.data() } as Product)));
+          if (pricingSnap.exists()) setPricing({ ...PRICING_DEFAULTS, ...(pricingSnap.data() as Partial<Pricing>) });
+        }
+      } catch { /* ignore */ } finally {
+        if (!cancelled) setLoading(false);
       }
     }
     load();
+    return () => { cancelled = true; };
   }, []);
 
-  // Algolia search with 600ms debounce — Fragrantica only, no local fallback shown first
+  // Algolia search — 600ms debounce, Fragrantica only
   useEffect(() => {
     if (!search.trim()) {
       setSuggestions([]);
@@ -134,11 +145,8 @@ export default function Products() {
     setFetchingSearch(true);
     const t = setTimeout(async () => {
       try {
-        const res = await fetch(
-          `/api/search-perfume?q=${encodeURIComponent(search)}`
-        );
-        const data: SearchResult[] = await res.json();
-        setSuggestions(data.length ? data : []);
+        const res = await fetch(`/api/search-perfume?q=${encodeURIComponent(search)}`);
+        setSuggestions(await res.json());
       } catch {
         setSuggestions([]);
       } finally {
@@ -151,21 +159,11 @@ export default function Products() {
   async function handleSuggestionClick(s: SearchResult) {
     setSuggestions([]);
     setSearch('');
-    // Apply Algolia data immediately
-    setForm((f) => ({
-      ...f,
-      name: s.name,
-      brand: s.brand,
-      image: s.image,
-      category: s.category,
-    }));
-    // Then fetch page for description + notes
+    setForm((f) => ({ ...f, name: s.name, brand: s.brand, image: s.image, category: s.category }));
     if (s.url) {
       setFetchingDetails(true);
       try {
-        const res = await fetch(
-          `/api/perfume-details?url=${encodeURIComponent(s.url)}`
-        );
+        const res = await fetch(`/api/perfume-details?url=${encodeURIComponent(s.url)}`);
         const d = await res.json();
         setForm((f) => ({
           ...f,
@@ -176,9 +174,7 @@ export default function Products() {
           baseNotes: d.notes?.base?.join(', ') || f.baseNotes,
           scentProfiles: d.scentProfiles?.join(', ') || f.scentProfiles,
         }));
-      } catch {
-        /* keep existing form data */
-      } finally {
+      } catch { /* keep existing */ } finally {
         setFetchingDetails(false);
       }
     }
@@ -186,7 +182,7 @@ export default function Products() {
 
   function openAdd() {
     setEditing(null);
-    setForm(EMPTY_FORM);
+    setForm({ ...BASE_FORM, sizes: defaultSizes(pricing) });
     setSearch('');
     setSuggestions([]);
     setModalOpen(true);
@@ -227,8 +223,8 @@ export default function Products() {
       const sizes = [...f.sizes];
       if (key === 'size') {
         const sizeStr = value as string;
-        const autoPrice =
-          pricing ? calcAutoPrice(sizeStr, pricing) : sizes[i].price;
+        const ml = parseFloat(sizeStr.replace(/[^\d.]/g, ''));
+        const autoPrice = ml ? calcPrice(ml, pricing) : sizes[i].price;
         sizes[i] = { ...sizes[i], size: sizeStr, price: autoPrice };
       } else {
         sizes[i] = { ...sizes[i], price: value as number };
@@ -246,7 +242,6 @@ export default function Products() {
         middle: splitComma(form.middleNotes),
         base: splitComma(form.baseNotes),
       };
-      const scentProfiles = splitComma(form.scentProfiles);
       const sizes = form.sizes.filter((s) => s.size.trim());
       const firstSize = sizes[0];
 
@@ -264,20 +259,15 @@ export default function Products() {
         size: firstSize?.size ?? '',
         notes,
         sizes,
-        scentProfiles,
+        scentProfiles: splitComma(form.scentProfiles),
         updatedAt: new Date(),
       };
 
       if (editing?.id) {
         await updateDoc(doc(db, 'products', editing.id), data as Record<string, unknown>);
-        setProducts((ps) =>
-          ps.map((p) => (p.id === editing.id ? { ...data, id: editing.id } : p))
-        );
+        setProducts((ps) => ps.map((p) => (p.id === editing.id ? { ...data, id: editing.id } : p)));
       } else {
-        const newRef = await addDoc(collection(db, 'products'), {
-          ...data,
-          createdAt: new Date(),
-        });
+        const newRef = await addDoc(collection(db, 'products'), { ...data, createdAt: new Date() });
         setProducts((ps) => [...ps, { ...data, id: newRef.id }]);
       }
       closeModal();
@@ -306,7 +296,6 @@ export default function Products() {
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
-      {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Products</h1>
         <button
@@ -320,8 +309,7 @@ export default function Products() {
         </button>
       </div>
 
-      {/* Product grid */}
-      {loading ? (
+      {loading && products.length === 0 ? (
         <div className="flex items-center gap-2 text-gray-400 text-sm">
           <div className="w-4 h-4 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
           Loading…
@@ -339,25 +327,12 @@ export default function Products() {
               className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden"
             >
               {p.image ? (
-                <img
-                  src={p.image}
-                  alt={p.name}
-                  className="w-full aspect-square object-cover"
-                />
+                <img src={p.image} alt={p.name} className="w-full aspect-square object-cover" />
               ) : (
                 <div className="w-full aspect-square bg-gray-50 flex items-center justify-center">
-                  <svg
-                    className="w-10 h-10 text-gray-200"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1.5}
-                      d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                    />
+                  <svg className="w-10 h-10 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                      d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                   </svg>
                 </div>
               )}
@@ -394,33 +369,22 @@ export default function Products() {
       {modalOpen && (
         <div
           className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 p-4 overflow-y-auto"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) closeModal();
-          }}
+          onClick={(e) => { if (e.target === e.currentTarget) closeModal(); }}
         >
           <div className="modal-enter bg-white rounded-2xl shadow-xl w-full max-w-2xl my-8">
-            {/* Modal header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
               <h2 className="text-lg font-semibold text-gray-900">
                 {editing ? 'Edit Product' : 'Add Product'}
               </h2>
-              <button
-                onClick={closeModal}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
-              >
+              <button onClick={closeModal} className="text-gray-400 hover:text-gray-600 transition-colors">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
 
             <form onSubmit={handleSave} className="px-6 py-5 space-y-5">
-              {/* Fragrantica search (add mode only) */}
+              {/* Fragrantica search — add mode only */}
               {!editing && (
                 <div className="relative">
                   <input
@@ -445,16 +409,10 @@ export default function Products() {
                             onClick={() => handleSuggestionClick(s)}
                           >
                             {s.image && (
-                              <img
-                                src={s.image}
-                                alt=""
-                                className="w-9 h-9 rounded-lg object-cover flex-shrink-0"
-                              />
+                              <img src={s.image} alt="" className="w-9 h-9 rounded-lg object-cover flex-shrink-0" />
                             )}
                             <div className="min-w-0">
-                              <p className="text-sm font-medium text-gray-900 truncate">
-                                {s.name}
-                              </p>
+                              <p className="text-sm font-medium text-gray-900 truncate">{s.name}</p>
                               <p className="text-xs text-gray-400 truncate">{s.brand}</p>
                             </div>
                           </button>
@@ -465,7 +423,7 @@ export default function Products() {
                   {fetchingDetails && (
                     <p className="text-xs text-amber-600 mt-1.5 flex items-center gap-1.5">
                       <span className="inline-block w-3 h-3 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
-                      Fetching details…
+                      Fetching description and notes…
                     </p>
                   )}
                 </div>
@@ -499,10 +457,7 @@ export default function Products() {
                 <select
                   value={form.category}
                   onChange={(e) =>
-                    setForm((f) => ({
-                      ...f,
-                      category: e.target.value as 'mens' | 'womens' | 'unisex',
-                    }))
+                    setForm((f) => ({ ...f, category: e.target.value as 'mens' | 'womens' | 'unisex' }))
                   }
                   className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white"
                 >
@@ -541,20 +496,10 @@ export default function Products() {
                   >
                     {uploadingImage ? 'Uploading…' : 'Upload'}
                   </button>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleImageUpload}
-                  />
+                  <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
                 </div>
                 {form.image && (
-                  <img
-                    src={form.image}
-                    alt=""
-                    className="mt-2 w-16 h-16 rounded-lg object-cover border border-gray-100"
-                  />
+                  <img src={form.image} alt="" className="mt-2 w-16 h-16 rounded-lg object-cover border border-gray-100" />
                 )}
               </div>
 
@@ -589,24 +534,19 @@ export default function Products() {
                 </div>
               </div>
 
-              {/* Sizes */}
+              {/* Sizes — pre-filled 1–10ml on add */}
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <p className="text-xs font-semibold text-gray-700">Sizes & Prices</p>
                   <button
                     type="button"
-                    onClick={() =>
-                      setForm((f) => ({
-                        ...f,
-                        sizes: [...f.sizes, { size: '', price: 0 }],
-                      }))
-                    }
+                    onClick={() => setForm((f) => ({ ...f, sizes: [...f.sizes, { size: '', price: 0 }] }))}
                     className="text-xs text-amber-600 hover:text-amber-800 font-medium"
                   >
                     + Add size
                   </button>
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
                   {form.sizes.map((s, i) => (
                     <div key={i} className="flex items-center gap-2">
                       <input
@@ -616,54 +556,30 @@ export default function Products() {
                         className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
                       />
                       <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-amber-400">
-                        <span className="px-2 text-gray-400 text-sm bg-gray-50 border-r border-gray-100 py-2">
-                          £
-                        </span>
+                        <span className="px-2 text-gray-400 text-sm bg-gray-50 border-r border-gray-100 py-2">£</span>
                         <input
                           type="number"
                           step="0.01"
                           min="0"
                           value={s.price}
-                          onChange={(e) =>
-                            updateSize(i, 'price', parseFloat(e.target.value) || 0)
-                          }
+                          onChange={(e) => updateSize(i, 'price', parseFloat(e.target.value) || 0)}
                           className="w-20 py-2 pr-2 text-sm focus:outline-none"
                         />
                       </div>
-                      {form.sizes.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setForm((f) => ({
-                              ...f,
-                              sizes: f.sizes.filter((_, j) => j !== i),
-                            }))
-                          }
-                          className="text-gray-300 hover:text-red-400 transition-colors"
-                        >
-                          <svg
-                            className="w-4 h-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M6 18L18 6M6 6l12 12"
-                            />
-                          </svg>
-                        </button>
-                      )}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setForm((f) => ({ ...f, sizes: f.sizes.filter((_, j) => j !== i) }))
+                        }
+                        className="text-gray-300 hover:text-red-400 transition-colors"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
                     </div>
                   ))}
                 </div>
-                {pricing && (
-                  <p className="text-xs text-gray-400 mt-1.5">
-                    Price auto-fills from settings when you enter the size (e.g. &ldquo;5ml&rdquo;)
-                  </p>
-                )}
               </div>
 
               {/* Flags */}
@@ -673,9 +589,7 @@ export default function Products() {
                     <input
                       type="checkbox"
                       checked={form[key]}
-                      onChange={(e) =>
-                        setForm((f) => ({ ...f, [key]: e.target.checked }))
-                      }
+                      onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.checked }))}
                       className="w-4 h-4 rounded accent-amber-400"
                     />
                     <span className="text-sm text-gray-700">{label}</span>
@@ -683,7 +597,7 @@ export default function Products() {
                 ))}
               </div>
 
-              {/* Footer buttons */}
+              {/* Footer */}
               <div className="flex gap-3 pt-2">
                 <button
                   type="button"

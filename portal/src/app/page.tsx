@@ -142,13 +142,6 @@ export default function Portal() {
     );
   }
 
-  const tabContent: Record<Tab, React.ReactNode> = {
-    dashboard: <Dashboard />,
-    products: <Products />,
-    orders: <Orders />,
-    settings: <Settings />,
-  };
-
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       {/* Desktop top nav */}
@@ -182,9 +175,12 @@ export default function Portal() {
         </button>
       </nav>
 
-      {/* Content */}
+      {/* All tabs mounted at once — show/hide with CSS for instant switching */}
       <main className="flex-1 pb-24 md:pb-6">
-        {tabContent[tab]}
+        <div className={tab === 'dashboard' ? '' : 'hidden'}><Dashboard /></div>
+        <div className={tab === 'products' ? '' : 'hidden'}><Products /></div>
+        <div className={tab === 'orders' ? '' : 'hidden'}><Orders /></div>
+        <div className={tab === 'settings' ? '' : 'hidden'}><Settings /></div>
       </main>
 
       {/* Mobile bottom nav */}

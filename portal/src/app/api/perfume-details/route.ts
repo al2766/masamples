@@ -1,18 +1,61 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+const BROWSER_HEADERS = {
+  'User-Agent':
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+  Accept:
+    'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+  'Accept-Language': 'en-US,en;q=0.5',
+  'Upgrade-Insecure-Requests': '1',
+};
+
+function isValidPage(html: string): boolean {
+  return (
+    !html.includes('Just a moment') &&
+    !html.includes('cf-browser-verification') &&
+    !html.includes('Enable JavaScript and cookies to continue') &&
+    html.length >= 2000
+  );
+}
+
 async function scrapeUrl(url: string): Promise<string | null> {
+  // Strategy 1: direct request with browser-like headers
   try {
-    const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
-    const res = await fetch(proxy, { signal: AbortSignal.timeout(8000) });
-    if (!res.ok) return null;
-    const html = await res.text();
-    if (html.includes('Just a moment') || html.includes('cf-browser-verification') || html.length < 2000) {
-      return null;
+    const res = await fetch(url, {
+      headers: BROWSER_HEADERS,
+      signal: AbortSignal.timeout(8000),
+    });
+    if (res.ok) {
+      const html = await res.text();
+      if (isValidPage(html)) return html;
     }
-    return html;
-  } catch {
-    return null;
-  }
+  } catch { /* try next */ }
+
+  // Strategy 2: allorigins.win proxy
+  try {
+    const res = await fetch(
+      `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+      { signal: AbortSignal.timeout(8000) }
+    );
+    if (res.ok) {
+      const html = await res.text();
+      if (isValidPage(html)) return html;
+    }
+  } catch { /* try next */ }
+
+  // Strategy 3: corsproxy.io
+  try {
+    const res = await fetch(
+      `https://corsproxy.io/?${encodeURIComponent(url)}`,
+      { signal: AbortSignal.timeout(8000) }
+    );
+    if (res.ok) {
+      const html = await res.text();
+      if (isValidPage(html)) return html;
+    }
+  } catch { /* give up */ }
+
+  return null;
 }
 
 // Strip HTML tags and collapse whitespace

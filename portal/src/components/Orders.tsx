@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+import { collection, getDocs, getDocsFromCache, orderBy, query } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import type { Order } from '@/lib/types';
 
@@ -21,29 +21,42 @@ function formatDate(ts: { seconds: number } | undefined) {
   });
 }
 
+function docsToOrders(docs: { id: string; data: () => Record<string, unknown> }[]): Order[] {
+  return docs.map((d) => ({ id: d.id, ...d.data() } as Order));
+}
+
 export default function Orders() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState<string | null>(null);
 
   useEffect(() => {
+    let cancelled = false;
+    const q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'));
+
     async function load() {
+      // Cache-first
       try {
-        const snap = await getDocs(
-          query(collection(db, 'orders'), orderBy('createdAt', 'desc'))
-        );
-        setOrders(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Order)));
-      } finally {
-        setLoading(false);
+        const cached = await getDocsFromCache(q);
+        if (!cancelled) { setOrders(docsToOrders(cached.docs)); setLoading(false); }
+      } catch { /* no cache */ }
+
+      // Network refresh
+      try {
+        const snap = await getDocs(q);
+        if (!cancelled) setOrders(docsToOrders(snap.docs));
+      } catch { /* ignore */ } finally {
+        if (!cancelled) setLoading(false);
       }
     }
     load();
+    return () => { cancelled = true; };
   }, []);
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold text-gray-900 mb-6">Orders</h1>
-      {loading ? (
+      {loading && orders.length === 0 ? (
         <div className="flex items-center gap-2 text-gray-400 text-sm">
           <div className="w-4 h-4 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
           Loading…
@@ -77,14 +90,23 @@ export default function Orders() {
                 <span className="font-semibold text-gray-900 text-sm flex-shrink-0">
                   £{o.total?.toFixed(2)}
                 </span>
-                <span className="text-xs text-gray-400 flex-shrink-0">{formatDate(o.createdAt)}</span>
+                <span className="text-xs text-gray-400 flex-shrink-0">
+                  {formatDate(o.createdAt)}
+                </span>
                 <svg
-                  className={`w-4 h-4 text-gray-300 flex-shrink-0 transition-transform ${expanded === o.id ? 'rotate-180' : ''}`}
+                  className={`w-4 h-4 text-gray-300 flex-shrink-0 transition-transform ${
+                    expanded === o.id ? 'rotate-180' : ''
+                  }`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
                 </svg>
               </button>
               {expanded === o.id && (
