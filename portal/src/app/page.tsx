@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import {
   collection, doc, onSnapshot, setDoc, addDoc, deleteDoc,
-  serverTimestamp,
+  getDocs, serverTimestamp,
 } from 'firebase/firestore';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import {
@@ -87,10 +87,12 @@ export default function Portal() {
   const [tab, setTab] = useState<Tab>('dashboard');
 
   // Live data (onSnapshot — fires immediately + on every change)
-  const [products,    setProducts]    = useState<Product[]>([]);
-  const [orders,      setOrders]      = useState<Order[]>([]);
-  const [productsErr, setProductsErr] = useState('');
-  const [ordersErr,   setOrdersErr]   = useState('');
+  const [products,        setProducts]        = useState<Product[]>([]);
+  const [orders,          setOrders]          = useState<Order[]>([]);
+  const [productsErr,     setProductsErr]     = useState('');
+  const [ordersErr,       setOrdersErr]       = useState('');
+  const [productsLoading, setProductsLoading] = useState(true);
+  const [debugInfo,       setDebugInfo]       = useState('');
 
   // Modal
   const [modalOpen,  setModalOpen]  = useState(false);
@@ -122,15 +124,24 @@ export default function Portal() {
   useEffect(() => {
     if (!authed) return;
     setProductsErr('');
+    setProductsLoading(true);
+
+    // Direct server read for diagnosis — shows raw count and any error
+    getDocs(collection(db, 'products'))
+      .then((s) => setDebugInfo(`Server read OK — ${s.size} doc(s) found`))
+      .catch((e) => setDebugInfo(`Server read FAILED: ${e.code} — ${e.message}`));
+
     return onSnapshot(collection(db, 'products'),
       (snap) => {
         const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() } as Product));
         docs.sort((a, b) => a.name.localeCompare(b.name));
         setProducts(docs);
+        setProductsLoading(false);
       },
       (err) => {
         console.error('products listener:', err);
         setProductsErr(`${err.code}: ${err.message}`);
+        setProductsLoading(false);
       }
     );
   }, [authed]);
@@ -400,12 +411,19 @@ export default function Portal() {
                 + Add Product
               </button>
             </div>
+            {debugInfo && (
+              <div className={`mb-4 rounded-xl px-4 py-3 text-sm border ${debugInfo.startsWith('Server read OK') ? 'bg-green-50 border-green-200 text-green-700' : 'bg-red-50 border-red-200 text-red-700'}`}>
+                <strong>Debug:</strong> {debugInfo}
+              </div>
+            )}
             {productsErr && (
               <div className="mb-4 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700">
                 <strong>Error loading products:</strong> {productsErr}
               </div>
             )}
-            {!productsErr && products.length === 0 ? (
+            {productsLoading ? (
+              <p className="text-gray-400 text-sm py-12 text-center">Loading…</p>
+            ) : !productsErr && products.length === 0 ? (
               <p className="text-gray-400 text-sm py-12 text-center">No products yet — add one above.</p>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
