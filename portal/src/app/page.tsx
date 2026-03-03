@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import {
   collection, doc, onSnapshot, setDoc, addDoc, deleteDoc,
-  getDocs, serverTimestamp,
+  serverTimestamp,
 } from 'firebase/firestore';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import {
@@ -92,7 +92,6 @@ export default function Portal() {
   const [productsErr,     setProductsErr]     = useState('');
   const [ordersErr,       setOrdersErr]       = useState('');
   const [productsLoading, setProductsLoading] = useState(true);
-  const [debugInfo,       setDebugInfo]       = useState('');
 
   // Modal
   const [modalOpen,  setModalOpen]  = useState(false);
@@ -125,12 +124,6 @@ export default function Portal() {
     if (!authed) return;
     setProductsErr('');
     setProductsLoading(true);
-
-    // Direct server read for diagnosis — shows raw count and any error
-    getDocs(collection(db, 'products'))
-      .then((s) => setDebugInfo(`Server read OK — ${s.size} doc(s) found`))
-      .catch((e) => setDebugInfo(`Server read FAILED: ${e.code} — ${e.message}`));
-
     return onSnapshot(collection(db, 'products'),
       (snap) => {
         const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() } as Product));
@@ -240,8 +233,14 @@ export default function Portal() {
     setSaving(true);
     setSaveErr('');
 
-    // Debug: log auth state so we can see if the user is properly signed in
-    console.log('[handleSave] auth.currentUser =', auth.currentUser?.email, '| uid =', auth.currentUser?.uid);
+    // Force token refresh so Firestore auth propagates before the write
+    try {
+      await auth.currentUser?.getIdToken(true);
+    } catch (tokenErr) {
+      setSaveErr('Auth token refresh failed — try signing out and back in.');
+      setSaving(false);
+      return;
+    }
 
     const sizes = form.sizes.filter((s) => s.size.trim());
     const payload = {
@@ -411,11 +410,6 @@ export default function Portal() {
                 + Add Product
               </button>
             </div>
-            {debugInfo && (
-              <div className={`mb-4 rounded-xl px-4 py-3 text-sm border ${debugInfo.startsWith('Server read OK') ? 'bg-green-50 border-green-200 text-green-700' : 'bg-red-50 border-red-200 text-red-700'}`}>
-                <strong>Debug:</strong> {debugInfo}
-              </div>
-            )}
             {productsErr && (
               <div className="mb-4 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700">
                 <strong>Error loading products:</strong> {productsErr}
