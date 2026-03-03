@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import {
   collection, doc, onSnapshot, setDoc, addDoc, deleteDoc,
-  query, orderBy, serverTimestamp,
+  serverTimestamp,
 } from 'firebase/firestore';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import {
@@ -87,8 +87,10 @@ export default function Portal() {
   const [tab, setTab] = useState<Tab>('dashboard');
 
   // Live data (onSnapshot — fires immediately + on every change)
-  const [products, setProducts] = useState<Product[]>([]);
-  const [orders,   setOrders]   = useState<Order[]>([]);
+  const [products,    setProducts]    = useState<Product[]>([]);
+  const [orders,      setOrders]      = useState<Order[]>([]);
+  const [productsErr, setProductsErr] = useState('');
+  const [ordersErr,   setOrdersErr]   = useState('');
 
   // Modal
   const [modalOpen,  setModalOpen]  = useState(false);
@@ -116,22 +118,33 @@ export default function Portal() {
     });
   }, []);
 
-  // ── Live products listener (same pattern as reference onSnapshot) ─────────
+  // ── Live products listener ────────────────────────────────────────────────
   useEffect(() => {
     if (!authed) return;
-    const q = query(collection(db, 'products'), orderBy('name', 'asc'));
-    return onSnapshot(q,
-      (snap) => setProducts(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Product))),
-      (err)  => console.error('products listener:', err)
+    setProductsErr('');
+    return onSnapshot(collection(db, 'products'),
+      (snap) => {
+        const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() } as Product));
+        docs.sort((a, b) => a.name.localeCompare(b.name));
+        setProducts(docs);
+      },
+      (err) => {
+        console.error('products listener:', err);
+        setProductsErr(`${err.code}: ${err.message}`);
+      }
     );
   }, [authed]);
 
   // ── Live orders listener ──────────────────────────────────────────────────
   useEffect(() => {
     if (!authed) return;
+    setOrdersErr('');
     return onSnapshot(collection(db, 'orders'),
       (snap) => setOrders(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Order))),
-      (err)  => console.error('orders listener:', err)
+      (err) => {
+        console.error('orders listener:', err);
+        setOrdersErr(`${err.code}: ${err.message}`);
+      }
     );
   }, [authed]);
 
@@ -387,7 +400,12 @@ export default function Portal() {
                 + Add Product
               </button>
             </div>
-            {products.length === 0 ? (
+            {productsErr && (
+              <div className="mb-4 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700">
+                <strong>Error loading products:</strong> {productsErr}
+              </div>
+            )}
+            {!productsErr && products.length === 0 ? (
               <p className="text-gray-400 text-sm py-12 text-center">No products yet — add one above.</p>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -422,7 +440,12 @@ export default function Portal() {
         {tab === 'orders' && (
           <div className="max-w-4xl mx-auto px-4 py-8">
             <h1 className="text-2xl font-bold text-gray-900 mb-6">Orders</h1>
-            {orders.length === 0 ? (
+            {ordersErr && (
+              <div className="mb-4 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700">
+                <strong>Error loading orders:</strong> {ordersErr}
+              </div>
+            )}
+            {!ordersErr && orders.length === 0 ? (
               <p className="text-gray-400 text-sm py-12 text-center">No orders yet.</p>
             ) : (
               <div className="space-y-3">
