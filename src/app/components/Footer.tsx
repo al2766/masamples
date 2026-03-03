@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import { Facebook, Instagram, Twitter } from 'lucide-react';
+import { Mail } from 'lucide-react';
 
 export function Footer() {
   return (
@@ -63,27 +63,29 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Social */}
+          {/* Get in Touch */}
           <div>
-            <h3 className="font-semibold mb-4 text-amber-400">Follow Us</h3>
+            <h3 className="font-semibold mb-4 text-amber-400">Get in Touch</h3>
             <div className="flex items-center space-x-4">
-              <a href="#" className="text-gray-400 hover:text-amber-400">
-                <Instagram className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-amber-400">
-                <Facebook className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-amber-400">
-                <Twitter className="h-5 w-5" />
+              <a
+                href="mailto:info@masamples.co.uk"
+                className="text-gray-400 hover:text-amber-400"
+                aria-label="Email us"
+              >
+                <Mail className="h-5 w-5" />
               </a>
               <a
                 href="https://www.ebay.co.uk/usr/masamples"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-amber-400 text-sm font-bold leading-5"
+                className="text-gray-400 hover:text-amber-400"
                 aria-label="eBay store"
               >
-                eBay
+                <svg viewBox="0 0 110 44" className="h-5 w-auto" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <text fontFamily="Arial Black, Arial, sans-serif" fontWeight="900" fontSize="42" y="38" fill="currentColor">
+                    eBay
+                  </text>
+                </svg>
               </a>
             </div>
             <p className="text-xs text-gray-600 mt-3">
