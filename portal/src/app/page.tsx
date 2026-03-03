@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   collection, doc, onSnapshot, setDoc, addDoc, deleteDoc,
   serverTimestamp,
@@ -506,7 +507,7 @@ export default function Portal() {
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 flex z-40">
         {TABS.map((t) => (
           <button key={t.id} onClick={() => setTab(t.id)}
-            className={`flex-1 flex flex-col items-center gap-0.5 py-3 text-xs font-medium transition-colors ${
+            className={`flex-1 flex flex-col items-center gap-1 py-4 text-xs font-medium transition-colors ${
               tab === t.id ? 'text-amber-500' : 'text-gray-400'
             }`}>
             {t.icon}
@@ -516,9 +517,21 @@ export default function Portal() {
       </nav>
 
       {/* ── Order Detail Modal ────────────────────────────────────────────── */}
+      <AnimatePresence>
       {viewOrder && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4" onClick={() => setViewOrder(null)}>
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md" onClick={(e) => e.stopPropagation()}>
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center px-4"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}
+          onClick={() => setViewOrder(null)}
+        >
+          <motion.div
+            className="bg-white rounded-2xl shadow-xl w-full max-w-md"
+            initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 16 }}
+            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
               <div>
                 <h2 className="text-base font-bold text-gray-900">Order</h2>
@@ -563,14 +576,25 @@ export default function Portal() {
                 </div>
               )}
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
+      </AnimatePresence>
 
       {/* ── Add / Edit Product Modal ──────────────────────────────────────── */}
+      <AnimatePresence>
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 overflow-y-auto py-6 px-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg my-auto">
+        <motion.div
+          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto py-6 px-4"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}
+        >
+          <motion.div
+            className="bg-white rounded-2xl shadow-xl w-full max-w-lg my-auto"
+            initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 16 }}
+            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+          >
 
             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
               <h2 className="text-base font-bold text-gray-900">{editing ? 'Edit Product' : 'Add Product'}</h2>
@@ -778,9 +802,10 @@ export default function Portal() {
               </div>
 
             </form>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
+      </AnimatePresence>
 
     </div>
   );
