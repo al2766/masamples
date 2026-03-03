@@ -431,7 +431,15 @@ export default function Portal() {
                     }
                     <div className="p-3">
                       <p className="text-sm font-semibold text-gray-900 truncate">{p.name}</p>
-                      <p className="text-xs text-gray-400 truncate mb-3">{p.brand}</p>
+                      <p className="text-xs text-gray-400 truncate mb-1.5">{p.brand}</p>
+                      {(p.isBestSeller || p.isNewArrival || p.isInspiredBy || !p.inStock) && (
+                        <div className="flex flex-wrap gap-1 mb-2">
+                          {!p.inStock && <span className="text-[10px] bg-red-50 text-red-400 rounded px-1.5 py-0.5 font-medium">Out of stock</span>}
+                          {p.isBestSeller && <span className="text-[10px] bg-amber-50 text-amber-600 rounded px-1.5 py-0.5 font-medium">Best Seller</span>}
+                          {p.isNewArrival && <span className="text-[10px] bg-green-50 text-green-600 rounded px-1.5 py-0.5 font-medium">New</span>}
+                          {p.isInspiredBy && <span className="text-[10px] bg-purple-50 text-purple-500 rounded px-1.5 py-0.5 font-medium">Inspired</span>}
+                        </div>
+                      )}
                       <div className="flex gap-2">
                         <button onClick={() => openEdit(p)}
                           className="flex-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg py-1.5 font-medium transition-colors">
@@ -466,16 +474,17 @@ export default function Portal() {
                 {[...orders]
                   .sort((a, b) => (b.createdAt?.seconds ?? 0) - (a.createdAt?.seconds ?? 0))
                   .map((o) => (
-                  <div key={o.id} className="bg-white rounded-xl border border-gray-100 shadow-sm px-4 py-2.5 flex items-center gap-3">
-                    <div className="flex-1 min-w-0 grid grid-cols-4 gap-2 items-center">
-                      <p className="text-xs font-mono text-gray-400 truncate">{o.id.slice(0, 8)}</p>
+                  <div key={o.id} className="bg-white rounded-xl border border-gray-100 shadow-sm px-4 py-3 flex items-center gap-3">
+                    <div className={`w-2 h-2 rounded-full shrink-0 mt-0.5 ${o.status === 'confirmed' ? 'bg-green-400' : 'bg-gray-300'}`} />
+                    <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900 truncate">{o.email}</p>
-                      <p className="text-xs text-gray-400">
-                        {o.createdAt ? new Date(o.createdAt.seconds * 1000).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '—'}
+                      <p className="text-xs text-gray-400 mt-0.5">
+                        {o.createdAt ? new Date(o.createdAt.seconds * 1000).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}
                         {' · '}{o.items?.length ?? 0} item{(o.items?.length ?? 0) !== 1 ? 's' : ''}
+                        {' · '}<span className={o.status === 'confirmed' ? 'text-green-500' : 'text-gray-400'}>{o.status ?? 'pending'}</span>
                       </p>
-                      <p className="text-sm font-bold text-gray-900 text-right">£{(o.total ?? 0).toFixed(2)}</p>
                     </div>
+                    <p className="text-sm font-bold text-gray-900 shrink-0">£{(o.total ?? 0).toFixed(2)}</p>
                     <button onClick={() => setViewOrder(o)}
                       className="shrink-0 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg px-3 py-1.5 font-medium transition-colors">
                       View
@@ -520,57 +529,64 @@ export default function Portal() {
       <AnimatePresence>
       {viewOrder && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center px-4"
+          className="fixed inset-0 z-50 flex flex-col justify-end md:justify-center md:items-center"
+          style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}
+          transition={{ duration: 0.22 }}
           onClick={() => setViewOrder(null)}
         >
           <motion.div
-            className="bg-white rounded-2xl shadow-xl w-full max-w-md"
-            initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 16 }}
-            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            className="w-full md:max-w-md bg-white rounded-t-3xl md:rounded-2xl shadow-2xl overflow-hidden"
+            initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
+            transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.35 }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+            {/* drag handle — mobile only */}
+            <div className="flex justify-center pt-3 pb-1 md:hidden">
+              <div className="w-10 h-1 bg-gray-200 rounded-full" />
+            </div>
+            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
               <div>
-                <h2 className="text-base font-bold text-gray-900">Order</h2>
-                <p className="text-xs font-mono text-gray-400 mt-0.5">{viewOrder.id}</p>
+                <h2 className="text-base font-bold text-gray-900">Order details</h2>
+                <p className="text-[11px] font-mono text-gray-400 mt-0.5">{viewOrder.id}</p>
               </div>
-              <button onClick={() => setViewOrder(null)} className="text-gray-400 hover:text-gray-600 transition-colors">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <button onClick={() => setViewOrder(null)} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 transition-colors">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
-            <div className="px-6 py-5 space-y-4">
-              <div className="flex justify-between items-start">
-                <div>
-                  <p className="text-sm font-medium text-gray-900">{viewOrder.email}</p>
+            <div className="px-5 py-4 space-y-4 max-h-[70vh] overflow-y-auto">
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-gray-900 truncate">{viewOrder.email}</p>
                   {viewOrder.shippingAddress && (
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-gray-500 mt-1 leading-relaxed">
                       {viewOrder.shippingAddress.firstName} {viewOrder.shippingAddress.lastName}<br />
-                      {viewOrder.shippingAddress.address}<br />
-                      {viewOrder.shippingAddress.city}, {viewOrder.shippingAddress.postcode}
+                      {viewOrder.shippingAddress.address}, {viewOrder.shippingAddress.city} {viewOrder.shippingAddress.postcode}
                     </p>
                   )}
+                  <p className="text-xs text-gray-400 mt-1.5">
+                    {viewOrder.createdAt ? new Date(viewOrder.createdAt.seconds * 1000).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}
+                  </p>
                 </div>
-                <div className="text-right">
-                  <p className="text-lg font-bold text-gray-900">£{(viewOrder.total ?? 0).toFixed(2)}</p>
-                  <span className={`inline-block mt-1 text-xs px-2 py-0.5 rounded-full font-medium ${
+                <div className="text-right shrink-0">
+                  <p className="text-xl font-bold text-gray-900">£{(viewOrder.total ?? 0).toFixed(2)}</p>
+                  <span className={`inline-block mt-1.5 text-xs px-2.5 py-0.5 rounded-full font-medium ${
                     viewOrder.status === 'confirmed' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'
-                  }`}>{viewOrder.status ?? 'unknown'}</span>
+                  }`}>{viewOrder.status ?? 'pending'}</span>
                 </div>
               </div>
-              <p className="text-xs text-gray-400">
-                {viewOrder.createdAt ? new Date(viewOrder.createdAt.seconds * 1000).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}
-              </p>
               {viewOrder.items?.length > 0 && (
-                <div className="border-t border-gray-100 pt-4 space-y-2">
+                <div className="border-t border-gray-100 pt-4 space-y-2.5">
+                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Items</p>
                   {viewOrder.items.map((item, i) => (
-                    <div key={i} className="flex justify-between text-sm">
-                      <span className="text-gray-700">{item.name} <span className="text-gray-400">{item.brand}</span></span>
-                      <span className="text-gray-500 shrink-0 ml-4">{item.size} × {item.quantity} — £{(item.price * item.quantity).toFixed(2)}</span>
+                    <div key={i} className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="text-sm text-gray-800 font-medium truncate">{item.name}</p>
+                        <p className="text-xs text-gray-400">{item.brand} · {item.size} × {item.quantity}</p>
+                      </div>
+                      <p className="text-sm font-semibold text-gray-900 shrink-0">£{(item.price * item.quantity).toFixed(2)}</p>
                     </div>
                   ))}
                 </div>
@@ -585,27 +601,33 @@ export default function Portal() {
       <AnimatePresence>
       {modalOpen && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto py-6 px-4"
+          className="fixed inset-0 z-50 flex flex-col justify-end md:justify-center md:items-center"
+          style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}
+          transition={{ duration: 0.22 }}
+          onClick={closeModal}
         >
           <motion.div
-            className="bg-white rounded-2xl shadow-xl w-full max-w-lg my-auto"
-            initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 16 }}
-            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            className="w-full md:max-w-lg bg-white rounded-t-3xl md:rounded-2xl shadow-2xl flex flex-col max-h-[92vh]"
+            initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
+            transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.35 }}
+            onClick={(e) => e.stopPropagation()}
           >
+            {/* drag handle — mobile only */}
+            <div className="flex justify-center pt-3 pb-1 md:hidden shrink-0">
+              <div className="w-10 h-1 bg-gray-200 rounded-full" />
+            </div>
 
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 shrink-0">
               <h2 className="text-base font-bold text-gray-900">{editing ? 'Edit Product' : 'Add Product'}</h2>
-              <button onClick={closeModal} className="text-gray-400 hover:text-gray-600 transition-colors">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <button onClick={closeModal} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 transition-colors">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
 
-            <form onSubmit={handleSave} className="px-6 py-5 space-y-5">
+            <form onSubmit={handleSave} className="overflow-y-auto flex-1 px-5 py-5 space-y-5">
 
               {/* Fragrantica search — add mode only */}
               {!editing && (
@@ -790,7 +812,7 @@ export default function Portal() {
 
               {saveErr && <p className="text-sm text-red-500">{saveErr}</p>}
 
-              <div className="flex gap-3 pt-1">
+              <div className="flex gap-3 pt-1 pb-2">
                 <button type="button" onClick={closeModal}
                   className="flex-1 py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">
                   Cancel
