@@ -12,11 +12,11 @@ export function ProductCard({ product }: ProductCardProps) {
     <Link to={`/product/${product.id}`}>
       <div className="group relative bg-white rounded-lg overflow-hidden border hover:shadow-lg transition-shadow h-full flex flex-col">
         {/* Image */}
-        <div className="aspect-square overflow-hidden bg-gray-100">
+        <div className="aspect-square overflow-hidden bg-white flex items-center justify-center p-4">
           <ImageWithFallback
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
           />
         </div>
 
