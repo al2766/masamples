@@ -69,11 +69,11 @@ export function ProductDetail() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
           {/* Image */}
           <div className="relative">
-            <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 sticky top-24">
+            <div className="aspect-square rounded-lg overflow-hidden bg-white flex items-center justify-center p-6 sticky top-24">
               <ImageWithFallback
                 src={product.image}
                 alt={product.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
             </div>
             {/* Badges */}
