@@ -92,6 +92,7 @@ export default function Portal() {
   const [productsErr,     setProductsErr]     = useState('');
   const [ordersErr,       setOrdersErr]       = useState('');
   const [productsLoading, setProductsLoading] = useState(true);
+  const [viewOrder, setViewOrder] = useState<Order | null>(null);
 
   // Modal
   const [modalOpen,  setModalOpen]  = useState(false);
@@ -424,8 +425,8 @@ export default function Portal() {
                 {products.map((p) => (
                   <div key={p.id} className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm">
                     {p.image
-                      ? <img src={p.image} alt={p.name} className="w-full h-32 object-cover" />
-                      : <div className="w-full h-32 bg-gray-100 flex items-center justify-center text-gray-300 text-xs">No image</div>
+                      ? <img src={p.image} alt={p.name} className="w-full h-20 object-contain bg-gray-50 p-1" />
+                      : <div className="w-full h-20 bg-gray-100 flex items-center justify-center text-gray-300 text-xs">No image</div>
                     }
                     <div className="p-3">
                       <p className="text-sm font-semibold text-gray-900 truncate">{p.name}</p>
@@ -450,7 +451,7 @@ export default function Portal() {
 
         {/* ── Orders ──────────────────────────────────────────────────────── */}
         {tab === 'orders' && (
-          <div className="max-w-4xl mx-auto px-4 py-8">
+          <div className="max-w-3xl mx-auto px-4 py-8">
             <h1 className="text-2xl font-bold text-gray-900 mb-6">Orders</h1>
             {ordersErr && (
               <div className="mb-4 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700">
@@ -460,39 +461,24 @@ export default function Portal() {
             {!ordersErr && orders.length === 0 ? (
               <p className="text-gray-400 text-sm py-12 text-center">No orders yet.</p>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {[...orders]
                   .sort((a, b) => (b.createdAt?.seconds ?? 0) - (a.createdAt?.seconds ?? 0))
                   .map((o) => (
-                  <div key={o.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
-                    <div className="flex items-start justify-between gap-4 flex-wrap">
-                      <div>
-                        <p className="text-sm font-semibold text-gray-900">{o.email}</p>
-                        {o.shippingAddress && (
-                          <p className="text-xs text-gray-400 mt-0.5">
-                            {o.shippingAddress.firstName} {o.shippingAddress.lastName} · {o.shippingAddress.address}, {o.shippingAddress.city} {o.shippingAddress.postcode}
-                          </p>
-                        )}
-                        <p className="text-xs text-gray-400 mt-0.5">
-                          {o.createdAt ? new Date(o.createdAt.seconds * 1000).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}
-                        </p>
-                      </div>
-                      <div className="text-right shrink-0">
-                        <p className="text-sm font-bold text-gray-900">£{(o.total ?? 0).toFixed(2)}</p>
-                        <span className={`inline-block mt-1 text-xs px-2 py-0.5 rounded-full font-medium ${
-                          o.status === 'confirmed' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'
-                        }`}>{o.status ?? 'unknown'}</span>
-                      </div>
+                  <div key={o.id} className="bg-white rounded-xl border border-gray-100 shadow-sm px-4 py-2.5 flex items-center gap-3">
+                    <div className="flex-1 min-w-0 grid grid-cols-4 gap-2 items-center">
+                      <p className="text-xs font-mono text-gray-400 truncate">{o.id.slice(0, 8)}</p>
+                      <p className="text-sm font-medium text-gray-900 truncate">{o.email}</p>
+                      <p className="text-xs text-gray-400">
+                        {o.createdAt ? new Date(o.createdAt.seconds * 1000).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '—'}
+                        {' · '}{o.items?.length ?? 0} item{(o.items?.length ?? 0) !== 1 ? 's' : ''}
+                      </p>
+                      <p className="text-sm font-bold text-gray-900 text-right">£{(o.total ?? 0).toFixed(2)}</p>
                     </div>
-                    {o.items?.length > 0 && (
-                      <div className="mt-3 pt-3 border-t border-gray-50 flex flex-wrap gap-2">
-                        {o.items.map((item, i) => (
-                          <span key={i} className="text-xs bg-gray-50 text-gray-600 px-2 py-1 rounded-lg">
-                            {item.name} {item.size} × {item.quantity}
-                          </span>
-                        ))}
-                      </div>
-                    )}
+                    <button onClick={() => setViewOrder(o)}
+                      className="shrink-0 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg px-3 py-1.5 font-medium transition-colors">
+                      View
+                    </button>
                   </div>
                 ))}
               </div>
@@ -528,6 +514,58 @@ export default function Portal() {
           </button>
         ))}
       </nav>
+
+      {/* ── Order Detail Modal ────────────────────────────────────────────── */}
+      {viewOrder && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4" onClick={() => setViewOrder(null)}>
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+              <div>
+                <h2 className="text-base font-bold text-gray-900">Order</h2>
+                <p className="text-xs font-mono text-gray-400 mt-0.5">{viewOrder.id}</p>
+              </div>
+              <button onClick={() => setViewOrder(null)} className="text-gray-400 hover:text-gray-600 transition-colors">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="px-6 py-5 space-y-4">
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="text-sm font-medium text-gray-900">{viewOrder.email}</p>
+                  {viewOrder.shippingAddress && (
+                    <p className="text-xs text-gray-500 mt-1">
+                      {viewOrder.shippingAddress.firstName} {viewOrder.shippingAddress.lastName}<br />
+                      {viewOrder.shippingAddress.address}<br />
+                      {viewOrder.shippingAddress.city}, {viewOrder.shippingAddress.postcode}
+                    </p>
+                  )}
+                </div>
+                <div className="text-right">
+                  <p className="text-lg font-bold text-gray-900">£{(viewOrder.total ?? 0).toFixed(2)}</p>
+                  <span className={`inline-block mt-1 text-xs px-2 py-0.5 rounded-full font-medium ${
+                    viewOrder.status === 'confirmed' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'
+                  }`}>{viewOrder.status ?? 'unknown'}</span>
+                </div>
+              </div>
+              <p className="text-xs text-gray-400">
+                {viewOrder.createdAt ? new Date(viewOrder.createdAt.seconds * 1000).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}
+              </p>
+              {viewOrder.items?.length > 0 && (
+                <div className="border-t border-gray-100 pt-4 space-y-2">
+                  {viewOrder.items.map((item, i) => (
+                    <div key={i} className="flex justify-between text-sm">
+                      <span className="text-gray-700">{item.name} <span className="text-gray-400">{item.brand}</span></span>
+                      <span className="text-gray-500 shrink-0 ml-4">{item.size} × {item.quantity} — £{(item.price * item.quantity).toFixed(2)}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Add / Edit Product Modal ──────────────────────────────────────── */}
       {modalOpen && (
@@ -704,15 +742,26 @@ export default function Portal() {
               </div>
 
               {/* Flags */}
-              <div className="flex flex-wrap gap-5">
-                {([['In Stock', 'inStock'], ['Best Seller', 'isBestSeller'], ['New Arrival', 'isNewArrival'], ['Inspired By', 'isInspiredBy']] as const).map(([label, key]) => (
-                  <label key={key} className="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" checked={form[key]}
-                      onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.checked }))}
-                      className="w-4 h-4 rounded accent-amber-400" />
-                    <span className="text-sm text-gray-700">{label}</span>
-                  </label>
-                ))}
+              <div className="space-y-2">
+                <div className="flex flex-wrap gap-5">
+                  {([['In Stock', 'inStock'], ['Best Seller', 'isBestSeller'], ['New Arrival', 'isNewArrival']] as const).map(([label, key]) => (
+                    <label key={key} className="flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" checked={form[key]}
+                        onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.checked }))}
+                        className="w-4 h-4 rounded accent-amber-400" />
+                      <span className="text-sm text-gray-700">{label}</span>
+                    </label>
+                  ))}
+                </div>
+                <label className="flex items-start gap-2 cursor-pointer">
+                  <input type="checkbox" checked={form.isInspiredBy}
+                    onChange={(e) => setForm((f) => ({ ...f, isInspiredBy: e.target.checked }))}
+                    className="w-4 h-4 rounded accent-amber-400 mt-0.5" />
+                  <div>
+                    <span className="text-sm text-gray-700">Inspired By</span>
+                    <p className="text-xs text-gray-400">Shows in Inspired By page. If no products are tagged, all products show there as fallback.</p>
+                  </div>
+                </label>
               </div>
 
               {saveErr && <p className="text-sm text-red-500">{saveErr}</p>}
