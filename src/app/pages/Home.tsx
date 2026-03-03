@@ -97,6 +97,27 @@ export function Home() {
         </div>
       </section>
 
+      {/* eBay trust strip */}
+      <div className="bg-white border-b border-gray-100 py-3">
+        <div className="container mx-auto px-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-sm text-gray-400">
+          <span>Est. on eBay 2023</span>
+          <span className="hidden sm:inline text-gray-200">·</span>
+          <span>100% positive feedback</span>
+          <span className="hidden sm:inline text-gray-200">·</span>
+          <a
+            href="https://www.ebay.co.uk/usr/masamples"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-amber-600 hover:text-amber-700 font-medium inline-flex items-center gap-1"
+          >
+            See our eBay reviews
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </a>
+        </div>
+      </div>
+
       {/* Best Sellers */}
       {bestSellers.length > 0 && (
         <section className="py-16">

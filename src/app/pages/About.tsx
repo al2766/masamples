@@ -9,14 +9,27 @@ export function About() {
         
         <div className="prose max-w-none mb-12">
           <p className="text-lg text-gray-600 mb-6">
-            Welcome to FragranceSamples, your premier destination for authentic luxury fragrance samples. 
-            We believe everyone should have the opportunity to experience high-end fragrances before committing 
-            to a full bottle.
+            MA Samples started on eBay in 2023 with a simple idea: let people try a fragrance before
+            committing to a full bottle. What began as a small eBay store grew steadily, and we're proud
+            to have maintained 100% positive feedback from every customer along the way.
           </p>
-          
+
+          <p className="text-gray-600 mb-4">
+            Now we've brought everything together into our own dedicated home. Same authentic products,
+            same careful decanting, same person behind every order — just a better experience built
+            around the community that trusted us from the start.
+          </p>
+
           <p className="text-gray-600 mb-6">
-            Our mission is to make luxury fragrances accessible and affordable. Each sample is carefully 
-            decanted from authentic bottles, ensuring you receive the genuine scent experience.
+            You can still find us on eBay and read every review there.{' '}
+            <a
+              href="https://www.ebay.co.uk/usr/masamples"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-amber-600 hover:text-amber-700 font-medium underline underline-offset-2"
+            >
+              View our eBay feedback →
+            </a>
           </p>
         </div>
 

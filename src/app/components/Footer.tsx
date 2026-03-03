@@ -66,7 +66,7 @@ export function Footer() {
           {/* Social */}
           <div>
             <h3 className="font-semibold mb-4 text-amber-400">Follow Us</h3>
-            <div className="flex space-x-4">
+            <div className="flex items-center space-x-4">
               <a href="#" className="text-gray-400 hover:text-amber-400">
                 <Instagram className="h-5 w-5" />
               </a>
@@ -76,7 +76,19 @@ export function Footer() {
               <a href="#" className="text-gray-400 hover:text-amber-400">
                 <Twitter className="h-5 w-5" />
               </a>
+              <a
+                href="https://www.ebay.co.uk/usr/masamples"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-amber-400 text-sm font-bold leading-5"
+                aria-label="eBay store"
+              >
+                eBay
+              </a>
             </div>
+            <p className="text-xs text-gray-600 mt-3">
+              Est. 2023 · 100% positive feedback
+            </p>
           </div>
         </div>
 
