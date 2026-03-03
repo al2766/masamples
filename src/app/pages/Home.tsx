@@ -3,7 +3,7 @@ import { useProducts } from '../../context/ProductsContext';
 import { ProductCard } from '../components/ProductCard';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
-import { Sparkles, Package, ShieldCheck } from 'lucide-react';
+import { Sparkles, Package, ShieldCheck, ArrowRight } from 'lucide-react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { motion } from 'motion/react';
 
@@ -100,9 +100,9 @@ export function Home() {
       {/* eBay credibility banner */}
       <div className="bg-white border-y border-gray-200 py-6">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10">
+          <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-10">
             {/* eBay logo + Est tag */}
-            <div className="flex flex-col items-center gap-1">
+            <div className="flex flex-col items-center gap-1 shrink-0">
               <svg viewBox="0 0 110 44" className="h-9 w-auto" aria-label="eBay" xmlns="http://www.w3.org/2000/svg">
                 <text fontFamily="Arial Black, Arial, sans-serif" fontWeight="900" fontSize="42" y="38">
                   <tspan fill="#E53238">e</tspan>
@@ -115,30 +115,31 @@ export function Home() {
             </div>
 
             {/* Divider */}
-            <div className="hidden sm:block h-12 w-px bg-gray-200" />
+            <div className="hidden sm:block h-16 w-px bg-gray-200 shrink-0" />
 
-            {/* Stats */}
-            <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 text-center">
-              <div>
-                <p className="text-lg font-bold text-gray-900">100%</p>
-                <p className="text-sm text-gray-500">Positive Feedback</p>
-              </div>
-              <div className="hidden sm:block h-8 w-px bg-gray-200" />
-              <div>
-                <p className="text-lg font-bold text-gray-900">Trusted Seller</p>
-                <p className="text-sm text-gray-500">Verified eBay store</p>
-              </div>
+            {/* Story snippet + Read more */}
+            <div className="flex-1 text-center sm:text-left">
+              <p className="text-sm text-gray-600 leading-relaxed">
+                MA Samples started on eBay in 2023 with a simple idea: let people try a fragrance before committing to a full bottle.
+                We've maintained <span className="font-semibold text-gray-900">100% positive feedback</span> from every customer along the way.
+              </p>
+              <Link
+                to="/about"
+                className="inline-flex items-center gap-1 mt-2 text-sm text-amber-600 hover:text-amber-700 font-medium"
+              >
+                Read our story <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
 
             {/* Divider */}
-            <div className="hidden sm:block h-12 w-px bg-gray-200" />
+            <div className="hidden sm:block h-16 w-px bg-gray-200 shrink-0" />
 
             {/* CTA */}
             <a
               href="https://www.ebay.co.uk/usr/masamples"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-[#E53238] text-[#E53238] font-semibold text-sm hover:bg-[#E53238] hover:text-white transition-colors"
+              className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-[#E53238] text-[#E53238] font-semibold text-sm hover:bg-[#E53238] hover:text-white transition-colors"
             >
               View our eBay store
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

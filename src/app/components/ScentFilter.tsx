@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { scentProfiles } from '../../data/products';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { SlidersHorizontal, ChevronDown, ChevronUp, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface ScentFilterProps {
@@ -18,149 +18,169 @@ export function ScentFilter({
   onNoteToggle,
   onClear
 }: ScentFilterProps) {
-  const [expandedProfiles, setExpandedProfiles] = useState<string[]>([]);
-
-  const toggleExpanded = (profileKey: string) => {
-    setExpandedProfiles(prev =>
-      prev.includes(profileKey)
-        ? prev.filter(p => p !== profileKey)
-        : [...prev, profileKey]
-    );
-  };
+  const [open, setOpen] = useState(false);
+  const [expandedProfile, setExpandedProfile] = useState<string | null>(null);
 
   const hasActiveFilters = selectedProfiles.length > 0 || selectedNotes.length > 0;
+  const activeCount = selectedProfiles.length + selectedNotes.length;
+
+  const handleProfileClick = (key: string) => {
+    setExpandedProfile(prev => prev === key ? null : key);
+  };
 
   return (
-    <>
-      {/* Filter panel — scrollable, not sticky */}
-      <div className="bg-white border-b">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold">Filter by Scent Profile</h3>
+    <div className="bg-white border-b">
+      <div className="container mx-auto px-4">
+        {/* Toggle bar */}
+        <button
+          onClick={() => setOpen(prev => !prev)}
+          className="w-full flex items-center justify-between py-3 text-left"
+        >
+          <div className="flex items-center gap-2">
+            <SlidersHorizontal className="h-4 w-4 text-gray-500" />
+            <span className="font-medium text-sm">Filter by Scent</span>
             {hasActiveFilters && (
-              <button
-                onClick={onClear}
-                className="text-sm text-amber-600 hover:text-amber-700 font-medium"
-              >
-                Clear All
-              </button>
+              <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-amber-500 text-white text-xs font-bold">
+                {activeCount}
+              </span>
             )}
           </div>
-
-          <div className="space-y-2">
-            {Object.entries(scentProfiles).map(([key, profile]) => {
-              const isExpanded = expandedProfiles.includes(key);
-              const isSelected = selectedProfiles.includes(key);
-
-              return (
-                <div key={key} className="border rounded-lg overflow-hidden">
-                  {/* Main Profile Button */}
-                  <button
-                    onClick={() => toggleExpanded(key)}
-                    className={`w-full flex items-center justify-between p-3 hover:bg-gray-50 transition-colors ${
-                      isSelected ? 'bg-amber-50 border-l-4 border-l-amber-500' : ''
-                    }`}
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="text-xl">{profile.icon}</span>
-                      <span className="font-medium">{profile.name}</span>
-                      {isSelected && (
-                        <span className="text-xs bg-amber-500 text-white px-2 py-0.5 rounded-full">
-                          Active
-                        </span>
-                      )}
-                    </div>
-                    {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                  </button>
-
-                  {/* Nested Notes */}
-                  <AnimatePresence initial={false}>
-                    {isExpanded && (
-                      <motion.div
-                        key="notes"
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.2, ease: 'easeInOut' }}
-                        style={{ overflow: 'hidden' }}
-                      >
-                        <div className="bg-gray-50 p-3 border-t">
-                          <div className="flex flex-wrap gap-2">
-                            {/* Select All Profile Button */}
-                            <button
-                              onClick={() => onProfileToggle(key)}
-                              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                                isSelected
-                                  ? 'bg-amber-500 text-white'
-                                  : 'bg-white border hover:border-amber-500'
-                              }`}
-                            >
-                              All {profile.name}
-                            </button>
-
-                            {/* Individual Notes */}
-                            {profile.notes.map((note) => {
-                              const noteSelected = selectedNotes.includes(note);
-                              return (
-                                <button
-                                  key={note}
-                                  onClick={() => onNoteToggle(note)}
-                                  className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
-                                    noteSelected
-                                      ? 'bg-black text-white'
-                                      : 'bg-white border hover:border-black'
-                                  }`}
-                                >
-                                  {note}
-                                </button>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              );
-            })}
+          <div className="flex items-center gap-3">
+            {hasActiveFilters && (
+              <button
+                onClick={(e) => { e.stopPropagation(); onClear(); setExpandedProfile(null); }}
+                className="text-xs text-amber-600 hover:text-amber-700 font-medium flex items-center gap-1"
+              >
+                <X className="h-3 w-3" /> Clear
+              </button>
+            )}
+            {open ? <ChevronUp className="h-4 w-4 text-gray-400" /> : <ChevronDown className="h-4 w-4 text-gray-400" />}
           </div>
+        </button>
 
-          {/* Active Filters Summary — desktop only (inline) */}
-          {hasActiveFilters && (
-            <div className="hidden md:block mt-4 pt-4 border-t">
-              <p className="text-sm text-gray-600 mb-2">Active filters:</p>
-              <div className="flex flex-wrap gap-2">
-                {selectedProfiles.map(profile => (
-                  <span
-                    key={profile}
-                    className="inline-flex items-center gap-1 px-2 py-1 bg-amber-100 text-amber-800 rounded text-xs font-medium"
-                  >
-                    {scentProfiles[profile as keyof typeof scentProfiles].name}
-                  </span>
-                ))}
-                {selectedNotes.map(note => (
-                  <span
-                    key={note}
-                    className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 text-gray-800 rounded text-xs"
-                  >
-                    {note}
-                  </span>
-                ))}
+        {/* Expandable filter panel */}
+        <AnimatePresence initial={false}>
+          {open && (
+            <motion.div
+              key="filter-panel"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.22, ease: 'easeInOut' }}
+              style={{ overflow: 'hidden' }}
+            >
+              <div className="pb-4">
+                {/* Profiles — horizontal scrolling chips */}
+                <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide" style={{ scrollbarWidth: 'none' }}>
+                  {Object.entries(scentProfiles).map(([key, profile]) => {
+                    const isSelected = selectedProfiles.includes(key);
+                    const isExpanded = expandedProfile === key;
+
+                    return (
+                      <button
+                        key={key}
+                        onClick={() => handleProfileClick(key)}
+                        className={`shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
+                          isSelected
+                            ? 'bg-amber-500 border-amber-500 text-white'
+                            : isExpanded
+                            ? 'bg-amber-50 border-amber-300 text-amber-800'
+                            : 'bg-white border-gray-200 text-gray-700 hover:border-amber-400 hover:text-amber-700'
+                        }`}
+                      >
+                        <span>{profile.icon}</span>
+                        <span>{profile.name}</span>
+                        {isExpanded && !isSelected && <ChevronUp className="h-3 w-3" />}
+                        {!isExpanded && !isSelected && <ChevronDown className="h-3 w-3 opacity-40" />}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Notes panel for expanded profile */}
+                <AnimatePresence initial={false}>
+                  {expandedProfile && (
+                    <motion.div
+                      key={expandedProfile}
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.18, ease: 'easeInOut' }}
+                      style={{ overflow: 'hidden' }}
+                    >
+                      <div className="mt-2 p-3 bg-gray-50 rounded-lg border border-gray-100">
+                        <div className="flex flex-wrap gap-2">
+                          {/* Select all for this profile */}
+                          <button
+                            onClick={() => onProfileToggle(expandedProfile)}
+                            className={`px-3 py-1 rounded-full text-xs font-semibold border transition-colors ${
+                              selectedProfiles.includes(expandedProfile)
+                                ? 'bg-amber-500 border-amber-500 text-white'
+                                : 'bg-white border-gray-300 text-gray-600 hover:border-amber-400'
+                            }`}
+                          >
+                            All {scentProfiles[expandedProfile as keyof typeof scentProfiles]?.name}
+                          </button>
+
+                          {scentProfiles[expandedProfile as keyof typeof scentProfiles]?.notes.map((note) => {
+                            const noteSelected = selectedNotes.includes(note);
+                            return (
+                              <button
+                                key={note}
+                                onClick={() => onNoteToggle(note)}
+                                className={`px-3 py-1 rounded-full text-xs border transition-colors ${
+                                  noteSelected
+                                    ? 'bg-black border-black text-white'
+                                    : 'bg-white border-gray-300 text-gray-600 hover:border-black'
+                                }`}
+                              >
+                                {note}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* Active filters summary */}
+                {hasActiveFilters && (
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {selectedProfiles.map(profile => (
+                      <span
+                        key={profile}
+                        className="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full text-xs font-medium"
+                      >
+                        {scentProfiles[profile as keyof typeof scentProfiles].icon}{' '}
+                        {scentProfiles[profile as keyof typeof scentProfiles].name}
+                      </span>
+                    ))}
+                    {selectedNotes.map(note => (
+                      <span
+                        key={note}
+                        className="inline-flex items-center gap-1 px-2 py-0.5 bg-gray-100 text-gray-700 rounded-full text-xs"
+                      >
+                        {note}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
-            </div>
+            </motion.div>
           )}
-        </div>
+        </AnimatePresence>
       </div>
 
-      {/* Sticky active filters bar — mobile only */}
-      {hasActiveFilters && (
-        <div className="md:hidden sticky top-16 z-10 bg-white border-b shadow-sm">
-          <div className="container mx-auto px-4 py-2 flex items-center gap-2 flex-wrap">
-            <p className="text-xs text-gray-500 shrink-0">Active:</p>
+      {/* Sticky active filters bar — visible when closed + filters active */}
+      {hasActiveFilters && !open && (
+        <div className="sticky top-16 z-10 bg-amber-50 border-t border-amber-100">
+          <div className="container mx-auto px-4 py-1.5 flex items-center gap-2 flex-wrap">
+            <span className="text-xs text-amber-700 font-medium shrink-0">Filtered:</span>
             {selectedProfiles.map(profile => (
               <span
                 key={profile}
-                className="inline-flex items-center gap-1 px-2 py-1 bg-amber-100 text-amber-800 rounded text-xs font-medium"
+                className="inline-flex items-center px-2 py-0.5 bg-amber-200 text-amber-900 rounded-full text-xs font-medium"
               >
                 {scentProfiles[profile as keyof typeof scentProfiles].name}
               </span>
@@ -168,20 +188,20 @@ export function ScentFilter({
             {selectedNotes.map(note => (
               <span
                 key={note}
-                className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 text-gray-800 rounded text-xs"
+                className="inline-flex items-center px-2 py-0.5 bg-gray-200 text-gray-700 rounded-full text-xs"
               >
                 {note}
               </span>
             ))}
             <button
               onClick={onClear}
-              className="ml-auto text-xs text-amber-600 hover:text-amber-700 font-medium shrink-0"
+              className="ml-auto text-xs text-amber-700 hover:text-amber-900 font-medium shrink-0"
             >
               Clear
             </button>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
