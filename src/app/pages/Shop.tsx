@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useProducts } from '../../context/ProductsContext';
+import { scentProfiles } from '../../data/products';
 import { ProductCard } from '../components/ProductCard';
 import { ScentFilter } from '../components/ScentFilter';
 import { Button } from '../components/ui/button';
@@ -19,13 +20,19 @@ export function Shop() {
   // Apply scent profile filters
   if (selectedProfiles.length > 0 || selectedNotes.length > 0) {
     filteredProducts = filteredProducts.filter((product) => {
-      const matchesProfile = selectedProfiles.length === 0 || 
+      const matchesProfile = selectedProfiles.length === 0 ||
         selectedProfiles.some(profile => product.scentProfiles?.includes(profile));
-      
-      const matchesNote = selectedNotes.length === 0 ||
-        selectedNotes.some(note => product.specificNotes?.includes(note));
 
-      return matchesProfile || matchesNote;
+      // A note matches if it's in specificNotes OR if the product's scent profile includes that note
+      const matchesNote = selectedNotes.length === 0 ||
+        selectedNotes.some(note =>
+          product.specificNotes?.includes(note) ||
+          product.scentProfiles?.some(profile =>
+            scentProfiles[profile as keyof typeof scentProfiles]?.notes.includes(note)
+          )
+        );
+
+      return matchesProfile && matchesNote;
     });
   }
 

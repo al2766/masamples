@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useProducts } from '../../context/ProductsContext';
+import { scentProfiles } from '../../data/products';
 import { ProductCard } from '../components/ProductCard';
 import { ScentFilter } from '../components/ScentFilter';
 
@@ -8,10 +9,8 @@ export function Inspired() {
   const [selectedProfiles, setSelectedProfiles] = useState<string[]>([]);
   const [selectedNotes, setSelectedNotes] = useState<string[]>([]);
 
-  // Show products marked isInspiredBy (falls back to all if none tagged yet)
-  const baseProducts = products.some((p) => p.isInspiredBy)
-    ? products.filter((p) => p.isInspiredBy)
-    : products;
+  // Strictly show only products marked isInspiredBy — no fallback
+  const baseProducts = products.filter((p) => p.isInspiredBy === true);
 
   let filteredProducts = baseProducts;
 
@@ -19,9 +18,17 @@ export function Inspired() {
     filteredProducts = filteredProducts.filter((product) => {
       const matchesProfile = selectedProfiles.length === 0 ||
         selectedProfiles.some(profile => product.scentProfiles?.includes(profile));
+
+      // A note matches if it's in specificNotes OR if the product's scent profile includes that note
       const matchesNote = selectedNotes.length === 0 ||
-        selectedNotes.some(note => product.specificNotes?.includes(note));
-      return matchesProfile || matchesNote;
+        selectedNotes.some(note =>
+          product.specificNotes?.includes(note) ||
+          product.scentProfiles?.some(profile =>
+            scentProfiles[profile as keyof typeof scentProfiles]?.notes.includes(note)
+          )
+        );
+
+      return matchesProfile && matchesNote;
     });
   }
 
