@@ -4,6 +4,11 @@ import * as cheerio from 'cheerio';
 
 export const maxDuration = 45;
 
+// Same credentials used by search-perfume — public, embedded in Fragrantica's frontend
+const ALGOLIA_APP_ID = 'FGVI612DFZ';
+const ALGOLIA_API_KEY =
+  'NjdkNmM0ZTBjNzJjNzZjZGQ2MTczOGI1NGRlMDMyODgxNjQ3OTQxZGRhYzYwZDhkMzllNDJiY2M3OTQ1MDYzNHZhbGlkVW50aWw9MTc3NDEyNDQyMw==';
+
 // Splits comma / "and" / · separated note strings into an array
 function split(raw: string): string[] {
   return raw
@@ -29,23 +34,20 @@ function extractNotes(text: string) {
   };
 }
 
-// Parse HTML with cheerio — works on both direct Fragrantica HTML and Jina.ai rendered HTML
+// Parse HTML with cheerio
 function parseHtml(html: string) {
   const $ = cheerio.load(html);
 
-  // Description: dedicated content block, then meta tags as fallback
   const description =
     $('#perfume-description-content p').first().text().trim().substring(0, 600)
     || $('meta[name="description"]').attr('content')?.substring(0, 600)
     || $('meta[property="og:description"]').attr('content')?.substring(0, 600)
     || undefined;
 
-  // Image
   const image =
     $('img[itemprop="image"]').attr('src') ??
     $('meta[property="og:image"]').attr('content');
 
-  // Notes from pyramid custom elements (works on direct HTML)
   function notesForTier(tier: string): string[] {
     return $(`pyramid-level-new[notes="${tier}"] .pyramid-note-label`)
       .map((_, el) => $(el).text().trim())
@@ -57,9 +59,6 @@ function parseHtml(html: string) {
   let middle = notesForTier('middle');
   let base   = notesForTier('base');
 
-  // If pyramid elements empty, try parsing notes out of the meta description text
-  // Fragrantica's meta description usually contains the full notes sentence:
-  // "Sauvage is a fragrance... Top notes are Bergamot; middle notes are..."
   if (!top.length && !middle.length && !base.length) {
     const metaText =
       $('meta[name="description"]').attr('content') ??
@@ -73,7 +72,18 @@ function parseHtml(html: string) {
     ? { top, middle, base }
     : undefined;
 
-  return { description: description || undefined, notes, image };
+  // Main accords — find the h6 "main accords" section and collect all truncate spans
+  const accords: string[] = [];
+  $('h6').each((_, el) => {
+    if ($(el).text().trim().toLowerCase() === 'main accords') {
+      $(el).closest('div').find('span.truncate').each((__, span) => {
+        const t = $(span).text().trim();
+        if (t) accords.push(t);
+      });
+    }
+  });
+
+  return { description: description || undefined, notes, image, accords: accords.length ? accords : undefined };
 }
 
 // Parse plain text / markdown (Jina.ai text output)
@@ -95,25 +105,87 @@ export async function GET(request: NextRequest) {
 
   const debug: string[] = [];
 
+  // ── 0. Algolia object fetch ────────────────────────────────────────────────
+  // The perfume ID is embedded in the URL: "Sauvage-31861.html" → objectID 31861
+  // Fetching the full Algolia object avoids any HTTP scraping of fragrantica.com.
+  const idMatch = targetUrl.match(/-(\d+)\.html$/);
+  if (idMatch) {
+    try {
+      const objectID = idMatch[1];
+      const algoliaUrl =
+        `https://${ALGOLIA_APP_ID.toLowerCase()}-dsn.algolia.net/1/indexes/fragrantica_perfumes/${objectID}` +
+        `?x-algolia-application-id=${ALGOLIA_APP_ID}` +
+        `&x-algolia-api-key=${encodeURIComponent(ALGOLIA_API_KEY)}`;
+
+      const res = await fetch(algoliaUrl, { signal: AbortSignal.timeout(6000) });
+      if (res.ok) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const obj: Record<string, any> = await res.json();
+        debug.push(`algolia: OK, keys=${Object.keys(obj).join(',')}`);
+
+        // Fragrantica field names are in Croatian/Serbian
+        // opis = description, vrh_note = top notes, srce_note = middle/heart, baza_note = base
+        const rawDesc: string =
+          obj.opis ?? obj.description ?? obj.desc ?? obj.text ?? '';
+        const description = rawDesc ? rawDesc.substring(0, 600) : undefined;
+
+        // Notes may be arrays of strings or a combined string
+        function toArr(val: unknown): string[] {
+          if (!val) return [];
+          if (Array.isArray(val)) return (val as string[]).map(String).filter(Boolean);
+          return split(String(val));
+        }
+
+        let top    = toArr(obj.vrh_note    ?? obj.top_notes    ?? obj.notes_top);
+        let middle = toArr(obj.srce_note   ?? obj.middle_notes ?? obj.notes_middle ?? obj.heart_notes);
+        let base   = toArr(obj.baza_note   ?? obj.base_notes   ?? obj.notes_base);
+
+        // If still empty, try a combined notes / meta description string
+        if (!top.length && !middle.length && !base.length) {
+          const combined = String(obj.notes ?? obj.meta_description ?? obj.opis ?? '');
+          if (combined) {
+            const parsed = extractNotes(combined);
+            if (parsed) ({ top, middle, base } = parsed);
+          }
+        }
+
+        const notes = (top.length || middle.length || base.length)
+          ? { top, middle, base }
+          : undefined;
+
+        // Main accords — akordi is the Croatian/Serbian field name
+        const accords: string[] = toArr(obj.akordi ?? obj.accords ?? obj.main_accords);
+
+        debug.push(`algolia: desc=${description ? 'yes' : 'no'}, notes=${JSON.stringify(notes)}, accords=${JSON.stringify(accords)}`);
+
+        if (description || notes || accords.length) {
+          return NextResponse.json({ description, notes, accords: accords.length ? accords : undefined, image: obj.thumbnail ?? undefined });
+        }
+        debug.push('algolia: object found but no desc/notes/accords fields — see keys above');
+      } else {
+        debug.push(`algolia: HTTP ${res.status}`);
+      }
+    } catch (e: unknown) {
+      const err = e as { message?: string };
+      debug.push(`algolia: error ${err?.message}`);
+    }
+  }
+
   // ── 1. Direct axios + cheerio ─────────────────────────────────────────────
   try {
     const response = await axios.get(targetUrl, {
       headers: {
-        'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-        Accept:
-          'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.5',
+        'User-Agent': 'PostmanRuntime/7.51.1',
+        Accept: '*/*',
         'Accept-Encoding': 'gzip, deflate, br',
         Connection: 'keep-alive',
-        'Upgrade-Insecure-Requests': '1',
       },
       timeout: 8000,
     });
     debug.push(`direct: OK ${response.status}, ${response.data.length} bytes`);
-    const { description, notes, image } = parseHtml(response.data);
-    debug.push(`direct: desc=${description ? 'yes' : 'no'}, notes=${JSON.stringify(notes)}`);
-    if (description || notes) return NextResponse.json({ description, notes, image });
+    const { description, notes, image, accords } = parseHtml(response.data);
+    debug.push(`direct: desc=${description ? 'yes' : 'no'}, notes=${JSON.stringify(notes)}, accords=${JSON.stringify(accords)}`);
+    if (description || notes || accords?.length) return NextResponse.json({ description, notes, image, accords });
     debug.push('direct: parsed but found nothing');
   } catch (e: unknown) {
     const err = e as { response?: { status: number }; message?: string };
@@ -121,17 +193,15 @@ export async function GET(request: NextRequest) {
   }
 
   // ── 2. Jina.ai HTML render + cheerio ─────────────────────────────────────
-  // Jina uses headless Chromium so it bypasses Cloudflare and executes JS.
-  // Requesting HTML lets us reuse the same cheerio selectors + meta tag parsing.
   try {
     const res = await axios.get(`https://r.jina.ai/${targetUrl}`, {
       headers: { Accept: 'text/html', 'X-Return-Format': 'html' },
       timeout: 25000,
     });
     debug.push(`jina-html: OK ${res.status}, ${res.data.length} bytes`);
-    const { description, notes, image } = parseHtml(res.data);
-    debug.push(`jina-html: desc=${description ? 'yes' : 'no'}, notes=${JSON.stringify(notes)}`);
-    if (description || notes) return NextResponse.json({ description, notes, image });
+    const { description, notes, image, accords } = parseHtml(res.data);
+    debug.push(`jina-html: desc=${description ? 'yes' : 'no'}, notes=${JSON.stringify(notes)}, accords=${JSON.stringify(accords)}`);
+    if (description || notes || accords?.length) return NextResponse.json({ description, notes, image, accords });
     debug.push('jina-html: parsed but found nothing');
   } catch (e: unknown) {
     const err = e as { response?: { status: number }; message?: string };

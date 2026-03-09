@@ -103,7 +103,7 @@ export function Home() {
           <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-10">
             {/* eBay logo + Est tag */}
             <div className="flex flex-col items-center gap-1 shrink-0">
-              <svg viewBox="0 0 110 44" className="h-9 w-auto" aria-label="eBay" xmlns="http://www.w3.org/2000/svg">
+              <svg viewBox="0 0 130 44" className="h-9 w-auto" aria-label="eBay" xmlns="http://www.w3.org/2000/svg">
                 <text fontFamily="Arial Black, Arial, sans-serif" fontWeight="900" fontSize="42" y="38">
                   <tspan fill="#E53238">e</tspan>
                   <tspan fill="#0064D2">B</tspan>

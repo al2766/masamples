@@ -81,7 +81,7 @@ export function Footer() {
                 className="text-gray-400 hover:text-amber-400"
                 aria-label="eBay store"
               >
-                <svg viewBox="0 0 110 44" className="h-5 w-auto" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <svg viewBox="0 0 130 44" className="h-5 w-auto" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                   <text fontFamily="Arial Black, Arial, sans-serif" fontWeight="900" fontSize="42" y="38" fill="currentColor">
                     eBay
                   </text>
