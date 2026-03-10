@@ -1,7 +1,1 @@
-
-  import { createRoot } from "react-dom/client";
-  import App from "./app/App.tsx";
-  import "./styles/index.css";
-
-  createRoot(document.getElementById("root")!).render(<App />);
-  
+{"data":"CiAgaW1wb3J0IHsgY3JlYXRlUm9vdCB9IGZyb20gInJlYWN0LWRvbS9jbGllbnQiOwogIGltcG9ydCBBcHAgZnJvbSAiLi9hcHAvQXBwLnRzeCI7CiAgaW1wb3J0ICIuL3N0eWxlcy9pbmRleC5jc3MiOwoKICBjcmVhdGVSb290KGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJyb290IikhKS5yZW5kZXIoPEFwcCAvPik7CiAg"}
