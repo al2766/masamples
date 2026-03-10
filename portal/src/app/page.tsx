@@ -37,38 +37,10 @@ interface SearchResult { id: string; name: string; brand: string; image: string;
 // ── Form helpers ──────────────────────────────────────────────────────────────
 const splitComma = (s: string) => s.split(',').map((x) => x.trim()).filter(Boolean);
 
-// Scent profile options — keys match what the main site filters on
-const SCENT_PROFILE_OPTIONS = [
-  { key: 'fresh',    label: 'Fresh' },
-  { key: 'floral',   label: 'Floral' },
-  { key: 'ambery',   label: 'Ambery' },
-  { key: 'woody',    label: 'Woody' },
-  { key: 'aromatic', label: 'Aromatic' },
-];
-
-// Maps raw Fragrantica accord strings to profile keys via keyword matching
-function mapAccordsToProfiles(accords: string[]): string[] {
-  const keywords: Record<string, string[]> = {
-    fresh:    ['fresh', 'citrus', 'aquatic', 'marine', 'fruity', 'green', 'watery'],
-    floral:   ['floral', 'rose', 'jasmine', 'iris', 'violet', 'powdery', 'white floral'],
-    ambery:   ['amber', 'vanilla', 'musk', 'sweet', 'spic', 'warm', 'tonka', 'resin', 'balsa', 'incense'],
-    woody:    ['wood', 'cedar', 'sandal', 'oud', 'vetiver', 'patchou', 'earth', 'smok', 'tobacco'],
-    aromatic: ['aromatic', 'herb', 'sage', 'mint', 'pepper', 'lavend', 'fougere'],
-  };
-  const matched = new Set<string>();
-  for (const accord of accords) {
-    const lower = accord.toLowerCase();
-    for (const [profile, kws] of Object.entries(keywords)) {
-      if (kws.some((kw) => lower.includes(kw))) matched.add(profile);
-    }
-  }
-  return Array.from(matched);
-}
-
 type Category = 'mens' | 'womens' | 'unisex';
 const BASE_FORM = {
   name: '', brand: '', description: '', category: 'mens' as Category,
-  image: '', topNotes: '', middleNotes: '', baseNotes: '', scentProfiles: [] as string[],
+  image: '', topNotes: '', middleNotes: '', baseNotes: '', scentProfiles: '',
   inStock: true, isBestSeller: false, isNewArrival: false, isInspiredBy: false,
   sizes: [{ size: '2ml', price: 5 }, { size: '5ml', price: 10 }, { size: '10ml', price: 18 }] as Size[],
 };
@@ -81,7 +53,7 @@ function productToForm(p: Product): FormState {
     topNotes:     p.notes?.top?.join(', ')    ?? '',
     middleNotes:  p.notes?.middle?.join(', ') ?? '',
     baseNotes:    p.notes?.base?.join(', ')   ?? '',
-    scentProfiles: p.scentProfiles ?? [],
+    scentProfiles: p.scentProfiles?.join(', ') ?? '',
     inStock: p.inStock ?? true, isBestSeller: p.isBestSeller ?? false,
     isNewArrival: p.isNewArrival ?? false, isInspiredBy: p.isInspiredBy ?? false,
     sizes: p.sizes?.length ? p.sizes : [{ size: '', price: 0 }],
@@ -232,7 +204,7 @@ export default function Portal() {
           topNotes:      top.join(', ')    || f.topNotes,
           middleNotes:   middle.join(', ') || f.middleNotes,
           baseNotes:     base.join(', ')   || f.baseNotes,
-          scentProfiles: accords?.length ? mapAccordsToProfiles(accords) : f.scentProfiles,
+          scentProfiles: accords?.join(', ') || f.scentProfiles,
           image:         image || f.image,
         }));
       } else { setDetailsFailed(true); }
@@ -287,7 +259,7 @@ export default function Portal() {
       sizes,
       price:         sizes[0]?.price ?? 0,
       size:          sizes[0]?.size  ?? '',
-      scentProfiles: form.scentProfiles,
+      scentProfiles: splitComma(form.scentProfiles),
       inStock:       form.inStock,
       isBestSeller:  form.isBestSeller,
       isNewArrival:  form.isNewArrival,
@@ -776,25 +748,10 @@ export default function Portal() {
                   </div>
                 ))}
                 <div>
-                  <label className="block text-xs text-gray-400 mb-1.5">Scent profiles</label>
-                  <div className="flex flex-wrap gap-3">
-                    {SCENT_PROFILE_OPTIONS.map(({ key, label }) => (
-                      <label key={key} className="flex items-center gap-1.5 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={form.scentProfiles.includes(key)}
-                          onChange={(e) => setForm((f) => ({
-                            ...f,
-                            scentProfiles: e.target.checked
-                              ? [...f.scentProfiles, key]
-                              : f.scentProfiles.filter((k) => k !== key),
-                          }))}
-                          className="w-4 h-4 rounded accent-amber-400"
-                        />
-                        <span className="text-sm text-gray-700">{label}</span>
-                      </label>
-                    ))}
-                  </div>
+                  <label className="block text-xs text-gray-400 mb-1">Scent profiles</label>
+                  <input value={form.scentProfiles} onChange={(e) => setForm((f) => ({ ...f, scentProfiles: e.target.value }))}
+                    placeholder="e.g. Woody, Fresh, Floral"
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400" />
                 </div>
               </div>
 
