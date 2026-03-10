@@ -1,1 +1,48 @@
-{"data":"aW1wb3J0IHsgUHJvZHVjdCB9IGZyb20gJy4uLy4uL2RhdGEvcHJvZHVjdHMnOwppbXBvcnQgeyBCYWRnZSB9IGZyb20gJy4vdWkvYmFkZ2UnOwppbXBvcnQgeyBJbWFnZVdpdGhGYWxsYmFjayB9IGZyb20gJy4vZmlnbWEvSW1hZ2VXaXRoRmFsbGJhY2snOwppbXBvcnQgeyBMaW5rIH0gZnJvbSAncmVhY3Qtcm91dGVyJzsKCmludGVyZmFjZSBQcm9kdWN0Q2FyZFByb3BzIHsKICBwcm9kdWN0OiBQcm9kdWN0Owp9CgpleHBvcnQgZnVuY3Rpb24gUHJvZHVjdENhcmQoeyBwcm9kdWN0IH06IFByb2R1Y3RDYXJkUHJvcHMpIHsKICByZXR1cm4gKAogICAgPExpbmsgdG89e2AvcHJvZHVjdC8ke3Byb2R1Y3QuaWR9YH0+CiAgICAgIDxkaXYgY2xhc3NOYW1lPSJncm91cCByZWxhdGl2ZSBiZy13aGl0ZSByb3VuZGVkLWxnIG92ZXJmbG93LWhpZGRlbiBib3JkZXIgaG92ZXI6c2hhZG93LWxnIHRyYW5zaXRpb24tc2hhZG93IGgtZnVsbCBmbGV4IGZsZXgtY29sIj4KICAgICAgICB7LyogSW1hZ2UgKi99CiAgICAgICAgPGRpdiBjbGFzc05hbWU9ImFzcGVjdC1zcXVhcmUgb3ZlcmZsb3ctaGlkZGVuIGJnLXdoaXRlIGZsZXggaXRlbXMtY2VudGVyIGp1c3RpZnktY2VudGVyIHAtNCI+CiAgICAgICAgICA8SW1hZ2VXaXRoRmFsbGJhY2sKICAgICAgICAgICAgc3JjPXtwcm9kdWN0LmltYWdlfQogICAgICAgICAgICBhbHQ9e3Byb2R1Y3QubmFtZX0KICAgICAgICAgICAgY2xhc3NOYW1lPSJ3LWZ1bGwgaC1mdWxsIG9iamVjdC1jb250YWluIGdyb3VwLWhvdmVyOnNjYWxlLTEwNSB0cmFuc2l0aW9uLXRyYW5zZm9ybSBkdXJhdGlvbi0zMDAiCiAgICAgICAgICAvPgogICAgICAgIDwvZGl2PgoKICAgICAgICB7LyogQmFkZ2VzICovfQogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJhYnNvbHV0ZSB0b3AtMyByaWdodC0zIGZsZXggZmxleC1jb2wgZ2FwLTIiPgogICAgICAgICAge3Byb2R1Y3QuaXNCZXN0U2VsbGVyICYmICgKICAgICAgICAgICAgPEJhZGdlIGNsYXNzTmFtZT0iYmctYmxhY2sgdGV4dC13aGl0ZSI+QmVzdCBTZWxsZXI8L0JhZGdlPgogICAgICAgICAgKX0KICAgICAgICAgIHshcHJvZHVjdC5pblN0b2NrICYmICgKICAgICAgICAgICAgPEJhZGdlIHZhcmlhbnQ9ImRlc3RydWN0aXZlIj5Tb2xkIE91dDwvQmFkZ2U+CiAgICAgICAgICApfQogICAgICAgIDwvZGl2PgoKICAgICAgICB7LyogQ29udGVudCAqL30KICAgICAgICA8ZGl2IGNsYXNzTmFtZT0icC0zIG1kOnAtNCBmbGV4IGZsZXgtY29sIGZsZXgtZ3JvdyI+CiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iZmxleC1ncm93Ij4KICAgICAgICAgICAgPHAgY2xhc3NOYW1lPSJ0ZXh0LXhzIG1kOnRleHQtc20gdGV4dC1ncmF5LTYwMCI+e3Byb2R1Y3QuYnJhbmR9PC9wPgogICAgICAgICAgICA8aDMgY2xhc3NOYW1lPSJmb250LXNlbWlib2xkIHRleHQtc20gbWQ6dGV4dC1iYXNlIGxpbmUtY2xhbXAtMiBtYi0yIj57cHJvZHVjdC5uYW1lfTwvaDM+CiAgICAgICAgICA8L2Rpdj4KCiAgICAgICAgICA8ZGl2PgogICAgICAgICAgICA8cCBjbGFzc05hbWU9InRleHQteHMgdGV4dC1ncmF5LTUwMCBtYi0xIj5mcm9tPC9wPgogICAgICAgICAgICA8cCBjbGFzc05hbWU9InRleHQtbGcgbWQ6dGV4dC14bCBmb250LWJvbGQiPsKje3Byb2R1Y3QucHJpY2UudG9GaXhlZCgyKX08L3A+CiAgICAgICAgICA8L2Rpdj4KICAgICAgICA8L2Rpdj4KICAgICAgPC9kaXY+CiAgICA8L0xpbms+CiAgKTsKfQ=="}
+import { Product } from '../../data/products';
+import { Badge } from './ui/badge';
+import { ImageWithFallback } from './figma/ImageWithFallback';
+import { Link } from 'react-router';
+
+interface ProductCardProps {
+  product: Product;
+}
+
+export function ProductCard({ product }: ProductCardProps) {
+  return (
+    <Link to={`/product/${product.id}`}>
+      <div className="group relative bg-white rounded-lg overflow-hidden border hover:shadow-lg transition-shadow h-full flex flex-col">
+        {/* Image */}
+        <div className="aspect-square overflow-hidden bg-white flex items-center justify-center p-4">
+          <ImageWithFallback
+            src={product.image}
+            alt={product.name}
+            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+          />
+        </div>
+
+        {/* Badges */}
+        <div className="absolute top-3 right-3 flex flex-col gap-2">
+          {product.isBestSeller && (
+            <Badge className="bg-black text-white">Best Seller</Badge>
+          )}
+          {!product.inStock && (
+            <Badge variant="destructive">Sold Out</Badge>
+          )}
+        </div>
+
+        {/* Content */}
+        <div className="p-3 md:p-4 flex flex-col flex-grow">
+          <div className="flex-grow">
+            <p className="text-xs md:text-sm text-gray-600">{product.brand}</p>
+            <h3 className="font-semibold text-sm md:text-base line-clamp-2 mb-2">{product.name}</h3>
+          </div>
+
+          <div>
+            <p className="text-xs text-gray-500 mb-1">from</p>
+            <p className="text-lg md:text-xl font-bold">£{product.price.toFixed(2)}</p>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+}

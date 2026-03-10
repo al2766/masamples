@@ -1,1 +1,228 @@
-{"data":"aW1wb3J0IHsgTmV4dFJlcXVlc3QsIE5leHRSZXNwb25zZSB9IGZyb20gJ25leHQvc2VydmVyJzsKaW1wb3J0IGF4aW9zIGZyb20gJ2F4aW9zJzsKaW1wb3J0ICogYXMgY2hlZXJpbyBmcm9tICdjaGVlcmlvJzsKCmV4cG9ydCBjb25zdCBtYXhEdXJhdGlvbiA9IDQ1OwoKLy8gU2FtZSBjcmVkZW50aWFscyB1c2VkIGJ5IHNlYXJjaC1wZXJmdW1lIOKAlCBwdWJsaWMsIGVtYmVkZGVkIGluIEZyYWdyYW50aWNhJ3MgZnJvbnRlbmQKY29uc3QgQUxHT0xJQV9BUFBfSUQgPSAnRkdWSTYxMkRGWic7CmNvbnN0IEFMR09MSUFfQVBJX0tFWSA9CiAgJ05qZGtObU0wWlRCak56SmpOelpqWkdRMk1UY3pPR0kxTkdSbE1ETXlPRGd4TmpRM09UUXhaR1JoWXpZd1pEaGtNemxsTkRKaVkyTTNPVFExTURZek5IWmhiR2xrVlc1MGFXdzlNVGMzTkRFeU5EUXlNdz09JzsKCi8vIFNwbGl0cyBjb21tYSAvICJhbmQiIC8gwrcgc2VwYXJhdGVkIG5vdGUgc3RyaW5ncyBpbnRvIGFuIGFycmF5CmZ1bmN0aW9uIHNwbGl0KHJhdzogc3RyaW5nKTogc3RyaW5nW10gewogIHJldHVybiByYXcKICAgIC5zcGxpdCgvWyzCt118XGJhbmRcYi8pCiAgICAubWFwKChzKSA9PiBzLnJlcGxhY2UoL1s7fChdLiovZywgJycpLnRyaW0oKSkKICAgIC5maWx0ZXIoKHMpID0+IHMubGVuZ3RoID4gMSAmJiBzLmxlbmd0aCA8IDQwKTsKfQoKLy8gRXh0cmFjdHMgdG9wL21pZGRsZS9iYXNlIG5vdGVzIGZyb20gYW55IHRleHQgKG1ldGEgZGVzY3JpcHRpb24sIHBsYWluIHRleHQsIG1hcmtkb3duKQpmdW5jdGlvbiBleHRyYWN0Tm90ZXModGV4dDogc3RyaW5nKSB7CiAgY29uc3QgdG9wTSAgPSB0ZXh0Lm1hdGNoKC9bVHRdb3BccytbTm5db3Rlcz9ccysoPzphcmV8aXN8OilccyooW147LlxuXSspL2kpCiAgICAgICAgICAgICA/PyB0ZXh0Lm1hdGNoKC9cKlwqVG9wXHMrTm90ZXM/XCpcKls6XHNdKyhbXlxuXSspL2kpOwogIGNvbnN0IG1pZE0gID0gdGV4dC5tYXRjaCgvKD86W01tXWlkZGxlfFtIaF1lYXJ0KVxzK1tObl1vdGVzP1xzKyg/OmFyZXxpc3w6KVxzKihbXjsuXG5dKykvaSkKICAgICAgICAgICAgID8/IHRleHQubWF0Y2goL1wqXCooPzpNaWRkbGV8SGVhcnQpXHMrTm90ZXM/XCpcKls6XHNdKyhbXlxuXSspL2kpOwogIGNvbnN0IGJhc2VNID0gdGV4dC5tYXRjaCgvW0JiXWFzZVxzK1tObl1vdGVzP1xzKyg/OmFyZXxpc3w6KVxzKihbXjsuXG5dKykvaSkKICAgICAgICAgICAgID8/IHRleHQubWF0Y2goL1wqXCpCYXNlXHMrTm90ZXM/XCpcKls6XHNdKyhbXlxuXSspL2kpOwoKICBpZiAoIXRvcE0gJiYgIW1pZE0gJiYgIWJhc2VNKSByZXR1cm4gdW5kZWZpbmVkOwogIHJldHVybiB7CiAgICB0b3A6ICAgIHRvcE0gID8gc3BsaXQodG9wTVsxXSkgIDogW10sCiAgICBtaWRkbGU6IG1pZE0gID8gc3BsaXQobWlkTVsxXSkgIDogW10sCiAgICBiYXNlOiAgIGJhc2VNID8gc3BsaXQoYmFzZU1bMV0pIDogW10sCiAgfTsKfQoKLy8gUGFyc2UgSFRNTCB3aXRoIGNoZWVyaW8KZnVuY3Rpb24gcGFyc2VIdG1sKGh0bWw6IHN0cmluZykgewogIGNvbnN0ICQgPSBjaGVlcmlvLmxvYWQoaHRtbCk7CgogIGNvbnN0IGRlc2NyaXB0aW9uID0KICAgICQoJyNwZXJmdW1lLWRlc2NyaXB0aW9uLWNvbnRlbnQgcCcpLmZpcnN0KCkudGV4dCgpLnRyaW0oKS5zdWJzdHJpbmcoMCwgNjAwKQogICAgfHwgJCgnbWV0YVtuYW1lPSJkZXNjcmlwdGlvbiJdJykuYXR0cignY29udGVudCcpPy5zdWJzdHJpbmcoMCwgNjAwKQogICAgfHwgJCgnbWV0YVtwcm9wZXJ0eT0ib2c6ZGVzY3JpcHRpb24iXScpLmF0dHIoJ2NvbnRlbnQnKT8uc3Vic3RyaW5nKDAsIDYwMCkKICAgIHx8IHVuZGVmaW5lZDsKCiAgY29uc3QgaW1hZ2UgPQogICAgJCgnaW1nW2l0ZW1wcm9wPSJpbWFnZSJdJykuYXR0cignc3JjJykgPz8KICAgICQoJ21ldGFbcHJvcGVydHk9Im9nOmltYWdlIl0nKS5hdHRyKCdjb250ZW50Jyk7CgogIGZ1bmN0aW9uIG5vdGVzRm9yVGllcih0aWVyOiBzdHJpbmcpOiBzdHJpbmdbXSB7CiAgICByZXR1cm4gJChgcHlyYW1pZC1sZXZlbC1uZXdbbm90ZXM9IiR7dGllcn0iXSAucHlyYW1pZC1ub3RlLWxhYmVsYCkKICAgICAgLm1hcCgoXywgZWwpID0+ICQoZWwpLnRleHQoKS50cmltKCkpCiAgICAgIC5nZXQoKQogICAgICAuZmlsdGVyKEJvb2xlYW4pOwogIH0KCiAgbGV0IHRvcCAgICA9IG5vdGVzRm9yVGllcigndG9wJyk7CiAgbGV0IG1pZGRsZSA9IG5vdGVzRm9yVGllcignbWlkZGxlJyk7CiAgbGV0IGJhc2UgICA9IG5vdGVzRm9yVGllcignYmFzZScpOwoKICBpZiAoIXRvcC5sZW5ndGggJiYgIW1pZGRsZS5sZW5ndGggJiYgIWJhc2UubGVuZ3RoKSB7CiAgICBjb25zdCBtZXRhVGV4dCA9CiAgICAgICQoJ21ldGFbbmFtZT0iZGVzY3JpcHRpb24iXScpLmF0dHIoJ2NvbnRlbnQnKSA/PwogICAgICAkKCdtZXRhW3Byb3BlcnR5PSJvZzpkZXNjcmlwdGlvbiJdJykuYXR0cignY29udGVudCcpID8/CiAgICAgICcnOwogICAgY29uc3Qgbm90ZXMgPSBleHRyYWN0Tm90ZXMobWV0YVRleHQpOwogICAgaWYgKG5vdGVzKSAoeyB0b3AsIG1pZGRsZSwgYmFzZSB9ID0gbm90ZXMpOwogIH0KCiAgY29uc3Qgbm90ZXMgPSAodG9wLmxlbmd0aCB8fCBtaWRkbGUubGVuZ3RoIHx8IGJhc2UubGVuZ3RoKQogICAgPyB7IHRvcCwgbWlkZGxlLCBiYXNlIH0KICAgIDogdW5kZWZpbmVkOwoKICAvLyBNYWluIGFjY29yZHMg4oCUIGZpbmQgdGhlIGg2ICJtYWluIGFjY29yZHMiIHNlY3Rpb24gYW5kIGNvbGxlY3QgYWxsIHRydW5jYXRlIHNwYW5zCiAgY29uc3QgYWNjb3Jkczogc3RyaW5nW10gPSBbXTsKICAkKCdoNicpLmVhY2goKF8sIGVsKSA9PiB7CiAgICBpZiAoJChlbCkudGV4dCgpLnRyaW0oKS50b0xvd2VyQ2FzZSgpID09PSAnbWFpbiBhY2NvcmRzJykgewogICAgICAkKGVsKS5jbG9zZXN0KCdkaXYnKS5maW5kKCdzcGFuLnRydW5jYXRlJykuZWFjaCgoX18sIHNwYW4pID0+IHsKICAgICAgICBjb25zdCB0ID0gJChzcGFuKS50ZXh0KCkudHJpbSgpOwogICAgICAgIGlmICh0KSBhY2NvcmRzLnB1c2godCk7CiAgICAgIH0pOwogICAgfQogIH0pOwoKICByZXR1cm4geyBkZXNjcmlwdGlvbjogZGVzY3JpcHRpb24gfHwgdW5kZWZpbmVkLCBub3RlcywgaW1hZ2UsIGFjY29yZHM6IGFjY29yZHMubGVuZ3RoID8gYWNjb3JkcyA6IHVuZGVmaW5lZCB9Owp9CgovLyBQYXJzZSBwbGFpbiB0ZXh0IC8gbWFya2Rvd24gKEppbmEuYWkgdGV4dCBvdXRwdXQpCmZ1bmN0aW9uIHBhcnNlVGV4dCh0ZXh0OiBzdHJpbmcpIHsKICBjb25zdCBub3RlcyA9IGV4dHJhY3ROb3Rlcyh0ZXh0KTsKICBjb25zdCBkZXNjTSA9IHRleHQubWF0Y2goL1tBLVpdW14uIT9dKig/OmZyYWdyYW5jZXxwZXJmdW1lfHNjZW50fGNvbG9nbmUpW14uIT9dKlsuIT9dL2kpOwogIGNvbnN0IGRlc2NyaXB0aW9uID0gZGVzY00gPyBkZXNjTVswXS50cmltKCkuc3Vic3RyaW5nKDAsIDYwMCkgOiB1bmRlZmluZWQ7CiAgcmV0dXJuIHsgZGVzY3JpcHRpb24sIG5vdGVzIH07Cn0KCi8vIEdFVCAvYXBpL3BlcmZ1bWUtZGV0YWlscz91cmw9aHR0cHM6Ly93d3cuZnJhZ3JhbnRpY2EuY29tL3BlcmZ1bWUvRGlvci9TYXV2YWdlLTMxODYxLmh0bWwKZXhwb3J0IGFzeW5jIGZ1bmN0aW9uIEdFVChyZXF1ZXN0OiBOZXh0UmVxdWVzdCkgewogIGNvbnN0IHsgc2VhcmNoUGFyYW1zIH0gPSBuZXcgVVJMKHJlcXVlc3QudXJsKTsKICBjb25zdCB0YXJnZXRVcmwgPSBzZWFyY2hQYXJhbXMuZ2V0KCd1cmwnKTsKCiAgaWYgKCF0YXJnZXRVcmwgfHwgIXRhcmdldFVybC5zdGFydHNXaXRoKCdodHRwczovL3d3dy5mcmFncmFudGljYS5jb20vcGVyZnVtZS8nKSkgewogICAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICdJbnZhbGlkIHVybCcgfSwgeyBzdGF0dXM6IDQwMCB9KTsKICB9CgogIGNvbnN0IGRlYnVnOiBzdHJpbmdbXSA9IFtdOwoKICAvLyDilIDilIAgMC4gQWxnb2xpYSBvYmplY3QgZmV0Y2gg4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSACiAgLy8gVGhlIHBlcmZ1bWUgSUQgaXMgZW1iZWRkZWQgaW4gdGhlIFVSTDogIlNhdXZhZ2UtMzE4NjEuaHRtbCIg4oaSIG9iamVjdElEIDMxODYxCiAgLy8gRmV0Y2hpbmcgdGhlIGZ1bGwgQWxnb2xpYSBvYmplY3QgYXZvaWRzIGFueSBIVFRQIHNjcmFwaW5nIG9mIGZyYWdyYW50aWNhLmNvbS4KICBjb25zdCBpZE1hdGNoID0gdGFyZ2V0VXJsLm1hdGNoKC8tKFxkKylcLmh0bWwkLyk7CiAgaWYgKGlkTWF0Y2gpIHsKICAgIHRyeSB7CiAgICAgIGNvbnN0IG9iamVjdElEID0gaWRNYXRjaFsxXTsKICAgICAgY29uc3QgYWxnb2xpYVVybCA9CiAgICAgICAgYGh0dHBzOi8vJHtBTEdPTElBX0FQUF9JRC50b0xvd2VyQ2FzZSgpfS1kc24uYWxnb2xpYS5uZXQvMS9pbmRleGVzL2ZyYWdyYW50aWNhX3BlcmZ1bWVzLyR7b2JqZWN0SUR9YCArCiAgICAgICAgYD94LWFsZ29saWEtYXBwbGljYXRpb24taWQ9JHtBTEdPTElBX0FQUF9JRH1gICsKICAgICAgICBgJngtYWxnb2xpYS1hcGkta2V5PSR7ZW5jb2RlVVJJQ29tcG9uZW50KEFMR09MSUFfQVBJX0tFWSl9YDsKCiAgICAgIGNvbnN0IHJlcyA9IGF3YWl0IGZldGNoKGFsZ29saWFVcmwsIHsgc2lnbmFsOiBBYm9ydFNpZ25hbC50aW1lb3V0KDYwMDApIH0pOwogICAgICBpZiAocmVzLm9rKSB7CiAgICAgICAgLy8gZXNsaW50LWRpc2FibGUtbmV4dC1saW5lIEB0eXBlc2NyaXB0LWVzbGludC9uby1leHBsaWNpdC1hbnkKICAgICAgICBjb25zdCBvYmo6IFJlY29yZDxzdHJpbmcsIGFueT4gPSBhd2FpdCByZXMuanNvbigpOwogICAgICAgIGRlYnVnLnB1c2goYGFsZ29saWE6IE9LLCBrZXlzPSR7T2JqZWN0LmtleXMob2JqKS5qb2luKCcsJyl9YCk7CgogICAgICAgIC8vIEZyYWdyYW50aWNhIGZpZWxkIG5hbWVzIGFyZSBpbiBDcm9hdGlhbi9TZXJiaWFuCiAgICAgICAgLy8gb3BpcyA9IGRlc2NyaXB0aW9uLCB2cmhfbm90ZSA9IHRvcCBub3Rlcywgc3JjZV9ub3RlID0gbWlkZGxlL2hlYXJ0LCBiYXphX25vdGUgPSBiYXNlCiAgICAgICAgY29uc3QgcmF3RGVzYzogc3RyaW5nID0KICAgICAgICAgIG9iai5vcGlzID8/IG9iai5kZXNjcmlwdGlvbiA/PyBvYmouZGVzYyA/PyBvYmoudGV4dCA/PyAnJzsKICAgICAgICBjb25zdCBkZXNjcmlwdGlvbiA9IHJhd0Rlc2MgPyByYXdEZXNjLnN1YnN0cmluZygwLCA2MDApIDogdW5kZWZpbmVkOwoKICAgICAgICAvLyBOb3RlcyBtYXkgYmUgYXJyYXlzIG9mIHN0cmluZ3Mgb3IgYSBjb21iaW5lZCBzdHJpbmcKICAgICAgICBmdW5jdGlvbiB0b0Fycih2YWw6IHVua25vd24pOiBzdHJpbmdbXSB7CiAgICAgICAgICBpZiAoIXZhbCkgcmV0dXJuIFtdOwogICAgICAgICAgaWYgKEFycmF5LmlzQXJyYXkodmFsKSkgcmV0dXJuICh2YWwgYXMgc3RyaW5nW10pLm1hcChTdHJpbmcpLmZpbHRlcihCb29sZWFuKTsKICAgICAgICAgIHJldHVybiBzcGxpdChTdHJpbmcodmFsKSk7CiAgICAgICAgfQoKICAgICAgICBsZXQgdG9wICAgID0gdG9BcnIob2JqLnZyaF9ub3RlICAgID8/IG9iai50b3Bfbm90ZXMgICAgPz8gb2JqLm5vdGVzX3RvcCk7CiAgICAgICAgbGV0IG1pZGRsZSA9IHRvQXJyKG9iai5zcmNlX25vdGUgICA/PyBvYmoubWlkZGxlX25vdGVzID8/IG9iai5ub3Rlc19taWRkbGUgPz8gb2JqLmhlYXJ0X25vdGVzKTsKICAgICAgICBsZXQgYmFzZSAgID0gdG9BcnIob2JqLmJhemFfbm90ZSAgID8/IG9iai5iYXNlX25vdGVzICAgPz8gb2JqLm5vdGVzX2Jhc2UpOwoKICAgICAgICAvLyBJZiBzdGlsbCBlbXB0eSwgdHJ5IGEgY29tYmluZWQgbm90ZXMgLyBtZXRhIGRlc2NyaXB0aW9uIHN0cmluZwogICAgICAgIGlmICghdG9wLmxlbmd0aCAmJiAhbWlkZGxlLmxlbmd0aCAmJiAhYmFzZS5sZW5ndGgpIHsKICAgICAgICAgIGNvbnN0IGNvbWJpbmVkID0gU3RyaW5nKG9iai5ub3RlcyA/PyBvYmoubWV0YV9kZXNjcmlwdGlvbiA/PyBvYmoub3BpcyA/PyAnJyk7CiAgICAgICAgICBpZiAoY29tYmluZWQpIHsKICAgICAgICAgICAgY29uc3QgcGFyc2VkID0gZXh0cmFjdE5vdGVzKGNvbWJpbmVkKTsKICAgICAgICAgICAgaWYgKHBhcnNlZCkgKHsgdG9wLCBtaWRkbGUsIGJhc2UgfSA9IHBhcnNlZCk7CiAgICAgICAgICB9CiAgICAgICAgfQoKICAgICAgICBjb25zdCBub3RlcyA9ICh0b3AubGVuZ3RoIHx8IG1pZGRsZS5sZW5ndGggfHwgYmFzZS5sZW5ndGgpCiAgICAgICAgICA/IHsgdG9wLCBtaWRkbGUsIGJhc2UgfQogICAgICAgICAgOiB1bmRlZmluZWQ7CgogICAgICAgIC8vIE1haW4gYWNjb3JkcyDigJQgYWtvcmRpIGlzIHRoZSBDcm9hdGlhbi9TZXJiaWFuIGZpZWxkIG5hbWUKICAgICAgICBjb25zdCBhY2NvcmRzOiBzdHJpbmdbXSA9IHRvQXJyKG9iai5ha29yZGkgPz8gb2JqLmFjY29yZHMgPz8gb2JqLm1haW5fYWNjb3Jkcyk7CgogICAgICAgIGRlYnVnLnB1c2goYGFsZ29saWE6IGRlc2M9JHtkZXNjcmlwdGlvbiA/ICd5ZXMnIDogJ25vJ30sIG5vdGVzPSR7SlNPTi5zdHJpbmdpZnkobm90ZXMpfSwgYWNjb3Jkcz0ke0pTT04uc3RyaW5naWZ5KGFjY29yZHMpfWApOwoKICAgICAgICBpZiAoZGVzY3JpcHRpb24gfHwgbm90ZXMgfHwgYWNjb3Jkcy5sZW5ndGgpIHsKICAgICAgICAgIHJldHVybiBOZXh0UmVzcG9uc2UuanNvbih7IGRlc2NyaXB0aW9uLCBub3RlcywgYWNjb3JkczogYWNjb3Jkcy5sZW5ndGggPyBhY2NvcmRzIDogdW5kZWZpbmVkLCBpbWFnZTogb2JqLnRodW1ibmFpbCA/PyB1bmRlZmluZWQgfSk7CiAgICAgICAgfQogICAgICAgIGRlYnVnLnB1c2goJ2FsZ29saWE6IG9iamVjdCBmb3VuZCBidXQgbm8gZGVzYy9ub3Rlcy9hY2NvcmRzIGZpZWxkcyDigJQgc2VlIGtleXMgYWJvdmUnKTsKICAgICAgfSBlbHNlIHsKICAgICAgICBkZWJ1Zy5wdXNoKGBhbGdvbGlhOiBIVFRQICR7cmVzLnN0YXR1c31gKTsKICAgICAgfQogICAgfSBjYXRjaCAoZTogdW5rbm93bikgewogICAgICBjb25zdCBlcnIgPSBlIGFzIHsgbWVzc2FnZT86IHN0cmluZyB9OwogICAgICBkZWJ1Zy5wdXNoKGBhbGdvbGlhOiBlcnJvciAke2Vycj8ubWVzc2FnZX1gKTsKICAgIH0KICB9CgogIC8vIOKUgOKUgCAxLiBEaXJlY3QgYXhpb3MgKyBjaGVlcmlvIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgAogIHRyeSB7CiAgICBjb25zdCByZXNwb25zZSA9IGF3YWl0IGF4aW9zLmdldCh0YXJnZXRVcmwsIHsKICAgICAgaGVhZGVyczogewogICAgICAgICdVc2VyLUFnZW50JzogJ1Bvc3RtYW5SdW50aW1lLzcuNTEuMScsCiAgICAgICAgQWNjZXB0OiAnKi8qJywKICAgICAgICAnQWNjZXB0LUVuY29kaW5nJzogJ2d6aXAsIGRlZmxhdGUsIGJyJywKICAgICAgICBDb25uZWN0aW9uOiAna2VlcC1hbGl2ZScsCiAgICAgIH0sCiAgICAgIHRpbWVvdXQ6IDgwMDAsCiAgICB9KTsKICAgIGRlYnVnLnB1c2goYGRpcmVjdDogT0sgJHtyZXNwb25zZS5zdGF0dXN9LCAke3Jlc3BvbnNlLmRhdGEubGVuZ3RofSBieXRlc2ApOwogICAgY29uc3QgeyBkZXNjcmlwdGlvbiwgbm90ZXMsIGltYWdlLCBhY2NvcmRzIH0gPSBwYXJzZUh0bWwocmVzcG9uc2UuZGF0YSk7CiAgICBkZWJ1Zy5wdXNoKGBkaXJlY3Q6IGRlc2M9JHtkZXNjcmlwdGlvbiA/ICd5ZXMnIDogJ25vJ30sIG5vdGVzPSR7SlNPTi5zdHJpbmdpZnkobm90ZXMpfSwgYWNjb3Jkcz0ke0pTT04uc3RyaW5naWZ5KGFjY29yZHMpfWApOwogICAgaWYgKGRlc2NyaXB0aW9uIHx8IG5vdGVzIHx8IGFjY29yZHM/Lmxlbmd0aCkgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZGVzY3JpcHRpb24sIG5vdGVzLCBpbWFnZSwgYWNjb3JkcyB9KTsKICAgIGRlYnVnLnB1c2goJ2RpcmVjdDogcGFyc2VkIGJ1dCBmb3VuZCBub3RoaW5nJyk7CiAgfSBjYXRjaCAoZTogdW5rbm93bikgewogICAgY29uc3QgZXJyID0gZSBhcyB7IHJlc3BvbnNlPzogeyBzdGF0dXM6IG51bWJlciB9OyBtZXNzYWdlPzogc3RyaW5nIH07CiAgICBkZWJ1Zy5wdXNoKGBkaXJlY3Q6IGVycm9yICR7ZXJyPy5yZXNwb25zZT8uc3RhdHVzID8/IGVycj8ubWVzc2FnZX1gKTsKICB9CgogIC8vIOKUgOKUgCAyLiBKaW5hLmFpIEhUTUwgcmVuZGVyICsgY2hlZXJpbyDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIAKICB0cnkgewogICAgY29uc3QgcmVzID0gYXdhaXQgYXhpb3MuZ2V0KGBodHRwczovL3IuamluYS5haS8ke3RhcmdldFVybH1gLCB7CiAgICAgIGhlYWRlcnM6IHsgQWNjZXB0OiAndGV4dC9odG1sJywgJ1gtUmV0dXJuLUZvcm1hdCc6ICdodG1sJyB9LAogICAgICB0aW1lb3V0OiAyNTAwMCwKICAgIH0pOwogICAgZGVidWcucHVzaChgamluYS1odG1sOiBPSyAke3Jlcy5zdGF0dXN9LCAke3Jlcy5kYXRhLmxlbmd0aH0gYnl0ZXNgKTsKICAgIGNvbnN0IHsgZGVzY3JpcHRpb24sIG5vdGVzLCBpbWFnZSwgYWNjb3JkcyB9ID0gcGFyc2VIdG1sKHJlcy5kYXRhKTsKICAgIGRlYnVnLnB1c2goYGppbmEtaHRtbDogZGVzYz0ke2Rlc2NyaXB0aW9uID8gJ3llcycgOiAnbm8nfSwgbm90ZXM9JHtKU09OLnN0cmluZ2lmeShub3Rlcyl9LCBhY2NvcmRzPSR7SlNPTi5zdHJpbmdpZnkoYWNjb3Jkcyl9YCk7CiAgICBpZiAoZGVzY3JpcHRpb24gfHwgbm90ZXMgfHwgYWNjb3Jkcz8ubGVuZ3RoKSByZXR1cm4gTmV4dFJlc3BvbnNlLmpzb24oeyBkZXNjcmlwdGlvbiwgbm90ZXMsIGltYWdlLCBhY2NvcmRzIH0pOwogICAgZGVidWcucHVzaCgnamluYS1odG1sOiBwYXJzZWQgYnV0IGZvdW5kIG5vdGhpbmcnKTsKICB9IGNhdGNoIChlOiB1bmtub3duKSB7CiAgICBjb25zdCBlcnIgPSBlIGFzIHsgcmVzcG9uc2U/OiB7IHN0YXR1czogbnVtYmVyIH07IG1lc3NhZ2U/OiBzdHJpbmcgfTsKICAgIGRlYnVnLnB1c2goYGppbmEtaHRtbDogZXJyb3IgJHtlcnI/LnJlc3BvbnNlPy5zdGF0dXMgPz8gZXJyPy5tZXNzYWdlfWApOwogIH0KCiAgLy8g4pSA4pSAIDMuIEppbmEuYWkgbWFya2Rvd24gdGV4dCArIHJlZ2V4IOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgAogIHRyeSB7CiAgICBjb25zdCByZXMgPSBhd2FpdCBheGlvcy5nZXQoYGh0dHBzOi8vci5qaW5hLmFpLyR7dGFyZ2V0VXJsfWAsIHsKICAgICAgaGVhZGVyczogeyBBY2NlcHQ6ICd0ZXh0L3BsYWluJywgJ1gtUmV0dXJuLUZvcm1hdCc6ICd0ZXh0JyB9LAogICAgICB0aW1lb3V0OiAyMDAwMCwKICAgIH0pOwogICAgZGVidWcucHVzaChgamluYS10ZXh0OiBPSyAke3Jlcy5zdGF0dXN9LCAke3Jlcy5kYXRhLmxlbmd0aH0gYnl0ZXNgKTsKICAgIGNvbnN0IHsgZGVzY3JpcHRpb24sIG5vdGVzIH0gPSBwYXJzZVRleHQocmVzLmRhdGEpOwogICAgZGVidWcucHVzaChgamluYS10ZXh0OiBkZXNjPSR7ZGVzY3JpcHRpb24gPyAneWVzJyA6ICdubyd9LCBub3Rlcz0ke0pTT04uc3RyaW5naWZ5KG5vdGVzKX1gKTsKICAgIGlmIChkZXNjcmlwdGlvbiB8fCBub3RlcykgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZGVzY3JpcHRpb24sIG5vdGVzIH0pOwogICAgZGVidWcucHVzaCgnamluYS10ZXh0OiBwYXJzZWQgYnV0IGZvdW5kIG5vdGhpbmcnKTsKICB9IGNhdGNoIChlOiB1bmtub3duKSB7CiAgICBjb25zdCBlcnIgPSBlIGFzIHsgcmVzcG9uc2U/OiB7IHN0YXR1czogbnVtYmVyIH07IG1lc3NhZ2U/OiBzdHJpbmcgfTsKICAgIGRlYnVnLnB1c2goYGppbmEtdGV4dDogZXJyb3IgJHtlcnI/LnJlc3BvbnNlPy5zdGF0dXMgPz8gZXJyPy5tZXNzYWdlfWApOwogIH0KCiAgcmV0dXJuIE5leHRSZXNwb25zZS5qc29uKHsgZXJyb3I6ICdDb3VsZCBub3QgZmV0Y2ggcGVyZnVtZSBwYWdlJywgZGVidWcgfSwgeyBzdGF0dXM6IDUwMiB9KTsKfQo="}
+import { NextRequest, NextResponse } from 'next/server';
+import axios from 'axios';
+import * as cheerio from 'cheerio';
+
+export const maxDuration = 45;
+
+// Same credentials used by search-perfume — public, embedded in Fragrantica's frontend
+const ALGOLIA_APP_ID = 'FGVI612DFZ';
+const ALGOLIA_API_KEY =
+  'NjdkNmM0ZTBjNzJjNzZjZGQ2MTczOGI1NGRlMDMyODgxNjQ3OTQxZGRhYzYwZDhkMzllNDJiY2M3OTQ1MDYzNHZhbGlkVW50aWw9MTc3NDEyNDQyMw==';
+
+// Splits comma / "and" / · separated note strings into an array
+function split(raw: string): string[] {
+  return raw
+    .split(/[,·]|\band\b/)
+    .map((s) => s.replace(/[;|(].*/g, '').trim())
+    .filter((s) => s.length > 1 && s.length < 40);
+}
+
+// Extracts top/middle/base notes from any text (meta description, plain text, markdown)
+function extractNotes(text: string) {
+  const topM  = text.match(/[Tt]op\s+[Nn]otes?\s+(?:are|is|:)\s*([^;.\n]+)/i)
+             ?? text.match(/\*\*Top\s+Notes?\*\*[:\s]+([^\n]+)/i);
+  const midM  = text.match(/(?:[Mm]iddle|[Hh]eart)\s+[Nn]otes?\s+(?:are|is|:)\s*([^;.\n]+)/i)
+             ?? text.match(/\*\*(?:Middle|Heart)\s+Notes?\*\*[:\s]+([^\n]+)/i);
+  const baseM = text.match(/[Bb]ase\s+[Nn]otes?\s+(?:are|is|:)\s*([^;.\n]+)/i)
+             ?? text.match(/\*\*Base\s+Notes?\*\*[:\s]+([^\n]+)/i);
+
+  if (!topM && !midM && !baseM) return undefined;
+  return {
+    top:    topM  ? split(topM[1])  : [],
+    middle: midM  ? split(midM[1])  : [],
+    base:   baseM ? split(baseM[1]) : [],
+  };
+}
+
+// Parse HTML with cheerio
+function parseHtml(html: string) {
+  const $ = cheerio.load(html);
+
+  const description =
+    $('#perfume-description-content p').first().text().trim().substring(0, 600)
+    || $('meta[name="description"]').attr('content')?.substring(0, 600)
+    || $('meta[property="og:description"]').attr('content')?.substring(0, 600)
+    || undefined;
+
+  const image =
+    $('img[itemprop="image"]').attr('src') ??
+    $('meta[property="og:image"]').attr('content');
+
+  function notesForTier(tier: string): string[] {
+    return $(`pyramid-level-new[notes="${tier}"] .pyramid-note-label`)
+      .map((_, el) => $(el).text().trim())
+      .get()
+      .filter(Boolean);
+  }
+
+  let top    = notesForTier('top');
+  let middle = notesForTier('middle');
+  let base   = notesForTier('base');
+
+  if (!top.length && !middle.length && !base.length) {
+    const metaText =
+      $('meta[name="description"]').attr('content') ??
+      $('meta[property="og:description"]').attr('content') ??
+      '';
+    const notes = extractNotes(metaText);
+    if (notes) ({ top, middle, base } = notes);
+  }
+
+  const notes = (top.length || middle.length || base.length)
+    ? { top, middle, base }
+    : undefined;
+
+  // Main accords — find the h6 "main accords" section and collect all truncate spans
+  const accords: string[] = [];
+  $('h6').each((_, el) => {
+    if ($(el).text().trim().toLowerCase() === 'main accords') {
+      $(el).closest('div').find('span.truncate').each((__, span) => {
+        const t = $(span).text().trim();
+        if (t) accords.push(t);
+      });
+    }
+  });
+
+  return { description: description || undefined, notes, image, accords: accords.length ? accords : undefined };
+}
+
+// Parse plain text / markdown (Jina.ai text output)
+function parseText(text: string) {
+  const notes = extractNotes(text);
+  const descM = text.match(/[A-Z][^.!?]*(?:fragrance|perfume|scent|cologne)[^.!?]*[.!?]/i);
+  const description = descM ? descM[0].trim().substring(0, 600) : undefined;
+  return { description, notes };
+}
+
+// GET /api/perfume-details?url=https://www.fragrantica.com/perfume/Dior/Sauvage-31861.html
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const targetUrl = searchParams.get('url');
+
+  if (!targetUrl || !targetUrl.startsWith('https://www.fragrantica.com/perfume/')) {
+    return NextResponse.json({ error: 'Invalid url' }, { status: 400 });
+  }
+
+  const debug: string[] = [];
+
+  // ── 0. Algolia object fetch ────────────────────────────────────────────────
+  // The perfume ID is embedded in the URL: "Sauvage-31861.html" → objectID 31861
+  // Fetching the full Algolia object avoids any HTTP scraping of fragrantica.com.
+  const idMatch = targetUrl.match(/-(\d+)\.html$/);
+  if (idMatch) {
+    try {
+      const objectID = idMatch[1];
+      const algoliaUrl =
+        `https://${ALGOLIA_APP_ID.toLowerCase()}-dsn.algolia.net/1/indexes/fragrantica_perfumes/${objectID}` +
+        `?x-algolia-application-id=${ALGOLIA_APP_ID}` +
+        `&x-algolia-api-key=${encodeURIComponent(ALGOLIA_API_KEY)}`;
+
+      const res = await fetch(algoliaUrl, { signal: AbortSignal.timeout(6000) });
+      if (res.ok) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const obj: Record<string, any> = await res.json();
+        debug.push(`algolia: OK, keys=${Object.keys(obj).join(',')}`);
+
+        // Fragrantica field names are in Croatian/Serbian
+        // opis = description, vrh_note = top notes, srce_note = middle/heart, baza_note = base
+        const rawDesc: string =
+          obj.opis ?? obj.description ?? obj.desc ?? obj.text ?? '';
+        const description = rawDesc ? rawDesc.substring(0, 600) : undefined;
+
+        // Notes may be arrays of strings or a combined string
+        function toArr(val: unknown): string[] {
+          if (!val) return [];
+          if (Array.isArray(val)) return (val as string[]).map(String).filter(Boolean);
+          return split(String(val));
+        }
+
+        let top    = toArr(obj.vrh_note    ?? obj.top_notes    ?? obj.notes_top);
+        let middle = toArr(obj.srce_note   ?? obj.middle_notes ?? obj.notes_middle ?? obj.heart_notes);
+        let base   = toArr(obj.baza_note   ?? obj.base_notes   ?? obj.notes_base);
+
+        // If still empty, try a combined notes / meta description string
+        if (!top.length && !middle.length && !base.length) {
+          const combined = String(obj.notes ?? obj.meta_description ?? obj.opis ?? '');
+          if (combined) {
+            const parsed = extractNotes(combined);
+            if (parsed) ({ top, middle, base } = parsed);
+          }
+        }
+
+        const notes = (top.length || middle.length || base.length)
+          ? { top, middle, base }
+          : undefined;
+
+        // Main accords — akordi is the Croatian/Serbian field name
+        const accords: string[] = toArr(obj.akordi ?? obj.accords ?? obj.main_accords);
+
+        debug.push(`algolia: desc=${description ? 'yes' : 'no'}, notes=${JSON.stringify(notes)}, accords=${JSON.stringify(accords)}`);
+
+        if (description || notes || accords.length) {
+          return NextResponse.json({ description, notes, accords: accords.length ? accords : undefined, image: obj.thumbnail ?? undefined });
+        }
+        debug.push('algolia: object found but no desc/notes/accords fields — see keys above');
+      } else {
+        debug.push(`algolia: HTTP ${res.status}`);
+      }
+    } catch (e: unknown) {
+      const err = e as { message?: string };
+      debug.push(`algolia: error ${err?.message}`);
+    }
+  }
+
+  // ── 1. Direct axios + cheerio ─────────────────────────────────────────────
+  try {
+    const response = await axios.get(targetUrl, {
+      headers: {
+        'User-Agent': 'PostmanRuntime/7.51.1',
+        Accept: '*/*',
+        'Accept-Encoding': 'gzip, deflate, br',
+        Connection: 'keep-alive',
+      },
+      timeout: 8000,
+    });
+    debug.push(`direct: OK ${response.status}, ${response.data.length} bytes`);
+    const { description, notes, image, accords } = parseHtml(response.data);
+    debug.push(`direct: desc=${description ? 'yes' : 'no'}, notes=${JSON.stringify(notes)}, accords=${JSON.stringify(accords)}`);
+    if (description || notes || accords?.length) return NextResponse.json({ description, notes, image, accords });
+    debug.push('direct: parsed but found nothing');
+  } catch (e: unknown) {
+    const err = e as { response?: { status: number }; message?: string };
+    debug.push(`direct: error ${err?.response?.status ?? err?.message}`);
+  }
+
+  // ── 2. Jina.ai HTML render + cheerio ─────────────────────────────────────
+  try {
+    const res = await axios.get(`https://r.jina.ai/${targetUrl}`, {
+      headers: { Accept: 'text/html', 'X-Return-Format': 'html' },
+      timeout: 25000,
+    });
+    debug.push(`jina-html: OK ${res.status}, ${res.data.length} bytes`);
+    const { description, notes, image, accords } = parseHtml(res.data);
+    debug.push(`jina-html: desc=${description ? 'yes' : 'no'}, notes=${JSON.stringify(notes)}, accords=${JSON.stringify(accords)}`);
+    if (description || notes || accords?.length) return NextResponse.json({ description, notes, image, accords });
+    debug.push('jina-html: parsed but found nothing');
+  } catch (e: unknown) {
+    const err = e as { response?: { status: number }; message?: string };
+    debug.push(`jina-html: error ${err?.response?.status ?? err?.message}`);
+  }
+
+  // ── 3. Jina.ai markdown text + regex ─────────────────────────────────────
+  try {
+    const res = await axios.get(`https://r.jina.ai/${targetUrl}`, {
+      headers: { Accept: 'text/plain', 'X-Return-Format': 'text' },
+      timeout: 20000,
+    });
+    debug.push(`jina-text: OK ${res.status}, ${res.data.length} bytes`);
+    const { description, notes } = parseText(res.data);
+    debug.push(`jina-text: desc=${description ? 'yes' : 'no'}, notes=${JSON.stringify(notes)}`);
+    if (description || notes) return NextResponse.json({ description, notes });
+    debug.push('jina-text: parsed but found nothing');
+  } catch (e: unknown) {
+    const err = e as { response?: { status: number }; message?: string };
+    debug.push(`jina-text: error ${err?.response?.status ?? err?.message}`);
+  }
+
+  return NextResponse.json({ error: 'Could not fetch perfume page', debug }, { status: 502 });
+}

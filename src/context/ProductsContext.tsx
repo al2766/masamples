@@ -1,1 +1,53 @@
-{"data":"aW1wb3J0IHsgY3JlYXRlQ29udGV4dCwgdXNlQ29udGV4dCwgdXNlRWZmZWN0LCB1c2VTdGF0ZSwgUmVhY3ROb2RlIH0gZnJvbSAncmVhY3QnOwppbXBvcnQgeyBjb2xsZWN0aW9uLCBnZXREb2NzLCBvcmRlckJ5LCBxdWVyeSB9IGZyb20gJ2ZpcmViYXNlL2ZpcmVzdG9yZSc7CmltcG9ydCB7IGRiIH0gZnJvbSAnLi4vbGliL2ZpcmViYXNlJzsKaW1wb3J0IHsgUHJvZHVjdCB9IGZyb20gJy4uL2RhdGEvcHJvZHVjdHMnOwoKaW50ZXJmYWNlIFByb2R1Y3RzQ29udGV4dFR5cGUgewogIHByb2R1Y3RzOiBQcm9kdWN0W107CiAgbG9hZGluZzogYm9vbGVhbjsKICBlcnJvcjogc3RyaW5nIHwgbnVsbDsKICByZWZyZXNoOiAoKSA9PiB2b2lkOwp9Cgpjb25zdCBQcm9kdWN0c0NvbnRleHQgPSBjcmVhdGVDb250ZXh0PFByb2R1Y3RzQ29udGV4dFR5cGU+KHsKICBwcm9kdWN0czogW10sCiAgbG9hZGluZzogdHJ1ZSwKICBlcnJvcjogbnVsbCwKICByZWZyZXNoOiAoKSA9PiB7fSwKfSk7CgpleHBvcnQgZnVuY3Rpb24gUHJvZHVjdHNQcm92aWRlcih7IGNoaWxkcmVuIH06IHsgY2hpbGRyZW46IFJlYWN0Tm9kZSB9KSB7CiAgY29uc3QgW3Byb2R1Y3RzLCBzZXRQcm9kdWN0c10gPSB1c2VTdGF0ZTxQcm9kdWN0W10+KFtdKTsKICBjb25zdCBbbG9hZGluZywgc2V0TG9hZGluZ10gPSB1c2VTdGF0ZSh0cnVlKTsKICBjb25zdCBbZXJyb3IsIHNldEVycm9yXSA9IHVzZVN0YXRlPHN0cmluZyB8IG51bGw+KG51bGwpOwoKICBjb25zdCBmZXRjaFByb2R1Y3RzID0gYXN5bmMgKCkgPT4gewogICAgc2V0TG9hZGluZyh0cnVlKTsKICAgIHNldEVycm9yKG51bGwpOwogICAgdHJ5IHsKICAgICAgY29uc3Qgc25hcCA9IGF3YWl0IGdldERvY3MocXVlcnkoY29sbGVjdGlvbihkYiwgJ3Byb2R1Y3RzJyksIG9yZGVyQnkoJ25hbWUnKSkpOwogICAgICBjb25zdCBmZXRjaGVkID0gc25hcC5kb2NzLm1hcCgoZCkgPT4gKHsgaWQ6IGQuaWQsIC4uLmQuZGF0YSgpIH0gYXMgUHJvZHVjdCkpOwogICAgICBzZXRQcm9kdWN0cyhmZXRjaGVkKTsKICAgIH0gY2F0Y2ggKGVycikgewogICAgICBjb25zb2xlLmVycm9yKCdGYWlsZWQgdG8gbG9hZCBwcm9kdWN0cyBmcm9tIEZpcmVzdG9yZTonLCBlcnIpOwogICAgICBzZXRFcnJvcignRmFpbGVkIHRvIGxvYWQgcHJvZHVjdHMnKTsKICAgIH0gZmluYWxseSB7CiAgICAgIHNldExvYWRpbmcoZmFsc2UpOwogICAgfQogIH07CgogIHVzZUVmZmVjdCgoKSA9PiB7CiAgICBmZXRjaFByb2R1Y3RzKCk7CiAgfSwgW10pOwoKICByZXR1cm4gKAogICAgPFByb2R1Y3RzQ29udGV4dC5Qcm92aWRlciB2YWx1ZT17eyBwcm9kdWN0cywgbG9hZGluZywgZXJyb3IsIHJlZnJlc2g6IGZldGNoUHJvZHVjdHMgfX0+CiAgICAgIHtjaGlsZHJlbn0KICAgIDwvUHJvZHVjdHNDb250ZXh0LlByb3ZpZGVyPgogICk7Cn0KCmV4cG9ydCBmdW5jdGlvbiB1c2VQcm9kdWN0cygpIHsKICByZXR1cm4gdXNlQ29udGV4dChQcm9kdWN0c0NvbnRleHQpOwp9Cg=="}
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+import { db } from '../lib/firebase';
+import { Product } from '../data/products';
+
+interface ProductsContextType {
+  products: Product[];
+  loading: boolean;
+  error: string | null;
+  refresh: () => void;
+}
+
+const ProductsContext = createContext<ProductsContextType>({
+  products: [],
+  loading: true,
+  error: null,
+  refresh: () => {},
+});
+
+export function ProductsProvider({ children }: { children: ReactNode }) {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchProducts = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const snap = await getDocs(query(collection(db, 'products'), orderBy('name')));
+      const fetched = snap.docs.map((d) => ({ id: d.id, ...d.data() } as Product));
+      setProducts(fetched);
+    } catch (err) {
+      console.error('Failed to load products from Firestore:', err);
+      setError('Failed to load products');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  return (
+    <ProductsContext.Provider value={{ products, loading, error, refresh: fetchProducts }}>
+      {children}
+    </ProductsContext.Provider>
+  );
+}
+
+export function useProducts() {
+  return useContext(ProductsContext);
+}

@@ -1,1 +1,40 @@
-{"data":"aW1wb3J0IHsgY3JlYXRlQnJvd3NlclJvdXRlciB9IGZyb20gJ3JlYWN0LXJvdXRlcic7CmltcG9ydCB7IEhvbWUgfSBmcm9tICcuL3BhZ2VzL0hvbWUnOwppbXBvcnQgeyBTaG9wIH0gZnJvbSAnLi9wYWdlcy9TaG9wJzsKaW1wb3J0IHsgQ2F0ZWdvcnkgfSBmcm9tICcuL3BhZ2VzL0NhdGVnb3J5JzsKaW1wb3J0IHsgQmVzdFNlbGxlcnMgfSBmcm9tICcuL3BhZ2VzL0Jlc3RTZWxsZXJzJzsKaW1wb3J0IHsgQ2FydCB9IGZyb20gJy4vcGFnZXMvQ2FydCc7CmltcG9ydCB7IENoZWNrb3V0IH0gZnJvbSAnLi9wYWdlcy9DaGVja291dCc7CmltcG9ydCB7IEJyYW5kIH0gZnJvbSAnLi9wYWdlcy9CcmFuZCc7CmltcG9ydCB7IEFib3V0IH0gZnJvbSAnLi9wYWdlcy9BYm91dCc7CmltcG9ydCB7IFByb2R1Y3REZXRhaWwgfSBmcm9tICcuL3BhZ2VzL1Byb2R1Y3REZXRhaWwnOwppbXBvcnQgeyBJbnNwaXJlZCB9IGZyb20gJy4vcGFnZXMvSW5zcGlyZWQnOwppbXBvcnQgeyBOZXdBcnJpdmFscyB9IGZyb20gJy4vcGFnZXMvTmV3QXJyaXZhbHMnOwppbXBvcnQgeyBPcmRlclN1Y2Nlc3MgfSBmcm9tICcuL3BhZ2VzL09yZGVyU3VjY2Vzcyc7CmltcG9ydCB7IEF1dGhQYWdlIH0gZnJvbSAnLi9wYWdlcy9BdXRoUGFnZSc7CmltcG9ydCB7IEFjY291bnQgfSBmcm9tICcuL3BhZ2VzL0FjY291bnQnOwppbXBvcnQgeyBMYXlvdXQgfSBmcm9tICcuL2NvbXBvbmVudHMvTGF5b3V0JzsKCmV4cG9ydCBjb25zdCByb3V0ZXIgPSBjcmVhdGVCcm93c2VyUm91dGVyKFsKICB7CiAgICBwYXRoOiAnLycsCiAgICBDb21wb25lbnQ6IExheW91dCwKICAgIGNoaWxkcmVuOiBbCiAgICAgIHsgaW5kZXg6IHRydWUsIENvbXBvbmVudDogSG9tZSB9LAogICAgICB7IHBhdGg6ICdzaG9wJywgQ29tcG9uZW50OiBTaG9wIH0sCiAgICAgIHsgcGF0aDogJ2NhdGVnb3J5LzpjYXRlZ29yeScsIENvbXBvbmVudDogQ2F0ZWdvcnkgfSwKICAgICAgeyBwYXRoOiAnYmVzdHNlbGxlcnMnLCBDb21wb25lbnQ6IEJlc3RTZWxsZXJzIH0sCiAgICAgIHsgcGF0aDogJ3Byb2R1Y3QvOmlkJywgQ29tcG9uZW50OiBQcm9kdWN0RGV0YWlsIH0sCiAgICAgIHsgcGF0aDogJ2luc3BpcmVkJywgQ29tcG9uZW50OiBJbnNwaXJlZCB9LAogICAgICB7IHBhdGg6ICduZXctYXJyaXZhbHMnLCBDb21wb25lbnQ6IE5ld0Fycml2YWxzIH0sCiAgICAgIHsgcGF0aDogJ2NhcnQnLCBDb21wb25lbnQ6IENhcnQgfSwKICAgICAgeyBwYXRoOiAnY2hlY2tvdXQnLCBDb21wb25lbnQ6IENoZWNrb3V0IH0sCiAgICAgIHsgcGF0aDogJ29yZGVyLXN1Y2Nlc3MnLCBDb21wb25lbnQ6IE9yZGVyU3VjY2VzcyB9LAogICAgICB7IHBhdGg6ICdicmFuZC86YnJhbmQnLCBDb21wb25lbnQ6IEJyYW5kIH0sCiAgICAgIHsgcGF0aDogJ2Fib3V0JywgQ29tcG9uZW50OiBBYm91dCB9LAogICAgICB7IHBhdGg6ICdsb2dpbicsIENvbXBvbmVudDogQXV0aFBhZ2UgfSwKICAgICAgeyBwYXRoOiAnc2lnbnVwJywgQ29tcG9uZW50OiBBdXRoUGFnZSB9LAogICAgICB7IHBhdGg6ICdhY2NvdW50JywgQ29tcG9uZW50OiBBY2NvdW50IH0sCiAgICBdLAogIH0sCl0pOwo="}
+import { createBrowserRouter } from 'react-router';
+import { Home } from './pages/Home';
+import { Shop } from './pages/Shop';
+import { Category } from './pages/Category';
+import { BestSellers } from './pages/BestSellers';
+import { Cart } from './pages/Cart';
+import { Checkout } from './pages/Checkout';
+import { Brand } from './pages/Brand';
+import { About } from './pages/About';
+import { ProductDetail } from './pages/ProductDetail';
+import { Inspired } from './pages/Inspired';
+import { NewArrivals } from './pages/NewArrivals';
+import { OrderSuccess } from './pages/OrderSuccess';
+import { AuthPage } from './pages/AuthPage';
+import { Account } from './pages/Account';
+import { Layout } from './components/Layout';
+
+export const router = createBrowserRouter([
+  {
+    path: '/',
+    Component: Layout,
+    children: [
+      { index: true, Component: Home },
+      { path: 'shop', Component: Shop },
+      { path: 'category/:category', Component: Category },
+      { path: 'bestsellers', Component: BestSellers },
+      { path: 'product/:id', Component: ProductDetail },
+      { path: 'inspired', Component: Inspired },
+      { path: 'new-arrivals', Component: NewArrivals },
+      { path: 'cart', Component: Cart },
+      { path: 'checkout', Component: Checkout },
+      { path: 'order-success', Component: OrderSuccess },
+      { path: 'brand/:brand', Component: Brand },
+      { path: 'about', Component: About },
+      { path: 'login', Component: AuthPage },
+      { path: 'signup', Component: AuthPage },
+      { path: 'account', Component: Account },
+    ],
+  },
+]);

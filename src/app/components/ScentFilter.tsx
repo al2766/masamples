@@ -1,1 +1,207 @@
-{"data":"aW1wb3J0IHsgdXNlU3RhdGUgfSBmcm9tICdyZWFjdCc7CmltcG9ydCB7IHNjZW50UHJvZmlsZXMgfSBmcm9tICcuLi8uLi9kYXRhL3Byb2R1Y3RzJzsKaW1wb3J0IHsgU2xpZGVyc0hvcml6b250YWwsIENoZXZyb25Eb3duLCBDaGV2cm9uVXAsIFggfSBmcm9tICdsdWNpZGUtcmVhY3QnOwppbXBvcnQgeyBtb3Rpb24sIEFuaW1hdGVQcmVzZW5jZSB9IGZyb20gJ21vdGlvbi9yZWFjdCc7CgppbnRlcmZhY2UgU2NlbnRGaWx0ZXJQcm9wcyB7CiAgc2VsZWN0ZWRQcm9maWxlczogc3RyaW5nW107CiAgc2VsZWN0ZWROb3Rlczogc3RyaW5nW107CiAgb25Qcm9maWxlVG9nZ2xlOiAocHJvZmlsZTogc3RyaW5nKSA9PiB2b2lkOwogIG9uTm90ZVRvZ2dsZTogKG5vdGU6IHN0cmluZykgPT4gdm9pZDsKICBvbkNsZWFyOiAoKSA9PiB2b2lkOwp9CgpleHBvcnQgZnVuY3Rpb24gU2NlbnRGaWx0ZXIoewogIHNlbGVjdGVkUHJvZmlsZXMsCiAgc2VsZWN0ZWROb3RlcywKICBvblByb2ZpbGVUb2dnbGUsCiAgb25Ob3RlVG9nZ2xlLAogIG9uQ2xlYXIKfTogU2NlbnRGaWx0ZXJQcm9wcykgewogIGNvbnN0IFtvcGVuLCBzZXRPcGVuXSA9IHVzZVN0YXRlKGZhbHNlKTsKICBjb25zdCBbZXhwYW5kZWRQcm9maWxlLCBzZXRFeHBhbmRlZFByb2ZpbGVdID0gdXNlU3RhdGU8c3RyaW5nIHwgbnVsbD4obnVsbCk7CgogIGNvbnN0IGhhc0FjdGl2ZUZpbHRlcnMgPSBzZWxlY3RlZFByb2ZpbGVzLmxlbmd0aCA+IDAgfHwgc2VsZWN0ZWROb3Rlcy5sZW5ndGggPiAwOwogIGNvbnN0IGFjdGl2ZUNvdW50ID0gc2VsZWN0ZWRQcm9maWxlcy5sZW5ndGggKyBzZWxlY3RlZE5vdGVzLmxlbmd0aDsKCiAgY29uc3QgaGFuZGxlUHJvZmlsZUNsaWNrID0gKGtleTogc3RyaW5nKSA9PiB7CiAgICBzZXRFeHBhbmRlZFByb2ZpbGUocHJldiA9PiBwcmV2ID09PSBrZXkgPyBudWxsIDoga2V5KTsKICB9OwoKICByZXR1cm4gKAogICAgPGRpdiBjbGFzc05hbWU9ImJnLXdoaXRlIGJvcmRlci1iIj4KICAgICAgPGRpdiBjbGFzc05hbWU9ImNvbnRhaW5lciBteC1hdXRvIHB4LTQiPgogICAgICAgIHsvKiBUb2dnbGUgYmFyICovfQogICAgICAgIDxidXR0b24KICAgICAgICAgIG9uQ2xpY2s9eygpID0+IHNldE9wZW4ocHJldiA9PiAhcHJldil9CiAgICAgICAgICBjbGFzc05hbWU9InctZnVsbCBmbGV4IGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWJldHdlZW4gcHktMyB0ZXh0LWxlZnQiCiAgICAgICAgPgogICAgICAgICAgPGRpdiBjbGFzc05hbWU9ImZsZXggaXRlbXMtY2VudGVyIGdhcC0yIj4KICAgICAgICAgICAgPFNsaWRlcnNIb3Jpem9udGFsIGNsYXNzTmFtZT0iaC00IHctNCB0ZXh0LWdyYXktNTAwIiAvPgogICAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9ImZvbnQtbWVkaXVtIHRleHQtc20iPkZpbHRlciBieSBTY2VudDwvc3Bhbj4KICAgICAgICAgICAge2hhc0FjdGl2ZUZpbHRlcnMgJiYgKAogICAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT0iaW5saW5lLWZsZXggaXRlbXMtY2VudGVyIGp1c3RpZnktY2VudGVyIHctNSBoLTUgcm91bmRlZC1mdWxsIGJnLWFtYmVyLTUwMCB0ZXh0LXdoaXRlIHRleHQteHMgZm9udC1ib2xkIj4KICAgICAgICAgICAgICAgIHthY3RpdmVDb3VudH0KICAgICAgICAgICAgICA8L3NwYW4+CiAgICAgICAgICAgICl9CiAgICAgICAgICA8L2Rpdj4KICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJmbGV4IGl0ZW1zLWNlbnRlciBnYXAtMyI+CiAgICAgICAgICAgIHtoYXNBY3RpdmVGaWx0ZXJzICYmICgKICAgICAgICAgICAgICA8YnV0dG9uCiAgICAgICAgICAgICAgICBvbkNsaWNrPXsoZSkgPT4geyBlLnN0b3BQcm9wYWdhdGlvbigpOyBvbkNsZWFyKCk7IHNldEV4cGFuZGVkUHJvZmlsZShudWxsKTsgfX0KICAgICAgICAgICAgICAgIGNsYXNzTmFtZT0idGV4dC14cyB0ZXh0LWFtYmVyLTYwMCBob3Zlcjp0ZXh0LWFtYmVyLTcwMCBmb250LW1lZGl1bSBmbGV4IGl0ZW1zLWNlbnRlciBnYXAtMSIKICAgICAgICAgICAgICA+CiAgICAgICAgICAgICAgICA8WCBjbGFzc05hbWU9ImgtMyB3LTMiIC8+IENsZWFyCiAgICAgICAgICAgICAgPC9idXR0b24+CiAgICAgICAgICAgICl9CiAgICAgICAgICAgIHtvcGVuID8gPENoZXZyb25VcCBjbGFzc05hbWU9ImgtNCB3LTQgdGV4dC1ncmF5LTQwMCIgLz4gOiA8Q2hldnJvbkRvd24gY2xhc3NOYW1lPSJoLTQgdy00IHRleHQtZ3JheS00MDAiIC8+fQogICAgICAgICAgPC9kaXY+CiAgICAgICAgPC9idXR0b24+CgogICAgICAgIHsvKiBFeHBhbmRhYmxlIGZpbHRlciBwYW5lbCAqL30KICAgICAgICA8QW5pbWF0ZVByZXNlbmNlIGluaXRpYWw9e2ZhbHNlfT4KICAgICAgICAgIHtvcGVuICYmICgKICAgICAgICAgICAgPG1vdGlvbi5kaXYKICAgICAgICAgICAgICBrZXk9ImZpbHRlci1wYW5lbCIKICAgICAgICAgICAgICBpbml0aWFsPXt7IGhlaWdodDogMCwgb3BhY2l0eTogMCB9fQogICAgICAgICAgICAgIGFuaW1hdGU9e3sgaGVpZ2h0OiAnYXV0bycsIG9wYWNpdHk6IDEgfX0KICAgICAgICAgICAgICBleGl0PXt7IGhlaWdodDogMCwgb3BhY2l0eTogMCB9fQogICAgICAgICAgICAgIHRyYW5zaXRpb249e3sgZHVyYXRpb246IDAuMjIsIGVhc2U6ICdlYXNlSW5PdXQnIH19CiAgICAgICAgICAgICAgc3R5bGU9e3sgb3ZlcmZsb3c6ICdoaWRkZW4nIH19CiAgICAgICAgICAgID4KICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0icGItNCI+CiAgICAgICAgICAgICAgICB7LyogUHJvZmlsZXMg4oCUIGhvcml6b250YWwgc2Nyb2xsaW5nIGNoaXBzICovfQogICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9ImZsZXggZ2FwLTIgb3ZlcmZsb3cteC1hdXRvIHBiLTIgc2Nyb2xsYmFyLWhpZGUiIHN0eWxlPXt7IHNjcm9sbGJhcldpZHRoOiAnbm9uZScgfX0+CiAgICAgICAgICAgICAgICAgIHtPYmplY3QuZW50cmllcyhzY2VudFByb2ZpbGVzKS5tYXAoKFtrZXksIHByb2ZpbGVdKSA9PiB7CiAgICAgICAgICAgICAgICAgICAgY29uc3QgaXNTZWxlY3RlZCA9IHNlbGVjdGVkUHJvZmlsZXMuaW5jbHVkZXMoa2V5KTsKICAgICAgICAgICAgICAgICAgICBjb25zdCBpc0V4cGFuZGVkID0gZXhwYW5kZWRQcm9maWxlID09PSBrZXk7CgogICAgICAgICAgICAgICAgICAgIHJldHVybiAoCiAgICAgICAgICAgICAgICAgICAgICA8YnV0dG9uCiAgICAgICAgICAgICAgICAgICAgICAgIGtleT17a2V5fQogICAgICAgICAgICAgICAgICAgICAgICBvbkNsaWNrPXsoKSA9PiBoYW5kbGVQcm9maWxlQ2xpY2soa2V5KX0KICAgICAgICAgICAgICAgICAgICAgICAgY2xhc3NOYW1lPXtgc2hyaW5rLTAgaW5saW5lLWZsZXggaXRlbXMtY2VudGVyIGdhcC0xLjUgcHgtMyBweS0xLjUgcm91bmRlZC1mdWxsIHRleHQtc20gZm9udC1tZWRpdW0gYm9yZGVyIHRyYW5zaXRpb24tY29sb3JzICR7CiAgICAgICAgICAgICAgICAgICAgICAgICAgaXNTZWxlY3RlZAogICAgICAgICAgICAgICAgICAgICAgICAgICAgPyAnYmctYW1iZXItNTAwIGJvcmRlci1hbWJlci01MDAgdGV4dC13aGl0ZScKICAgICAgICAgICAgICAgICAgICAgICAgICAgIDogaXNFeHBhbmRlZAogICAgICAgICAgICAgICAgICAgICAgICAgICAgPyAnYmctYW1iZXItNTAgYm9yZGVyLWFtYmVyLTMwMCB0ZXh0LWFtYmVyLTgwMCcKICAgICAgICAgICAgICAgICAgICAgICAgICAgIDogJ2JnLXdoaXRlIGJvcmRlci1ncmF5LTIwMCB0ZXh0LWdyYXktNzAwIGhvdmVyOmJvcmRlci1hbWJlci00MDAgaG92ZXI6dGV4dC1hbWJlci03MDAnCiAgICAgICAgICAgICAgICAgICAgICAgIH1gfQogICAgICAgICAgICAgICAgICAgICAgPgogICAgICAgICAgICAgICAgICAgICAgICA8c3Bhbj57cHJvZmlsZS5pY29ufTwvc3Bhbj4KICAgICAgICAgICAgICAgICAgICAgICAgPHNwYW4+e3Byb2ZpbGUubmFtZX08L3NwYW4+CiAgICAgICAgICAgICAgICAgICAgICAgIHtpc0V4cGFuZGVkICYmICFpc1NlbGVjdGVkICYmIDxDaGV2cm9uVXAgY2xhc3NOYW1lPSJoLTMgdy0zIiAvPn0KICAgICAgICAgICAgICAgICAgICAgICAgeyFpc0V4cGFuZGVkICYmICFpc1NlbGVjdGVkICYmIDxDaGV2cm9uRG93biBjbGFzc05hbWU9ImgtMyB3LTMgb3BhY2l0eS00MCIgLz59CiAgICAgICAgICAgICAgICAgICAgICA8L2J1dHRvbj4KICAgICAgICAgICAgICAgICAgICApOwogICAgICAgICAgICAgICAgICB9KX0KICAgICAgICAgICAgICAgIDwvZGl2PgoKICAgICAgICAgICAgICAgIHsvKiBOb3RlcyBwYW5lbCBmb3IgZXhwYW5kZWQgcHJvZmlsZSAqL30KICAgICAgICAgICAgICAgIDxBbmltYXRlUHJlc2VuY2UgaW5pdGlhbD17ZmFsc2V9PgogICAgICAgICAgICAgICAgICB7ZXhwYW5kZWRQcm9maWxlICYmICgKICAgICAgICAgICAgICAgICAgICA8bW90aW9uLmRpdgogICAgICAgICAgICAgICAgICAgICAga2V5PXtleHBhbmRlZFByb2ZpbGV9CiAgICAgICAgICAgICAgICAgICAgICBpbml0aWFsPXt7IGhlaWdodDogMCwgb3BhY2l0eTogMCB9fQogICAgICAgICAgICAgICAgICAgICAgYW5pbWF0ZT17eyBoZWlnaHQ6ICdhdXRvJywgb3BhY2l0eTogMSB9fQogICAgICAgICAgICAgICAgICAgICAgZXhpdD17eyBoZWlnaHQ6IDAsIG9wYWNpdHk6IDAgfX0KICAgICAgICAgICAgICAgICAgICAgIHRyYW5zaXRpb249e3sgZHVyYXRpb246IDAuMTgsIGVhc2U6ICdlYXNlSW5PdXQnIH19CiAgICAgICAgICAgICAgICAgICAgICBzdHlsZT17eyBvdmVyZmxvdzogJ2hpZGRlbicgfX0KICAgICAgICAgICAgICAgICAgICA+CiAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0ibXQtMiBwLTMgYmctZ3JheS01MCByb3VuZGVkLWxnIGJvcmRlciBib3JkZXItZ3JheS0xMDAiPgogICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iZmxleCBmbGV4LXdyYXAgZ2FwLTIiPgogICAgICAgICAgICAgICAgICAgICAgICAgIHsvKiBTZWxlY3QgYWxsIGZvciB0aGlzIHByb2ZpbGUgKi99CiAgICAgICAgICAgICAgICAgICAgICAgICAgPGJ1dHRvbgogICAgICAgICAgICAgICAgICAgICAgICAgICAgb25DbGljaz17KCkgPT4gb25Qcm9maWxlVG9nZ2xlKGV4cGFuZGVkUHJvZmlsZSl9CiAgICAgICAgICAgICAgICAgICAgICAgICAgICBjbGFzc05hbWU9e2BweC0zIHB5LTEgcm91bmRlZC1mdWxsIHRleHQteHMgZm9udC1zZW1pYm9sZCBib3JkZXIgdHJhbnNpdGlvbi1jb2xvcnMgJHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc2VsZWN0ZWRQcm9maWxlcy5pbmNsdWRlcyhleHBhbmRlZFByb2ZpbGUpCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPyAnYmctYW1iZXItNTAwIGJvcmRlci1hbWJlci01MDAgdGV4dC13aGl0ZScKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA6ICdiZy13aGl0ZSBib3JkZXItZ3JheS0zMDAgdGV4dC1ncmF5LTYwMCBob3Zlcjpib3JkZXItYW1iZXItNDAwJwogICAgICAgICAgICAgICAgICAgICAgICAgICAgfWB9CiAgICAgICAgICAgICAgICAgICAgICAgICAgPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgQWxsIHtzY2VudFByb2ZpbGVzW2V4cGFuZGVkUHJvZmlsZSBhcyBrZXlvZiB0eXBlb2Ygc2NlbnRQcm9maWxlc10/Lm5hbWV9CiAgICAgICAgICAgICAgICAgICAgICAgICAgPC9idXR0b24+CgogICAgICAgICAgICAgICAgICAgICAgICAgIHtzY2VudFByb2ZpbGVzW2V4cGFuZGVkUHJvZmlsZSBhcyBrZXlvZiB0eXBlb2Ygc2NlbnRQcm9maWxlc10/Lm5vdGVzLm1hcCgobm90ZSkgPT4gewogICAgICAgICAgICAgICAgICAgICAgICAgICAgY29uc3Qgbm90ZVNlbGVjdGVkID0gc2VsZWN0ZWROb3Rlcy5pbmNsdWRlcyhub3RlKTsKICAgICAgICAgICAgICAgICAgICAgICAgICAgIHJldHVybiAoCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxidXR0b24KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBrZXk9e25vdGV9CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgb25DbGljaz17KCkgPT4gb25Ob3RlVG9nZ2xlKG5vdGUpfQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNsYXNzTmFtZT17YHB4LTMgcHktMSByb3VuZGVkLWZ1bGwgdGV4dC14cyBib3JkZXIgdHJhbnNpdGlvbi1jb2xvcnMgJHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIG5vdGVTZWxlY3RlZAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA/ICdiZy1ibGFjayBib3JkZXItYmxhY2sgdGV4dC13aGl0ZScKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgOiAnYmctd2hpdGUgYm9yZGVyLWdyYXktMzAwIHRleHQtZ3JheS02MDAgaG92ZXI6Ym9yZGVyLWJsYWNrJwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIH1gfQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICA+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAge25vdGV9CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvYnV0dG9uPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgKTsKICAgICAgICAgICAgICAgICAgICAgICAgICB9KX0KICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgICAgICAgICA8L21vdGlvbi5kaXY+CiAgICAgICAgICAgICAgICAgICl9CiAgICAgICAgICAgICAgICA8L0FuaW1hdGVQcmVzZW5jZT4KCiAgICAgICAgICAgICAgICB7LyogQWN0aXZlIGZpbHRlcnMgc3VtbWFyeSAqL30KICAgICAgICAgICAgICAgIHtoYXNBY3RpdmVGaWx0ZXJzICYmICgKICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9Im10LTMgZmxleCBmbGV4LXdyYXAgZ2FwLTEuNSI+CiAgICAgICAgICAgICAgICAgICAge3NlbGVjdGVkUHJvZmlsZXMubWFwKHByb2ZpbGUgPT4gKAogICAgICAgICAgICAgICAgICAgICAgPHNwYW4KICAgICAgICAgICAgICAgICAgICAgICAga2V5PXtwcm9maWxlfQogICAgICAgICAgICAgICAgICAgICAgICBjbGFzc05hbWU9ImlubGluZS1mbGV4IGl0ZW1zLWNlbnRlciBnYXAtMSBweC0yIHB5LTAuNSBiZy1hbWJlci0xMDAgdGV4dC1hbWJlci04MDAgcm91bmRlZC1mdWxsIHRleHQteHMgZm9udC1tZWRpdW0iCiAgICAgICAgICAgICAgICAgICAgICA+CiAgICAgICAgICAgICAgICAgICAgICAgIHtzY2VudFByb2ZpbGVzW3Byb2ZpbGUgYXMga2V5b2YgdHlwZW9mIHNjZW50UHJvZmlsZXNdLmljb259eycgJ30KICAgICAgICAgICAgICAgICAgICAgICAge3NjZW50UHJvZmlsZXNbcHJvZmlsZSBhcyBrZXlvZiB0eXBlb2Ygc2NlbnRQcm9maWxlc10ubmFtZX0KICAgICAgICAgICAgICAgICAgICAgIDwvc3Bhbj4KICAgICAgICAgICAgICAgICAgICApKX0KICAgICAgICAgICAgICAgICAgICB7c2VsZWN0ZWROb3Rlcy5tYXAobm90ZSA9PiAoCiAgICAgICAgICAgICAgICAgICAgICA8c3BhbgogICAgICAgICAgICAgICAgICAgICAgICBrZXk9e25vdGV9CiAgICAgICAgICAgICAgICAgICAgICAgIGNsYXNzTmFtZT0iaW5saW5lLWZsZXggaXRlbXMtY2VudGVyIGdhcC0xIHB4LTIgcHktMC41IGJnLWdyYXktMTAwIHRleHQtZ3JheS03MDAgcm91bmRlZC1mdWxsIHRleHQteHMiCiAgICAgICAgICAgICAgICAgICAgICA+CiAgICAgICAgICAgICAgICAgICAgICAgIHtub3RlfQogICAgICAgICAgICAgICAgICAgICAgPC9zcGFuPgogICAgICAgICAgICAgICAgICAgICkpfQogICAgICAgICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgICAgICl9CiAgICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICAgIDwvbW90aW9uLmRpdj4KICAgICAgICAgICl9CiAgICAgICAgPC9BbmltYXRlUHJlc2VuY2U+CiAgICAgIDwvZGl2PgoKICAgICAgey8qIFN0aWNreSBhY3RpdmUgZmlsdGVycyBiYXIg4oCUIHZpc2libGUgd2hlbiBjbG9zZWQgKyBmaWx0ZXJzIGFjdGl2ZSAqL30KICAgICAge2hhc0FjdGl2ZUZpbHRlcnMgJiYgIW9wZW4gJiYgKAogICAgICAgIDxkaXYgY2xhc3NOYW1lPSJzdGlja3kgdG9wLTE2IHotMTAgYmctYW1iZXItNTAgYm9yZGVyLXQgYm9yZGVyLWFtYmVyLTEwMCI+CiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iY29udGFpbmVyIG14LWF1dG8gcHgtNCBweS0xLjUgZmxleCBpdGVtcy1jZW50ZXIgZ2FwLTIgZmxleC13cmFwIj4KICAgICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPSJ0ZXh0LXhzIHRleHQtYW1iZXItNzAwIGZvbnQtbWVkaXVtIHNocmluay0wIj5GaWx0ZXJlZDo8L3NwYW4+CiAgICAgICAgICAgIHtzZWxlY3RlZFByb2ZpbGVzLm1hcChwcm9maWxlID0+ICgKICAgICAgICAgICAgICA8c3BhbgogICAgICAgICAgICAgICAga2V5PXtwcm9maWxlfQogICAgICAgICAgICAgICAgY2xhc3NOYW1lPSJpbmxpbmUtZmxleCBpdGVtcy1jZW50ZXIgcHgtMiBweS0wLjUgYmctYW1iZXItMjAwIHRleHQtYW1iZXItOTAwIHJvdW5kZWQtZnVsbCB0ZXh0LXhzIGZvbnQtbWVkaXVtIgogICAgICAgICAgICAgID4KICAgICAgICAgICAgICAgIHtzY2VudFByb2ZpbGVzW3Byb2ZpbGUgYXMga2V5b2YgdHlwZW9mIHNjZW50UHJvZmlsZXNdLm5hbWV9CiAgICAgICAgICAgICAgPC9zcGFuPgogICAgICAgICAgICApKX0KICAgICAgICAgICAge3NlbGVjdGVkTm90ZXMubWFwKG5vdGUgPT4gKAogICAgICAgICAgICAgIDxzcGFuCiAgICAgICAgICAgICAgICBrZXk9e25vdGV9CiAgICAgICAgICAgICAgICBjbGFzc05hbWU9ImlubGluZS1mbGV4IGl0ZW1zLWNlbnRlciBweC0yIHB5LTAuNSBiZy1ncmF5LTIwMCB0ZXh0LWdyYXktNzAwIHJvdW5kZWQtZnVsbCB0ZXh0LXhzIgogICAgICAgICAgICAgID4KICAgICAgICAgICAgICAgIHtub3RlfQogICAgICAgICAgICAgIDwvc3Bhbj4KICAgICAgICAgICAgKSl9CiAgICAgICAgICAgIDxidXR0b24KICAgICAgICAgICAgICBvbkNsaWNrPXtvbkNsZWFyfQogICAgICAgICAgICAgIGNsYXNzTmFtZT0ibWwtYXV0byB0ZXh0LXhzIHRleHQtYW1iZXItNzAwIGhvdmVyOnRleHQtYW1iZXItOTAwIGZvbnQtbWVkaXVtIHNocmluay0wIgogICAgICAgICAgICA+CiAgICAgICAgICAgICAgQ2xlYXIKICAgICAgICAgICAgPC9idXR0b24+CiAgICAgICAgICA8L2Rpdj4KICAgICAgICA8L2Rpdj4KICAgICAgKX0KICAgIDwvZGl2PgogICk7Cn0K"}
+import { useState } from 'react';
+import { scentProfiles } from '../../data/products';
+import { SlidersHorizontal, ChevronDown, ChevronUp, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+
+interface ScentFilterProps {
+  selectedProfiles: string[];
+  selectedNotes: string[];
+  onProfileToggle: (profile: string) => void;
+  onNoteToggle: (note: string) => void;
+  onClear: () => void;
+}
+
+export function ScentFilter({
+  selectedProfiles,
+  selectedNotes,
+  onProfileToggle,
+  onNoteToggle,
+  onClear
+}: ScentFilterProps) {
+  const [open, setOpen] = useState(false);
+  const [expandedProfile, setExpandedProfile] = useState<string | null>(null);
+
+  const hasActiveFilters = selectedProfiles.length > 0 || selectedNotes.length > 0;
+  const activeCount = selectedProfiles.length + selectedNotes.length;
+
+  const handleProfileClick = (key: string) => {
+    setExpandedProfile(prev => prev === key ? null : key);
+  };
+
+  return (
+    <div className="bg-white border-b">
+      <div className="container mx-auto px-4">
+        {/* Toggle bar */}
+        <button
+          onClick={() => setOpen(prev => !prev)}
+          className="w-full flex items-center justify-between py-3 text-left"
+        >
+          <div className="flex items-center gap-2">
+            <SlidersHorizontal className="h-4 w-4 text-gray-500" />
+            <span className="font-medium text-sm">Filter by Scent</span>
+            {hasActiveFilters && (
+              <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-amber-500 text-white text-xs font-bold">
+                {activeCount}
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-3">
+            {hasActiveFilters && (
+              <button
+                onClick={(e) => { e.stopPropagation(); onClear(); setExpandedProfile(null); }}
+                className="text-xs text-amber-600 hover:text-amber-700 font-medium flex items-center gap-1"
+              >
+                <X className="h-3 w-3" /> Clear
+              </button>
+            )}
+            {open ? <ChevronUp className="h-4 w-4 text-gray-400" /> : <ChevronDown className="h-4 w-4 text-gray-400" />}
+          </div>
+        </button>
+
+        {/* Expandable filter panel */}
+        <AnimatePresence initial={false}>
+          {open && (
+            <motion.div
+              key="filter-panel"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.22, ease: 'easeInOut' }}
+              style={{ overflow: 'hidden' }}
+            >
+              <div className="pb-4">
+                {/* Profiles — horizontal scrolling chips */}
+                <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide" style={{ scrollbarWidth: 'none' }}>
+                  {Object.entries(scentProfiles).map(([key, profile]) => {
+                    const isSelected = selectedProfiles.includes(key);
+                    const isExpanded = expandedProfile === key;
+
+                    return (
+                      <button
+                        key={key}
+                        onClick={() => handleProfileClick(key)}
+                        className={`shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
+                          isSelected
+                            ? 'bg-amber-500 border-amber-500 text-white'
+                            : isExpanded
+                            ? 'bg-amber-50 border-amber-300 text-amber-800'
+                            : 'bg-white border-gray-200 text-gray-700 hover:border-amber-400 hover:text-amber-700'
+                        }`}
+                      >
+                        <span>{profile.icon}</span>
+                        <span>{profile.name}</span>
+                        {isExpanded && !isSelected && <ChevronUp className="h-3 w-3" />}
+                        {!isExpanded && !isSelected && <ChevronDown className="h-3 w-3 opacity-40" />}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Notes panel for expanded profile */}
+                <AnimatePresence initial={false}>
+                  {expandedProfile && (
+                    <motion.div
+                      key={expandedProfile}
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.18, ease: 'easeInOut' }}
+                      style={{ overflow: 'hidden' }}
+                    >
+                      <div className="mt-2 p-3 bg-gray-50 rounded-lg border border-gray-100">
+                        <div className="flex flex-wrap gap-2">
+                          {/* Select all for this profile */}
+                          <button
+                            onClick={() => onProfileToggle(expandedProfile)}
+                            className={`px-3 py-1 rounded-full text-xs font-semibold border transition-colors ${
+                              selectedProfiles.includes(expandedProfile)
+                                ? 'bg-amber-500 border-amber-500 text-white'
+                                : 'bg-white border-gray-300 text-gray-600 hover:border-amber-400'
+                            }`}
+                          >
+                            All {scentProfiles[expandedProfile as keyof typeof scentProfiles]?.name}
+                          </button>
+
+                          {scentProfiles[expandedProfile as keyof typeof scentProfiles]?.notes.map((note) => {
+                            const noteSelected = selectedNotes.includes(note);
+                            return (
+                              <button
+                                key={note}
+                                onClick={() => onNoteToggle(note)}
+                                className={`px-3 py-1 rounded-full text-xs border transition-colors ${
+                                  noteSelected
+                                    ? 'bg-black border-black text-white'
+                                    : 'bg-white border-gray-300 text-gray-600 hover:border-black'
+                                }`}
+                              >
+                                {note}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* Active filters summary */}
+                {hasActiveFilters && (
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {selectedProfiles.map(profile => (
+                      <span
+                        key={profile}
+                        className="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full text-xs font-medium"
+                      >
+                        {scentProfiles[profile as keyof typeof scentProfiles].icon}{' '}
+                        {scentProfiles[profile as keyof typeof scentProfiles].name}
+                      </span>
+                    ))}
+                    {selectedNotes.map(note => (
+                      <span
+                        key={note}
+                        className="inline-flex items-center gap-1 px-2 py-0.5 bg-gray-100 text-gray-700 rounded-full text-xs"
+                      >
+                        {note}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Sticky active filters bar — visible when closed + filters active */}
+      {hasActiveFilters && !open && (
+        <div className="sticky top-16 z-10 bg-amber-50 border-t border-amber-100">
+          <div className="container mx-auto px-4 py-1.5 flex items-center gap-2 flex-wrap">
+            <span className="text-xs text-amber-700 font-medium shrink-0">Filtered:</span>
+            {selectedProfiles.map(profile => (
+              <span
+                key={profile}
+                className="inline-flex items-center px-2 py-0.5 bg-amber-200 text-amber-900 rounded-full text-xs font-medium"
+              >
+                {scentProfiles[profile as keyof typeof scentProfiles].name}
+              </span>
+            ))}
+            {selectedNotes.map(note => (
+              <span
+                key={note}
+                className="inline-flex items-center px-2 py-0.5 bg-gray-200 text-gray-700 rounded-full text-xs"
+              >
+                {note}
+              </span>
+            ))}
+            <button
+              onClick={onClear}
+              className="ml-auto text-xs text-amber-700 hover:text-amber-900 font-medium shrink-0"
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

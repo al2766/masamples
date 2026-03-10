@@ -1,1 +1,25 @@
-{"data":"aW1wb3J0IHsgT3V0bGV0LCB1c2VMb2NhdGlvbiB9IGZyb20gJ3JlYWN0LXJvdXRlcic7CmltcG9ydCB7IHVzZUVmZmVjdCB9IGZyb20gJ3JlYWN0JzsKaW1wb3J0IHsgSGVhZGVyIH0gZnJvbSAnLi9IZWFkZXInOwppbXBvcnQgeyBGb290ZXIgfSBmcm9tICcuL0Zvb3Rlcic7CgpmdW5jdGlvbiBTY3JvbGxUb1RvcCgpIHsKICBjb25zdCB7IHBhdGhuYW1lIH0gPSB1c2VMb2NhdGlvbigpOwogIHVzZUVmZmVjdCgoKSA9PiB7CiAgICB3aW5kb3cuc2Nyb2xsVG8oMCwgMCk7CiAgfSwgW3BhdGhuYW1lXSk7CiAgcmV0dXJuIG51bGw7Cn0KCmV4cG9ydCBmdW5jdGlvbiBMYXlvdXQoKSB7CiAgcmV0dXJuICgKICAgIDxkaXYgY2xhc3NOYW1lPSJmbGV4IGZsZXgtY29sIG1pbi1oLXNjcmVlbiI+CiAgICAgIDxTY3JvbGxUb1RvcCAvPgogICAgICA8SGVhZGVyIC8+CiAgICAgIDxtYWluIGNsYXNzTmFtZT0iZmxleC0xIj4KICAgICAgICA8T3V0bGV0IC8+CiAgICAgIDwvbWFpbj4KICAgICAgPEZvb3RlciAvPgogICAgPC9kaXY+CiAgKTsKfQo="}
+import { Outlet, useLocation } from 'react-router';
+import { useEffect } from 'react';
+import { Header } from './Header';
+import { Footer } from './Footer';
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
+
+export function Layout() {
+  return (
+    <div className="flex flex-col min-h-screen">
+      <ScrollToTop />
+      <Header />
+      <main className="flex-1">
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
+  );
+}

@@ -1,1 +1,21 @@
-{"data":"aW1wb3J0IHsgaW5pdGlhbGl6ZUFwcCwgZ2V0QXBwcyB9IGZyb20gJ2ZpcmViYXNlL2FwcCc7CmltcG9ydCB7IGdldEZpcmVzdG9yZSB9IGZyb20gJ2ZpcmViYXNlL2ZpcmVzdG9yZSc7CmltcG9ydCB7IGdldEF1dGggfSBmcm9tICdmaXJlYmFzZS9hdXRoJzsKaW1wb3J0IHsgZ2V0U3RvcmFnZSB9IGZyb20gJ2ZpcmViYXNlL3N0b3JhZ2UnOwoKY29uc3QgZmlyZWJhc2VDb25maWcgPSB7CiAgYXBpS2V5OiAiQUl6YVN5QXoxY3JkOWVhRTVCbUhLaEtXNFBiNE9aZ0pHbVFmNWxrIiwKICBhdXRoRG9tYWluOiAibWFzYW1wbGVzLThmYTdjLmZpcmViYXNlYXBwLmNvbSIsCiAgcHJvamVjdElkOiAibWFzYW1wbGVzLThmYTdjIiwKICBzdG9yYWdlQnVja2V0OiAibWFzYW1wbGVzLThmYTdjLmZpcmViYXNlc3RvcmFnZS5hcHAiLAogIG1lc3NhZ2luZ1NlbmRlcklkOiAiMTA3NjE0MTEzODY0MyIsCiAgYXBwSWQ6ICIxOjEwNzYxNDExMzg2NDM6d2ViOmZlZTg5YjQxZWU3ZjNhYjlmNjJhMjYiLAogIG1lYXN1cmVtZW50SWQ6ICJHLUtGTktCTlRWNUYiLAp9OwoKY29uc3QgYXBwID0gZ2V0QXBwcygpLmxlbmd0aCA/IGdldEFwcHMoKVswXSA6IGluaXRpYWxpemVBcHAoZmlyZWJhc2VDb25maWcpOwoKZXhwb3J0IGNvbnN0IGRiID0gZ2V0RmlyZXN0b3JlKGFwcCk7CmV4cG9ydCBjb25zdCBhdXRoID0gZ2V0QXV0aChhcHApOwpleHBvcnQgY29uc3Qgc3RvcmFnZSA9IGdldFN0b3JhZ2UoYXBwKTsKZXhwb3J0IGRlZmF1bHQgYXBwOwo="}
+import { initializeApp, getApps } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+import { getStorage } from 'firebase/storage';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAz1crd9eaE5BmHKhKW4Pb4OZgJGmQf5lk",
+  authDomain: "masamples-8fa7c.firebaseapp.com",
+  projectId: "masamples-8fa7c",
+  storageBucket: "masamples-8fa7c.firebasestorage.app",
+  messagingSenderId: "1076141138643",
+  appId: "1:1076141138643:web:fee89b41ee7f3ab9f62a26",
+  measurementId: "G-KFNKBNTV5F",
+};
+
+const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+
+export const db = getFirestore(app);
+export const auth = getAuth(app);
+export const storage = getStorage(app);
+export default app;

@@ -1,1 +1,89 @@
-{"data":"aW1wb3J0IFJlYWN0LCB7IGNyZWF0ZUNvbnRleHQsIHVzZUNvbnRleHQsIHVzZVN0YXRlLCB1c2VFZmZlY3QsIFJlYWN0Tm9kZSB9IGZyb20gJ3JlYWN0JzsKaW1wb3J0IHsgUHJvZHVjdCB9IGZyb20gJy4uL2RhdGEvcHJvZHVjdHMnOwoKaW50ZXJmYWNlIENhcnRJdGVtIGV4dGVuZHMgUHJvZHVjdCB7CiAgcXVhbnRpdHk6IG51bWJlcjsKfQoKaW50ZXJmYWNlIENhcnRDb250ZXh0VHlwZSB7CiAgY2FydDogQ2FydEl0ZW1bXTsKICBhZGRUb0NhcnQ6IChwcm9kdWN0OiBQcm9kdWN0KSA9PiB2b2lkOwogIHJlbW92ZUZyb21DYXJ0OiAocHJvZHVjdElkOiBzdHJpbmcpID0+IHZvaWQ7CiAgdXBkYXRlUXVhbnRpdHk6IChwcm9kdWN0SWQ6IHN0cmluZywgcXVhbnRpdHk6IG51bWJlcikgPT4gdm9pZDsKICBjbGVhckNhcnQ6ICgpID0+IHZvaWQ7CiAgZ2V0Q2FydFRvdGFsOiAoKSA9PiBudW1iZXI7CiAgZ2V0Q2FydENvdW50OiAoKSA9PiBudW1iZXI7Cn0KCmNvbnN0IENhcnRDb250ZXh0ID0gY3JlYXRlQ29udGV4dDxDYXJ0Q29udGV4dFR5cGUgfCB1bmRlZmluZWQ+KHVuZGVmaW5lZCk7CgpleHBvcnQgY29uc3QgQ2FydFByb3ZpZGVyOiBSZWFjdC5GQzx7IGNoaWxkcmVuOiBSZWFjdE5vZGUgfT4gPSAoeyBjaGlsZHJlbiB9KSA9PiB7CiAgY29uc3QgW2NhcnQsIHNldENhcnRdID0gdXNlU3RhdGU8Q2FydEl0ZW1bXT4oKCkgPT4gewogICAgdHJ5IHsKICAgICAgY29uc3Qgc2F2ZWQgPSBsb2NhbFN0b3JhZ2UuZ2V0SXRlbSgnbWEtY2FydCcpOwogICAgICByZXR1cm4gc2F2ZWQgPyBKU09OLnBhcnNlKHNhdmVkKSA6IFtdOwogICAgfSBjYXRjaCB7CiAgICAgIHJldHVybiBbXTsKICAgIH0KICB9KTsKCiAgdXNlRWZmZWN0KCgpID0+IHsKICAgIGxvY2FsU3RvcmFnZS5zZXRJdGVtKCdtYS1jYXJ0JywgSlNPTi5zdHJpbmdpZnkoY2FydCkpOwogIH0sIFtjYXJ0XSk7CgogIGNvbnN0IGFkZFRvQ2FydCA9IChwcm9kdWN0OiBQcm9kdWN0KSA9PiB7CiAgICBzZXRDYXJ0KChwcmV2Q2FydCkgPT4gewogICAgICBjb25zdCBleGlzdGluZ0l0ZW0gPSBwcmV2Q2FydC5maW5kKChpdGVtKSA9PiBpdGVtLmlkID09PSBwcm9kdWN0LmlkKTsKICAgICAgaWYgKGV4aXN0aW5nSXRlbSkgewogICAgICAgIHJldHVybiBwcmV2Q2FydC5tYXAoKGl0ZW0pID0+CiAgICAgICAgICBpdGVtLmlkID09PSBwcm9kdWN0LmlkCiAgICAgICAgICAgID8geyAuLi5pdGVtLCBxdWFudGl0eTogaXRlbS5xdWFudGl0eSArIDEgfQogICAgICAgICAgICA6IGl0ZW0KICAgICAgICApOwogICAgICB9CiAgICAgIHJldHVybiBbLi4ucHJldkNhcnQsIHsgLi4ucHJvZHVjdCwgcXVhbnRpdHk6IDEgfV07CiAgICB9KTsKICB9OwoKICBjb25zdCByZW1vdmVGcm9tQ2FydCA9IChwcm9kdWN0SWQ6IHN0cmluZykgPT4gewogICAgc2V0Q2FydCgocHJldkNhcnQpID0+IHByZXZDYXJ0LmZpbHRlcigoaXRlbSkgPT4gaXRlbS5pZCAhPT0gcHJvZHVjdElkKSk7CiAgfTsKCiAgY29uc3QgdXBkYXRlUXVhbnRpdHkgPSAocHJvZHVjdElkOiBzdHJpbmcsIHF1YW50aXR5OiBudW1iZXIpID0+IHsKICAgIGlmIChxdWFudGl0eSA8PSAwKSB7CiAgICAgIHJlbW92ZUZyb21DYXJ0KHByb2R1Y3RJZCk7CiAgICAgIHJldHVybjsKICAgIH0KICAgIHNldENhcnQoKHByZXZDYXJ0KSA9PgogICAgICBwcmV2Q2FydC5tYXAoKGl0ZW0pID0+CiAgICAgICAgaXRlbS5pZCA9PT0gcHJvZHVjdElkID8geyAuLi5pdGVtLCBxdWFudGl0eSB9IDogaXRlbQogICAgICApCiAgICApOwogIH07CgogIGNvbnN0IGNsZWFyQ2FydCA9ICgpID0+IHsKICAgIHNldENhcnQoW10pOwogIH07CgogIGNvbnN0IGdldENhcnRUb3RhbCA9ICgpID0+IHsKICAgIHJldHVybiBjYXJ0LnJlZHVjZSgodG90YWwsIGl0ZW0pID0+IHRvdGFsICsgaXRlbS5wcmljZSAqIGl0ZW0ucXVhbnRpdHksIDApOwogIH07CgogIGNvbnN0IGdldENhcnRDb3VudCA9ICgpID0+IHsKICAgIHJldHVybiBjYXJ0LnJlZHVjZSgoY291bnQsIGl0ZW0pID0+IGNvdW50ICsgaXRlbS5xdWFudGl0eSwgMCk7CiAgfTsKCiAgcmV0dXJuICgKICAgIDxDYXJ0Q29udGV4dC5Qcm92aWRlcgogICAgICB2YWx1ZT17eyBjYXJ0LCBhZGRUb0NhcnQsIHJlbW92ZUZyb21DYXJ0LCB1cGRhdGVRdWFudGl0eSwgY2xlYXJDYXJ0LCBnZXRDYXJ0VG90YWwsIGdldENhcnRDb3VudCB9fQogICAgPgogICAgICB7Y2hpbGRyZW59CiAgICA8L0NhcnRDb250ZXh0LlByb3ZpZGVyPgogICk7Cn07CgpleHBvcnQgY29uc3QgdXNlQ2FydCA9ICgpID0+IHsKICBjb25zdCBjb250ZXh0ID0gdXNlQ29udGV4dChDYXJ0Q29udGV4dCk7CiAgaWYgKCFjb250ZXh0KSB0aHJvdyBuZXcgRXJyb3IoJ3VzZUNhcnQgbXVzdCBiZSB1c2VkIHdpdGhpbiBhIENhcnRQcm92aWRlcicpOwogIHJldHVybiBjb250ZXh0Owp9Owo="}
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { Product } from '../data/products';
+
+interface CartItem extends Product {
+  quantity: number;
+}
+
+interface CartContextType {
+  cart: CartItem[];
+  addToCart: (product: Product) => void;
+  removeFromCart: (productId: string) => void;
+  updateQuantity: (productId: string, quantity: number) => void;
+  clearCart: () => void;
+  getCartTotal: () => number;
+  getCartCount: () => number;
+}
+
+const CartContext = createContext<CartContextType | undefined>(undefined);
+
+export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [cart, setCart] = useState<CartItem[]>(() => {
+    try {
+      const saved = localStorage.getItem('ma-cart');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem('ma-cart', JSON.stringify(cart));
+  }, [cart]);
+
+  const addToCart = (product: Product) => {
+    setCart((prevCart) => {
+      const existingItem = prevCart.find((item) => item.id === product.id);
+      if (existingItem) {
+        return prevCart.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+      return [...prevCart, { ...product, quantity: 1 }];
+    });
+  };
+
+  const removeFromCart = (productId: string) => {
+    setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
+  };
+
+  const updateQuantity = (productId: string, quantity: number) => {
+    if (quantity <= 0) {
+      removeFromCart(productId);
+      return;
+    }
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item.id === productId ? { ...item, quantity } : item
+      )
+    );
+  };
+
+  const clearCart = () => {
+    setCart([]);
+  };
+
+  const getCartTotal = () => {
+    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+  };
+
+  const getCartCount = () => {
+    return cart.reduce((count, item) => count + item.quantity, 0);
+  };
+
+  return (
+    <CartContext.Provider
+      value={{ cart, addToCart, removeFromCart, updateQuantity, clearCart, getCartTotal, getCartCount }}
+    >
+      {children}
+    </CartContext.Provider>
+  );
+};
+
+export const useCart = () => {
+  const context = useContext(CartContext);
+  if (!context) throw new Error('useCart must be used within a CartProvider');
+  return context;
+};

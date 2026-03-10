@@ -1,1 +1,45 @@
-{"data":"aW1wb3J0IHsgdXNlUGFyYW1zIH0gZnJvbSAncmVhY3Qtcm91dGVyJzsKaW1wb3J0IHsgdXNlUHJvZHVjdHMgfSBmcm9tICcuLi8uLi9jb250ZXh0L1Byb2R1Y3RzQ29udGV4dCc7CmltcG9ydCB7IFByb2R1Y3RDYXJkIH0gZnJvbSAnLi4vY29tcG9uZW50cy9Qcm9kdWN0Q2FyZCc7CgpleHBvcnQgZnVuY3Rpb24gQ2F0ZWdvcnkoKSB7CiAgY29uc3QgeyBjYXRlZ29yeSB9ID0gdXNlUGFyYW1zPHsgY2F0ZWdvcnk6IHN0cmluZyB9PigpOwogIGNvbnN0IHsgcHJvZHVjdHMgfSA9IHVzZVByb2R1Y3RzKCk7CgogIGNvbnN0IGZpbHRlcmVkUHJvZHVjdHMgPSBwcm9kdWN0cy5maWx0ZXIoCiAgICAocHJvZHVjdCkgPT4gcHJvZHVjdC5jYXRlZ29yeSA9PT0gY2F0ZWdvcnkKICApOwoKICBjb25zdCBjYXRlZ29yeVRpdGxlczogUmVjb3JkPHN0cmluZywgc3RyaW5nPiA9IHsKICAgIG1lbnM6ICJNZW4ncyBGcmFncmFuY2VzIiwKICAgIHdvbWVuczogIldvbWVuJ3MgRnJhZ3JhbmNlcyIsCiAgICB1bmlzZXg6ICdVbmlzZXggRnJhZ3JhbmNlcycKICB9OwoKICBjb25zdCB0aXRsZSA9IGNhdGVnb3J5ID8gY2F0ZWdvcnlUaXRsZXNbY2F0ZWdvcnldIHx8ICdGcmFncmFuY2VzJyA6ICdGcmFncmFuY2VzJzsKCiAgcmV0dXJuICgKICAgIDxkaXYgY2xhc3NOYW1lPSJtaW4taC1zY3JlZW4gcHktMTIiPgogICAgICA8ZGl2IGNsYXNzTmFtZT0iY29udGFpbmVyIG14LWF1dG8gcHgtNCI+CiAgICAgICAgPGRpdiBjbGFzc05hbWU9Im1iLTgiPgogICAgICAgICAgPGgxIGNsYXNzTmFtZT0idGV4dC00eGwgbWItNCI+e3RpdGxlfTwvaDE+CiAgICAgICAgICA8cCBjbGFzc05hbWU9InRleHQtZ3JheS02MDAiPgogICAgICAgICAgICB7ZmlsdGVyZWRQcm9kdWN0cy5sZW5ndGh9IHByb2R1Y3RzIGF2YWlsYWJsZQogICAgICAgICAgPC9wPgogICAgICAgIDwvZGl2PgoKICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iZ3JpZCBncmlkLWNvbHMtMiBtZDpncmlkLWNvbHMtMyBsZzpncmlkLWNvbHMtNCBnYXAtNCBtZDpnYXAtNiI+CiAgICAgICAgICB7ZmlsdGVyZWRQcm9kdWN0cy5tYXAoKHByb2R1Y3QpID0+ICgKICAgICAgICAgICAgPFByb2R1Y3RDYXJkIGtleT17cHJvZHVjdC5pZH0gcHJvZHVjdD17cHJvZHVjdH0gLz4KICAgICAgICAgICkpfQogICAgICAgIDwvZGl2PgoKICAgICAgICB7ZmlsdGVyZWRQcm9kdWN0cy5sZW5ndGggPT09IDAgJiYgKAogICAgICAgICAgPGRpdiBjbGFzc05hbWU9InRleHQtY2VudGVyIHB5LTEyIj4KICAgICAgICAgICAgPHAgY2xhc3NOYW1lPSJ0ZXh0LWdyYXktNjAwIj5ObyBwcm9kdWN0cyBmb3VuZCBpbiB0aGlzIGNhdGVnb3J5PC9wPgogICAgICAgICAgPC9kaXY+CiAgICAgICAgKX0KICAgICAgPC9kaXY+CiAgICA8L2Rpdj4KICApOwp9"}
+import { useParams } from 'react-router';
+import { useProducts } from '../../context/ProductsContext';
+import { ProductCard } from '../components/ProductCard';
+
+export function Category() {
+  const { category } = useParams<{ category: string }>();
+  const { products } = useProducts();
+
+  const filteredProducts = products.filter(
+    (product) => product.category === category
+  );
+
+  const categoryTitles: Record<string, string> = {
+    mens: "Men's Fragrances",
+    womens: "Women's Fragrances",
+    unisex: 'Unisex Fragrances'
+  };
+
+  const title = category ? categoryTitles[category] || 'Fragrances' : 'Fragrances';
+
+  return (
+    <div className="min-h-screen py-12">
+      <div className="container mx-auto px-4">
+        <div className="mb-8">
+          <h1 className="text-4xl mb-4">{title}</h1>
+          <p className="text-gray-600">
+            {filteredProducts.length} products available
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          {filteredProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+
+        {filteredProducts.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-gray-600">No products found in this category</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

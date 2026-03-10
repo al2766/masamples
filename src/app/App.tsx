@@ -1,1 +1,19 @@
-{"data":"aW1wb3J0IHsgUm91dGVyUHJvdmlkZXIgfSBmcm9tICdyZWFjdC1yb3V0ZXInOwppbXBvcnQgeyByb3V0ZXIgfSBmcm9tICcuL3JvdXRlcyc7CmltcG9ydCB7IENhcnRQcm92aWRlciB9IGZyb20gJy4uL2NvbnRleHQvQ2FydENvbnRleHQnOwppbXBvcnQgeyBBdXRoUHJvdmlkZXIgfSBmcm9tICcuLi9jb250ZXh0L0F1dGhDb250ZXh0JzsKaW1wb3J0IHsgUHJvZHVjdHNQcm92aWRlciB9IGZyb20gJy4uL2NvbnRleHQvUHJvZHVjdHNDb250ZXh0JzsKaW1wb3J0IHsgVG9hc3RlciB9IGZyb20gJy4vY29tcG9uZW50cy91aS9zb25uZXInOwoKZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gQXBwKCkgewogIHJldHVybiAoCiAgICA8QXV0aFByb3ZpZGVyPgogICAgICA8UHJvZHVjdHNQcm92aWRlcj4KICAgICAgICA8Q2FydFByb3ZpZGVyPgogICAgICAgICAgPFJvdXRlclByb3ZpZGVyIHJvdXRlcj17cm91dGVyfSAvPgogICAgICAgICAgPFRvYXN0ZXIgLz4KICAgICAgICA8L0NhcnRQcm92aWRlcj4KICAgICAgPC9Qcm9kdWN0c1Byb3ZpZGVyPgogICAgPC9BdXRoUHJvdmlkZXI+CiAgKTsKfQo="}
+import { RouterProvider } from 'react-router';
+import { router } from './routes';
+import { CartProvider } from '../context/CartContext';
+import { AuthProvider } from '../context/AuthContext';
+import { ProductsProvider } from '../context/ProductsContext';
+import { Toaster } from './components/ui/sonner';
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <ProductsProvider>
+        <CartProvider>
+          <RouterProvider router={router} />
+          <Toaster />
+        </CartProvider>
+      </ProductsProvider>
+    </AuthProvider>
+  );
+}

@@ -1,1 +1,222 @@
-{"data":"aW1wb3J0IHsgdXNlU3RhdGUsIEZvcm1FdmVudCB9IGZyb20gJ3JlYWN0JzsKaW1wb3J0IHsgTGluaywgdXNlTmF2aWdhdGUsIHVzZUxvY2F0aW9uIH0gZnJvbSAncmVhY3Qtcm91dGVyJzsKaW1wb3J0IHsgdXNlQXV0aCB9IGZyb20gJy4uLy4uL2NvbnRleHQvQXV0aENvbnRleHQnOwppbXBvcnQgeyBtb3Rpb24sIEFuaW1hdGVQcmVzZW5jZSB9IGZyb20gJ21vdGlvbi9yZWFjdCc7CmltcG9ydCB7IEJ1dHRvbiB9IGZyb20gJy4uL2NvbXBvbmVudHMvdWkvYnV0dG9uJzsKaW1wb3J0IHsgSW5wdXQgfSBmcm9tICcuLi9jb21wb25lbnRzL3VpL2lucHV0JzsKaW1wb3J0IHsgTGFiZWwgfSBmcm9tICcuLi9jb21wb25lbnRzL3VpL2xhYmVsJzsKaW1wb3J0IHsgQ2FyZCwgQ2FyZENvbnRlbnQgfSBmcm9tICcuLi9jb21wb25lbnRzL3VpL2NhcmQnOwoKZnVuY3Rpb24gTG9naW5Gb3JtKHsgZnJvbSB9OiB7IGZyb206IHN0cmluZyB9KSB7CiAgY29uc3QgeyBsb2dpbiB9ID0gdXNlQXV0aCgpOwogIGNvbnN0IG5hdmlnYXRlID0gdXNlTmF2aWdhdGUoKTsKICBjb25zdCBbZW1haWwsIHNldEVtYWlsXSA9IHVzZVN0YXRlKCcnKTsKICBjb25zdCBbcGFzc3dvcmQsIHNldFBhc3N3b3JkXSA9IHVzZVN0YXRlKCcnKTsKICBjb25zdCBbZXJyb3IsIHNldEVycm9yXSA9IHVzZVN0YXRlKCcnKTsKICBjb25zdCBbbG9hZGluZywgc2V0TG9hZGluZ10gPSB1c2VTdGF0ZShmYWxzZSk7CgogIGNvbnN0IGhhbmRsZVN1Ym1pdCA9IGFzeW5jIChlOiBGb3JtRXZlbnQpID0+IHsKICAgIGUucHJldmVudERlZmF1bHQoKTsKICAgIHNldEVycm9yKCcnKTsKICAgIHNldExvYWRpbmcodHJ1ZSk7CiAgICB0cnkgewogICAgICBhd2FpdCBsb2dpbihlbWFpbCwgcGFzc3dvcmQpOwogICAgICBuYXZpZ2F0ZShmcm9tLCB7IHJlcGxhY2U6IHRydWUgfSk7CiAgICB9IGNhdGNoIHsKICAgICAgc2V0RXJyb3IoJ0luY29ycmVjdCBlbWFpbCBvciBwYXNzd29yZC4gUGxlYXNlIHRyeSBhZ2Fpbi4nKTsKICAgIH0gZmluYWxseSB7CiAgICAgIHNldExvYWRpbmcoZmFsc2UpOwogICAgfQogIH07CgogIHJldHVybiAoCiAgICA8PgogICAgICA8ZGl2IGNsYXNzTmFtZT0idGV4dC1jZW50ZXIgbWItNiI+CiAgICAgICAgPGgyIGNsYXNzTmFtZT0idGV4dC0yeGwgZm9udC1zZW1pYm9sZCI+U2lnbiBJbjwvaDI+CiAgICAgICAgPHAgY2xhc3NOYW1lPSJ0ZXh0LWdyYXktNTAwIHRleHQtc20gbXQtMSI+V2VsY29tZSBiYWNrIHRvIE1BIFNhbXBsZXM8L3A+CiAgICAgIDwvZGl2PgogICAgICA8Zm9ybSBvblN1Ym1pdD17aGFuZGxlU3VibWl0fSBjbGFzc05hbWU9InNwYWNlLXktNCI+CiAgICAgICAgPGRpdj4KICAgICAgICAgIDxMYWJlbCBodG1sRm9yPSJsb2dpbi1lbWFpbCIgY2xhc3NOYW1lPSJibG9jayBtYi0yIj5FbWFpbDwvTGFiZWw+CiAgICAgICAgICA8SW5wdXQKICAgICAgICAgICAgaWQ9ImxvZ2luLWVtYWlsIgogICAgICAgICAgICB0eXBlPSJlbWFpbCIKICAgICAgICAgICAgdmFsdWU9e2VtYWlsfQogICAgICAgICAgICBvbkNoYW5nZT17KGUpID0+IHNldEVtYWlsKGUudGFyZ2V0LnZhbHVlKX0KICAgICAgICAgICAgcmVxdWlyZWQKICAgICAgICAgICAgYXV0b0NvbXBsZXRlPSJlbWFpbCIKICAgICAgICAgIC8+CiAgICAgICAgPC9kaXY+CiAgICAgICAgPGRpdj4KICAgICAgICAgIDxMYWJlbCBodG1sRm9yPSJsb2dpbi1wYXNzd29yZCIgY2xhc3NOYW1lPSJibG9jayBtYi0yIj5QYXNzd29yZDwvTGFiZWw+CiAgICAgICAgICA8SW5wdXQKICAgICAgICAgICAgaWQ9ImxvZ2luLXBhc3N3b3JkIgogICAgICAgICAgICB0eXBlPSJwYXNzd29yZCIKICAgICAgICAgICAgdmFsdWU9e3Bhc3N3b3JkfQogICAgICAgICAgICBvbkNoYW5nZT17KGUpID0+IHNldFBhc3N3b3JkKGUudGFyZ2V0LnZhbHVlKX0KICAgICAgICAgICAgcmVxdWlyZWQKICAgICAgICAgICAgYXV0b0NvbXBsZXRlPSJjdXJyZW50LXBhc3N3b3JkIgogICAgICAgICAgLz4KICAgICAgICA8L2Rpdj4KICAgICAgICB7ZXJyb3IgJiYgPHAgY2xhc3NOYW1lPSJ0ZXh0LXJlZC01MDAgdGV4dC1zbSI+e2Vycm9yfTwvcD59CiAgICAgICAgPEJ1dHRvbgogICAgICAgICAgdHlwZT0ic3VibWl0IgogICAgICAgICAgY2xhc3NOYW1lPSJ3LWZ1bGwgYmctYW1iZXItNDAwIGhvdmVyOmJnLWFtYmVyLTUwMCB0ZXh0LWJsYWNrIGZvbnQtc2VtaWJvbGQiCiAgICAgICAgICBkaXNhYmxlZD17bG9hZGluZ30KICAgICAgICA+CiAgICAgICAgICB7bG9hZGluZyA/ICdTaWduaW5nIGluLi4uJyA6ICdTaWduIEluJ30KICAgICAgICA8L0J1dHRvbj4KICAgICAgPC9mb3JtPgogICAgICA8ZGl2IGNsYXNzTmFtZT0ibXQtNiB0ZXh0LWNlbnRlciBzcGFjZS15LTIiPgogICAgICAgIDxwIGNsYXNzTmFtZT0idGV4dC1zbSB0ZXh0LWdyYXktNjAwIj4KICAgICAgICAgIERvbid0IGhhdmUgYW4gYWNjb3VudD97JyAnfQogICAgICAgICAgPExpbmsgdG89Ii9zaWdudXAiIHN0YXRlPXt7IGZyb20gfX0gY2xhc3NOYW1lPSJ0ZXh0LWFtYmVyLTYwMCBob3Zlcjp1bmRlcmxpbmUgZm9udC1tZWRpdW0iPgogICAgICAgICAgICBDcmVhdGUgb25lCiAgICAgICAgICA8L0xpbms+CiAgICAgICAgPC9wPgogICAgICAgIDxwIGNsYXNzTmFtZT0idGV4dC1zbSB0ZXh0LWdyYXktNjAwIj4KICAgICAgICAgIDxMaW5rIHRvPSIvY2hlY2tvdXQiIGNsYXNzTmFtZT0idGV4dC1ncmF5LTQwMCBob3Zlcjp1bmRlcmxpbmUiPgogICAgICAgICAgICBDb250aW51ZSBhcyBndWVzdAogICAgICAgICAgPC9MaW5rPgogICAgICAgIDwvcD4KICAgICAgPC9kaXY+CiAgICA8Lz4KICApOwp9CgpmdW5jdGlvbiBTaWduVXBGb3JtKHsgZnJvbSB9OiB7IGZyb206IHN0cmluZyB9KSB7CiAgY29uc3QgeyBzaWdudXAgfSA9IHVzZUF1dGgoKTsKICBjb25zdCBuYXZpZ2F0ZSA9IHVzZU5hdmlnYXRlKCk7CiAgY29uc3QgW25hbWUsIHNldE5hbWVdID0gdXNlU3RhdGUoJycpOwogIGNvbnN0IFtlbWFpbCwgc2V0RW1haWxdID0gdXNlU3RhdGUoJycpOwogIGNvbnN0IFtwYXNzd29yZCwgc2V0UGFzc3dvcmRdID0gdXNlU3RhdGUoJycpOwogIGNvbnN0IFtlcnJvciwgc2V0RXJyb3JdID0gdXNlU3RhdGUoJycpOwogIGNvbnN0IFtsb2FkaW5nLCBzZXRMb2FkaW5nXSA9IHVzZVN0YXRlKGZhbHNlKTsKCiAgY29uc3QgaGFuZGxlU3VibWl0ID0gYXN5bmMgKGU6IEZvcm1FdmVudCkgPT4gewogICAgZS5wcmV2ZW50RGVmYXVsdCgpOwogICAgc2V0RXJyb3IoJycpOwogICAgaWYgKHBhc3N3b3JkLmxlbmd0aCA8IDYpIHsKICAgICAgc2V0RXJyb3IoJ1Bhc3N3b3JkIG11c3QgYmUgYXQgbGVhc3QgNiBjaGFyYWN0ZXJzLicpOwogICAgICByZXR1cm47CiAgICB9CiAgICBzZXRMb2FkaW5nKHRydWUpOwogICAgdHJ5IHsKICAgICAgYXdhaXQgc2lnbnVwKGVtYWlsLCBwYXNzd29yZCwgbmFtZSk7CiAgICAgIG5hdmlnYXRlKGZyb20sIHsgcmVwbGFjZTogdHJ1ZSB9KTsKICAgIH0gY2F0Y2ggKGVycjogdW5rbm93bikgewogICAgICBjb25zdCBjb2RlID0gKGVyciBhcyB7IGNvZGU/OiBzdHJpbmcgfSkuY29kZTsKICAgICAgaWYgKGNvZGUgPT09ICdhdXRoL2VtYWlsLWFscmVhZHktaW4tdXNlJykgewogICAgICAgIHNldEVycm9yKCdBbiBhY2NvdW50IHdpdGggdGhpcyBlbWFpbCBhbHJlYWR5IGV4aXN0cy4nKTsKICAgICAgfSBlbHNlIHsKICAgICAgICBzZXRFcnJvcignRmFpbGVkIHRvIGNyZWF0ZSBhY2NvdW50LiBQbGVhc2UgdHJ5IGFnYWluLicpOwogICAgICB9CiAgICB9IGZpbmFsbHkgewogICAgICBzZXRMb2FkaW5nKGZhbHNlKTsKICAgIH0KICB9OwoKICByZXR1cm4gKAogICAgPD4KICAgICAgPGRpdiBjbGFzc05hbWU9InRleHQtY2VudGVyIG1iLTYiPgogICAgICAgIDxoMiBjbGFzc05hbWU9InRleHQtMnhsIGZvbnQtc2VtaWJvbGQiPkNyZWF0ZSBBY2NvdW50PC9oMj4KICAgICAgICA8cCBjbGFzc05hbWU9InRleHQtZ3JheS01MDAgdGV4dC1zbSBtdC0xIj5Kb2luIE1BIFNhbXBsZXM8L3A+CiAgICAgIDwvZGl2PgogICAgICA8Zm9ybSBvblN1Ym1pdD17aGFuZGxlU3VibWl0fSBjbGFzc05hbWU9InNwYWNlLXktNCI+CiAgICAgICAgPGRpdj4KICAgICAgICAgIDxMYWJlbCBodG1sRm9yPSJzaWdudXAtbmFtZSIgY2xhc3NOYW1lPSJibG9jayBtYi0yIj5GdWxsIE5hbWU8L0xhYmVsPgogICAgICAgICAgPElucHV0CiAgICAgICAgICAgIGlkPSJzaWdudXAtbmFtZSIKICAgICAgICAgICAgdHlwZT0idGV4dCIKICAgICAgICAgICAgdmFsdWU9e25hbWV9CiAgICAgICAgICAgIG9uQ2hhbmdlPXsoZSkgPT4gc2V0TmFtZShlLnRhcmdldC52YWx1ZSl9CiAgICAgICAgICAgIHJlcXVpcmVkCiAgICAgICAgICAgIGF1dG9Db21wbGV0ZT0ibmFtZSIKICAgICAgICAgIC8+CiAgICAgICAgPC9kaXY+CiAgICAgICAgPGRpdj4KICAgICAgICAgIDxMYWJlbCBodG1sRm9yPSJzaWdudXAtZW1haWwiIGNsYXNzTmFtZT0iYmxvY2sgbWItMiI+RW1haWw8L0xhYmVsPgogICAgICAgICAgPElucHV0CiAgICAgICAgICAgIGlkPSJzaWdudXAtZW1haWwiCiAgICAgICAgICAgIHR5cGU9ImVtYWlsIgogICAgICAgICAgICB2YWx1ZT17ZW1haWx9CiAgICAgICAgICAgIG9uQ2hhbmdlPXsoZSkgPT4gc2V0RW1haWwoZS50YXJnZXQudmFsdWUpfQogICAgICAgICAgICByZXF1aXJlZAogICAgICAgICAgICBhdXRvQ29tcGxldGU9ImVtYWlsIgogICAgICAgICAgLz4KICAgICAgICA8L2Rpdj4KICAgICAgICA8ZGl2PgogICAgICAgICAgPExhYmVsIGh0bWxGb3I9InNpZ251cC1wYXNzd29yZCIgY2xhc3NOYW1lPSJibG9jayBtYi0yIj5QYXNzd29yZDwvTGFiZWw+CiAgICAgICAgICA8SW5wdXQKICAgICAgICAgICAgaWQ9InNpZ251cC1wYXNzd29yZCIKICAgICAgICAgICAgdHlwZT0icGFzc3dvcmQiCiAgICAgICAgICAgIHZhbHVlPXtwYXNzd29yZH0KICAgICAgICAgICAgb25DaGFuZ2U9eyhlKSA9PiBzZXRQYXNzd29yZChlLnRhcmdldC52YWx1ZSl9CiAgICAgICAgICAgIHJlcXVpcmVkCiAgICAgICAgICAgIGF1dG9Db21wbGV0ZT0ibmV3LXBhc3N3b3JkIgogICAgICAgICAgICBtaW5MZW5ndGg9ezZ9CiAgICAgICAgICAvPgogICAgICAgICAgPHAgY2xhc3NOYW1lPSJ0ZXh0LXhzIHRleHQtZ3JheS00MDAgbXQtMSI+TWluaW11bSA2IGNoYXJhY3RlcnM8L3A+CiAgICAgICAgPC9kaXY+CiAgICAgICAge2Vycm9yICYmIDxwIGNsYXNzTmFtZT0idGV4dC1yZWQtNTAwIHRleHQtc20iPntlcnJvcn08L3A+fQogICAgICAgIDxCdXR0b24KICAgICAgICAgIHR5cGU9InN1Ym1pdCIKICAgICAgICAgIGNsYXNzTmFtZT0idy1mdWxsIGJnLWFtYmVyLTQwMCBob3ZlcjpiZy1hbWJlci01MDAgdGV4dC1ibGFjayBmb250LXNlbWlib2xkIgogICAgICAgICAgZGlzYWJsZWQ9e2xvYWRpbmd9CiAgICAgICAgPgogICAgICAgICAge2xvYWRpbmcgPyAnQ3JlYXRpbmcgYWNjb3VudC4uLicgOiAnQ3JlYXRlIEFjY291bnQnfQogICAgICAgIDwvQnV0dG9uPgogICAgICA8L2Zvcm0+CiAgICAgIDxkaXYgY2xhc3NOYW1lPSJtdC02IHRleHQtY2VudGVyIHNwYWNlLXktMiI+CiAgICAgICAgPHAgY2xhc3NOYW1lPSJ0ZXh0LXNtIHRleHQtZ3JheS02MDAiPgogICAgICAgICAgQWxyZWFkeSBoYXZlIGFuIGFjY291bnQ/eycgJ30KICAgICAgICAgIDxMaW5rIHRvPSIvbG9naW4iIHN0YXRlPXt7IGZyb20gfX0gY2xhc3NOYW1lPSJ0ZXh0LWFtYmVyLTYwMCBob3Zlcjp1bmRlcmxpbmUgZm9udC1tZWRpdW0iPgogICAgICAgICAgICBTaWduIGluCiAgICAgICAgICA8L0xpbms+CiAgICAgICAgPC9wPgogICAgICAgIDxwIGNsYXNzTmFtZT0idGV4dC1zbSB0ZXh0LWdyYXktNjAwIj4KICAgICAgICAgIDxMaW5rIHRvPSIvY2hlY2tvdXQiIGNsYXNzTmFtZT0idGV4dC1ncmF5LTQwMCBob3Zlcjp1bmRlcmxpbmUiPgogICAgICAgICAgICBDb250aW51ZSBhcyBndWVzdAogICAgICAgICAgPC9MaW5rPgogICAgICAgIDwvcD4KICAgICAgPC9kaXY+CiAgICA8Lz4KICApOwp9CgpleHBvcnQgZnVuY3Rpb24gQXV0aFBhZ2UoKSB7CiAgY29uc3QgbG9jYXRpb24gPSB1c2VMb2NhdGlvbigpOwogIGNvbnN0IGZyb20gPSAobG9jYXRpb24uc3RhdGUgYXMgeyBmcm9tPzogc3RyaW5nIH0pPy5mcm9tIHx8ICcvJzsKICBjb25zdCBpc0xvZ2luID0gbG9jYXRpb24ucGF0aG5hbWUgPT09ICcvbG9naW4nOwoKICByZXR1cm4gKAogICAgPGRpdiBjbGFzc05hbWU9Im1pbi1oLXNjcmVlbiBmbGV4IGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWNlbnRlciBiZy1ncmF5LTUwIHB5LTEyIHB4LTQiPgogICAgICA8Q2FyZCBjbGFzc05hbWU9InctZnVsbCBtYXgtdy1tZCBvdmVyZmxvdy1oaWRkZW4iPgogICAgICAgIHsvKiBTdGF0aWMgbG9nbyDigJQgbmV2ZXIgbW92ZXMgKi99CiAgICAgICAgPGRpdiBjbGFzc05hbWU9InB0LTggcGItMiBmbGV4IGp1c3RpZnktY2VudGVyIj4KICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJ3LTEyIGgtMTIgYmctYmxhY2sgcm91bmRlZCBmbGV4IGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWNlbnRlciI+CiAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT0idGV4dC13aGl0ZSBmb250LWJvbGQgdGV4dC14bCI+TUE8L3NwYW4+CiAgICAgICAgICA8L2Rpdj4KICAgICAgICA8L2Rpdj4KCiAgICAgICAgey8qIEFuaW1hdGVkIGNvbnRlbnQg4oCUIG9ubHkgdGhlIGZvcm0gY29udGVudCBzbGlkZXMgKi99CiAgICAgICAgPENhcmRDb250ZW50IGNsYXNzTmFtZT0icHgtOCBwdC00IHBiLTEwIj4KICAgICAgICAgIDxBbmltYXRlUHJlc2VuY2UgbW9kZT0id2FpdCIgaW5pdGlhbD17ZmFsc2V9PgogICAgICAgICAgICA8bW90aW9uLmRpdgogICAgICAgICAgICAgIGtleT17bG9jYXRpb24ucGF0aG5hbWV9CiAgICAgICAgICAgICAgaW5pdGlhbD17eyBvcGFjaXR5OiAwLCB4OiAxNCB9fQogICAgICAgICAgICAgIGFuaW1hdGU9e3sgb3BhY2l0eTogMSwgeDogMCB9fQogICAgICAgICAgICAgIGV4aXQ9e3sgb3BhY2l0eTogMCwgeDogLTE0IH19CiAgICAgICAgICAgICAgdHJhbnNpdGlvbj17eyBkdXJhdGlvbjogMC4xOCwgZWFzZTogJ2Vhc2VPdXQnIH19CiAgICAgICAgICAgID4KICAgICAgICAgICAgICB7aXNMb2dpbgogICAgICAgICAgICAgICAgPyA8TG9naW5Gb3JtIGZyb209e2Zyb219IC8+CiAgICAgICAgICAgICAgICA6IDxTaWduVXBGb3JtIGZyb209e2Zyb219IC8+CiAgICAgICAgICAgICAgfQogICAgICAgICAgICA8L21vdGlvbi5kaXY+CiAgICAgICAgICA8L0FuaW1hdGVQcmVzZW5jZT4KICAgICAgICA8L0NhcmRDb250ZW50PgogICAgICA8L0NhcmQ+CiAgICA8L2Rpdj4KICApOwp9Cg=="}
+import { useState, FormEvent } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router';
+import { useAuth } from '../../context/AuthContext';
+import { motion, AnimatePresence } from 'motion/react';
+import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+import { Label } from '../components/ui/label';
+import { Card, CardContent } from '../components/ui/card';
+
+function LoginForm({ from }: { from: string }) {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+    try {
+      await login(email, password);
+      navigate(from, { replace: true });
+    } catch {
+      setError('Incorrect email or password. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <div className="text-center mb-6">
+        <h2 className="text-2xl font-semibold">Sign In</h2>
+        <p className="text-gray-500 text-sm mt-1">Welcome back to MA Samples</p>
+      </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <Label htmlFor="login-email" className="block mb-2">Email</Label>
+          <Input
+            id="login-email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            autoComplete="email"
+          />
+        </div>
+        <div>
+          <Label htmlFor="login-password" className="block mb-2">Password</Label>
+          <Input
+            id="login-password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            autoComplete="current-password"
+          />
+        </div>
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+        <Button
+          type="submit"
+          className="w-full bg-amber-400 hover:bg-amber-500 text-black font-semibold"
+          disabled={loading}
+        >
+          {loading ? 'Signing in...' : 'Sign In'}
+        </Button>
+      </form>
+      <div className="mt-6 text-center space-y-2">
+        <p className="text-sm text-gray-600">
+          Don't have an account?{' '}
+          <Link to="/signup" state={{ from }} className="text-amber-600 hover:underline font-medium">
+            Create one
+          </Link>
+        </p>
+        <p className="text-sm text-gray-600">
+          <Link to="/checkout" className="text-gray-400 hover:underline">
+            Continue as guest
+          </Link>
+        </p>
+      </div>
+    </>
+  );
+}
+
+function SignUpForm({ from }: { from: string }) {
+  const { signup } = useAuth();
+  const navigate = useNavigate();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setError('');
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters.');
+      return;
+    }
+    setLoading(true);
+    try {
+      await signup(email, password, name);
+      navigate(from, { replace: true });
+    } catch (err: unknown) {
+      const code = (err as { code?: string }).code;
+      if (code === 'auth/email-already-in-use') {
+        setError('An account with this email already exists.');
+      } else {
+        setError('Failed to create account. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <div className="text-center mb-6">
+        <h2 className="text-2xl font-semibold">Create Account</h2>
+        <p className="text-gray-500 text-sm mt-1">Join MA Samples</p>
+      </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <Label htmlFor="signup-name" className="block mb-2">Full Name</Label>
+          <Input
+            id="signup-name"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            autoComplete="name"
+          />
+        </div>
+        <div>
+          <Label htmlFor="signup-email" className="block mb-2">Email</Label>
+          <Input
+            id="signup-email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            autoComplete="email"
+          />
+        </div>
+        <div>
+          <Label htmlFor="signup-password" className="block mb-2">Password</Label>
+          <Input
+            id="signup-password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            autoComplete="new-password"
+            minLength={6}
+          />
+          <p className="text-xs text-gray-400 mt-1">Minimum 6 characters</p>
+        </div>
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+        <Button
+          type="submit"
+          className="w-full bg-amber-400 hover:bg-amber-500 text-black font-semibold"
+          disabled={loading}
+        >
+          {loading ? 'Creating account...' : 'Create Account'}
+        </Button>
+      </form>
+      <div className="mt-6 text-center space-y-2">
+        <p className="text-sm text-gray-600">
+          Already have an account?{' '}
+          <Link to="/login" state={{ from }} className="text-amber-600 hover:underline font-medium">
+            Sign in
+          </Link>
+        </p>
+        <p className="text-sm text-gray-600">
+          <Link to="/checkout" className="text-gray-400 hover:underline">
+            Continue as guest
+          </Link>
+        </p>
+      </div>
+    </>
+  );
+}
+
+export function AuthPage() {
+  const location = useLocation();
+  const from = (location.state as { from?: string })?.from || '/';
+  const isLogin = location.pathname === '/login';
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4">
+      <Card className="w-full max-w-md overflow-hidden">
+        {/* Static logo — never moves */}
+        <div className="pt-8 pb-2 flex justify-center">
+          <div className="w-12 h-12 bg-black rounded flex items-center justify-center">
+            <span className="text-white font-bold text-xl">MA</span>
+          </div>
+        </div>
+
+        {/* Animated content — only the form content slides */}
+        <CardContent className="px-8 pt-4 pb-10">
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={location.pathname}
+              initial={{ opacity: 0, x: 14 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -14 }}
+              transition={{ duration: 0.18, ease: 'easeOut' }}
+            >
+              {isLogin
+                ? <LoginForm from={from} />
+                : <SignUpForm from={from} />
+              }
+            </motion.div>
+          </AnimatePresence>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

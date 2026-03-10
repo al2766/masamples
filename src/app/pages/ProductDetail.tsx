@@ -1,1 +1,168 @@
-{"data":"aW1wb3J0IHsgdXNlU3RhdGUgfSBmcm9tICdyZWFjdCc7CmltcG9ydCB7IHVzZVBhcmFtcywgTGluaywgdXNlTmF2aWdhdGUgfSBmcm9tICdyZWFjdC1yb3V0ZXInOwppbXBvcnQgeyB1c2VQcm9kdWN0cyB9IGZyb20gJy4uLy4uL2NvbnRleHQvUHJvZHVjdHNDb250ZXh0JzsKaW1wb3J0IHsgQnV0dG9uIH0gZnJvbSAnLi4vY29tcG9uZW50cy91aS9idXR0b24nOwppbXBvcnQgeyBCYWRnZSB9IGZyb20gJy4uL2NvbXBvbmVudHMvdWkvYmFkZ2UnOwppbXBvcnQgeyBJbWFnZVdpdGhGYWxsYmFjayB9IGZyb20gJy4uL2NvbXBvbmVudHMvZmlnbWEvSW1hZ2VXaXRoRmFsbGJhY2snOwppbXBvcnQgeyBTZWxlY3QsIFNlbGVjdENvbnRlbnQsIFNlbGVjdEl0ZW0sIFNlbGVjdFRyaWdnZXIsIFNlbGVjdFZhbHVlIH0gZnJvbSAnLi4vY29tcG9uZW50cy91aS9zZWxlY3QnOwppbXBvcnQgeyB1c2VDYXJ0IH0gZnJvbSAnLi4vLi4vY29udGV4dC9DYXJ0Q29udGV4dCc7CmltcG9ydCB7IHRvYXN0IH0gZnJvbSAnc29ubmVyJzsKaW1wb3J0IHsgQXJyb3dMZWZ0IH0gZnJvbSAnbHVjaWRlLXJlYWN0JzsKCmV4cG9ydCBmdW5jdGlvbiBQcm9kdWN0RGV0YWlsKCkgewogIGNvbnN0IHsgaWQgfSA9IHVzZVBhcmFtczx7IGlkOiBzdHJpbmcgfT4oKTsKICBjb25zdCBuYXZpZ2F0ZSA9IHVzZU5hdmlnYXRlKCk7CiAgY29uc3QgeyBwcm9kdWN0cyB9ID0gdXNlUHJvZHVjdHMoKTsKICBjb25zdCBwcm9kdWN0ID0gcHJvZHVjdHMuZmluZCgocCkgPT4gcC5pZCA9PT0gaWQpOwogIGNvbnN0IHsgYWRkVG9DYXJ0IH0gPSB1c2VDYXJ0KCk7CiAgY29uc3QgW3NlbGVjdGVkU2l6ZSwgc2V0U2VsZWN0ZWRTaXplXSA9IHVzZVN0YXRlKHByb2R1Y3Q/LnNpemVzPy5bMF0/LnNpemUgfHwgcHJvZHVjdD8uc2l6ZSB8fCAnNW1sJyk7CgogIGlmICghcHJvZHVjdCkgewogICAgcmV0dXJuICgKICAgICAgPGRpdiBjbGFzc05hbWU9Im1pbi1oLXNjcmVlbiBweS0xMiI+CiAgICAgICAgPGRpdiBjbGFzc05hbWU9ImNvbnRhaW5lciBteC1hdXRvIHB4LTQiPgogICAgICAgICAgPGRpdiBjbGFzc05hbWU9InRleHQtY2VudGVyIj4KICAgICAgICAgICAgPGgxIGNsYXNzTmFtZT0idGV4dC00eGwgbWItNCI+UHJvZHVjdCBOb3QgRm91bmQ8L2gxPgogICAgICAgICAgICA8TGluayB0bz0iL3Nob3AiPgogICAgICAgICAgICAgIDxCdXR0b24+UmV0dXJuIHRvIFNob3A8L0J1dHRvbj4KICAgICAgICAgICAgPC9MaW5rPgogICAgICAgICAgPC9kaXY+CiAgICAgICAgPC9kaXY+CiAgICAgIDwvZGl2PgogICAgKTsKICB9CgogIGNvbnN0IHNlbGVjdGVkUHJpY2VEYXRhID0gcHJvZHVjdC5zaXplcz8uZmluZChzID0+IHMuc2l6ZSA9PT0gc2VsZWN0ZWRTaXplKTsKICBjb25zdCBjdXJyZW50UHJpY2UgPSBzZWxlY3RlZFByaWNlRGF0YT8ucHJpY2UgfHwgcHJvZHVjdC5wcmljZTsKCiAgY29uc3QgaGFuZGxlQWRkVG9DYXJ0ID0gKCkgPT4gewogICAgaWYgKCFwcm9kdWN0LmluU3RvY2spIHsKICAgICAgdG9hc3QuZXJyb3IoJ1NvcnJ5LCB0aGlzIGl0ZW0gaXMgY3VycmVudGx5IG91dCBvZiBzdG9jaycpOwogICAgICByZXR1cm47CiAgICB9CiAgICAKICAgIC8vIENyZWF0ZSBhIG1vZGlmaWVkIHByb2R1Y3Qgd2l0aCBzZWxlY3RlZCBzaXplIGFuZCBwcmljZQogICAgY29uc3QgcHJvZHVjdFRvQWRkID0gewogICAgICAuLi5wcm9kdWN0LAogICAgICBzaXplOiBzZWxlY3RlZFNpemUsCiAgICAgIHByaWNlOiBjdXJyZW50UHJpY2UKICAgIH07CiAgICAKICAgIGFkZFRvQ2FydChwcm9kdWN0VG9BZGQpOwogICAgdG9hc3Quc3VjY2VzcyhgJHtwcm9kdWN0Lm5hbWV9ICgke3NlbGVjdGVkU2l6ZX0pIGFkZGVkIHRvIGNhcnQhYCwgewogICAgICBhY3Rpb246IHsKICAgICAgICBsYWJlbDogJ1ZpZXcgQmFza2V0JywKICAgICAgICBvbkNsaWNrOiAoKSA9PiBuYXZpZ2F0ZSgnL2NhcnQnKSwKICAgICAgfSwKICAgIH0pOwogIH07CgogIHJldHVybiAoCiAgICA8ZGl2IGNsYXNzTmFtZT0ibWluLWgtc2NyZWVuIHB5LTggbWQ6cHktMTIiPgogICAgICA8ZGl2IGNsYXNzTmFtZT0iY29udGFpbmVyIG14LWF1dG8gcHgtNCI+CiAgICAgICAgey8qIEJhY2sgYnV0dG9uICovfQogICAgICAgIDxMaW5rIHRvPSIvc2hvcCIgY2xhc3NOYW1lPSJpbmxpbmUtZmxleCBpdGVtcy1jZW50ZXIgdGV4dC1ncmF5LTYwMCBob3Zlcjp0ZXh0LWJsYWNrIG1iLTYgdHJhbnNpdGlvbi1jb2xvcnMiPgogICAgICAgICAgPEFycm93TGVmdCBjbGFzc05hbWU9ImgtNCB3LTQgbXItMiIgLz4KICAgICAgICAgIEJhY2sgdG8gU2hvcAogICAgICAgIDwvTGluaz4KCiAgICAgICAgPGRpdiBjbGFzc05hbWU9ImdyaWQgZ3JpZC1jb2xzLTEgbWQ6Z3JpZC1jb2xzLTIgZ2FwLTggbGc6Z2FwLTEyIj4KICAgICAgICAgIHsvKiBJbWFnZSAqL30KICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJyZWxhdGl2ZSI+CiAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJhc3BlY3Qtc3F1YXJlIHJvdW5kZWQtbGcgb3ZlcmZsb3ctaGlkZGVuIGJnLXdoaXRlIGZsZXggaXRlbXMtY2VudGVyIGp1c3RpZnktY2VudGVyIHAtNiBzdGlja3kgdG9wLTI0Ij4KICAgICAgICAgICAgICA8SW1hZ2VXaXRoRmFsbGJhY2sKICAgICAgICAgICAgICAgIHNyYz17cHJvZHVjdC5pbWFnZX0KICAgICAgICAgICAgICAgIGFsdD17cHJvZHVjdC5uYW1lfQogICAgICAgICAgICAgICAgY2xhc3NOYW1lPSJ3LWZ1bGwgaC1mdWxsIG9iamVjdC1jb250YWluIgogICAgICAgICAgICAgIC8+CiAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgICB7LyogQmFkZ2VzICovfQogICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iYWJzb2x1dGUgdG9wLTQgcmlnaHQtNCBmbGV4IGZsZXgtY29sIGdhcC0yIj4KICAgICAgICAgICAgICB7cHJvZHVjdC5pc0Jlc3RTZWxsZXIgJiYgKAogICAgICAgICAgICAgICAgPEJhZGdlIGNsYXNzTmFtZT0iYmctYmxhY2sgdGV4dC13aGl0ZSI+QmVzdCBTZWxsZXI8L0JhZGdlPgogICAgICAgICAgICAgICl9CiAgICAgICAgICAgICAgeyFwcm9kdWN0LmluU3RvY2sgJiYgKAogICAgICAgICAgICAgICAgPEJhZGdlIHZhcmlhbnQ9ImRlc3RydWN0aXZlIj5Tb2xkIE91dDwvQmFkZ2U+CiAgICAgICAgICAgICAgKX0KICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICA8L2Rpdj4KCiAgICAgICAgICB7LyogUHJvZHVjdCBJbmZvICovfQogICAgICAgICAgPGRpdiBjbGFzc05hbWU9ImZsZXggZmxleC1jb2wiPgogICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0ibWItNiI+CiAgICAgICAgICAgICAgPHAgY2xhc3NOYW1lPSJ0ZXh0LWdyYXktNjAwIG1iLTIiPntwcm9kdWN0LmJyYW5kfTwvcD4KICAgICAgICAgICAgICA8aDEgY2xhc3NOYW1lPSJ0ZXh0LTN4bCBtZDp0ZXh0LTR4bCBtYi00Ij57cHJvZHVjdC5uYW1lfTwvaDE+CiAgICAgICAgICAgICAgPHAgY2xhc3NOYW1lPSJ0ZXh0LWdyYXktNzAwIHRleHQtbGciPntwcm9kdWN0LmRlc2NyaXB0aW9ufTwvcD4KICAgICAgICAgICAgPC9kaXY+CgogICAgICAgICAgICB7LyogTm90ZXMgKi99CiAgICAgICAgICAgIHtwcm9kdWN0Lm5vdGVzICYmICgKICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0ibWItOCBwLTYgYmctZ3JheS01MCByb3VuZGVkLWxnIj4KICAgICAgICAgICAgICAgIDxoMiBjbGFzc05hbWU9InRleHQteGwgZm9udC1zZW1pYm9sZCBtYi00Ij5GcmFncmFuY2UgTm90ZXM8L2gyPgogICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9InNwYWNlLXktMyI+CiAgICAgICAgICAgICAgICAgIDxkaXY+CiAgICAgICAgICAgICAgICAgICAgPHAgY2xhc3NOYW1lPSJ0ZXh0LXNtIGZvbnQtc2VtaWJvbGQgdGV4dC1ncmF5LTYwMCBtYi0xIj5Ub3AgTm90ZXM8L3A+CiAgICAgICAgICAgICAgICAgICAgPHAgY2xhc3NOYW1lPSJ0ZXh0LWdyYXktODAwIj57cHJvZHVjdC5ub3Rlcy50b3Auam9pbignLCAnKX08L3A+CiAgICAgICAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgICAgICAgICA8ZGl2PgogICAgICAgICAgICAgICAgICAgIDxwIGNsYXNzTmFtZT0idGV4dC1zbSBmb250LXNlbWlib2xkIHRleHQtZ3JheS02MDAgbWItMSI+TWlkZGxlIE5vdGVzPC9wPgogICAgICAgICAgICAgICAgICAgIDxwIGNsYXNzTmFtZT0idGV4dC1ncmF5LTgwMCI+e3Byb2R1Y3Qubm90ZXMubWlkZGxlLmpvaW4oJywgJyl9PC9wPgogICAgICAgICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgICAgICAgPGRpdj4KICAgICAgICAgICAgICAgICAgICA8cCBjbGFzc05hbWU9InRleHQtc20gZm9udC1zZW1pYm9sZCB0ZXh0LWdyYXktNjAwIG1iLTEiPkJhc2UgTm90ZXM8L3A+CiAgICAgICAgICAgICAgICAgICAgPHAgY2xhc3NOYW1lPSJ0ZXh0LWdyYXktODAwIj57cHJvZHVjdC5ub3Rlcy5iYXNlLmpvaW4oJywgJyl9PC9wPgogICAgICAgICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgICApfQoKICAgICAgICAgICAgey8qIFNpemUgU2VsZWN0aW9uICovfQogICAgICAgICAgICB7cHJvZHVjdC5zaXplcyAmJiBwcm9kdWN0LnNpemVzLmxlbmd0aCA+IDAgJiYgKAogICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJtYi02Ij4KICAgICAgICAgICAgICAgIDxsYWJlbCBjbGFzc05hbWU9ImJsb2NrIHRleHQtc20gZm9udC1zZW1pYm9sZCBtYi0yIj5TZWxlY3QgU2l6ZTwvbGFiZWw+CiAgICAgICAgICAgICAgICA8U2VsZWN0IHZhbHVlPXtzZWxlY3RlZFNpemV9IG9uVmFsdWVDaGFuZ2U9e3NldFNlbGVjdGVkU2l6ZX0+CiAgICAgICAgICAgICAgICAgIDxTZWxlY3RUcmlnZ2VyIGNsYXNzTmFtZT0idy1mdWxsIj4KICAgICAgICAgICAgICAgICAgICA8U2VsZWN0VmFsdWUgcGxhY2Vob2xkZXI9IlNlbGVjdCBzaXplIiAvPgogICAgICAgICAgICAgICAgICA8L1NlbGVjdFRyaWdnZXI+CiAgICAgICAgICAgICAgICAgIDxTZWxlY3RDb250ZW50PgogICAgICAgICAgICAgICAgICAgIHtwcm9kdWN0LnNpemVzLm1hcCgoc2l6ZU9wdGlvbikgPT4gKAogICAgICAgICAgICAgICAgICAgICAgPFNlbGVjdEl0ZW0ga2V5PXtzaXplT3B0aW9uLnNpemV9IHZhbHVlPXtzaXplT3B0aW9uLnNpemV9PgogICAgICAgICAgICAgICAgICAgICAgICB7c2l6ZU9wdGlvbi5zaXplfSAtIMKje3NpemVPcHRpb24ucHJpY2UudG9GaXhlZCgyKX0KICAgICAgICAgICAgICAgICAgICAgIDwvU2VsZWN0SXRlbT4KICAgICAgICAgICAgICAgICAgICApKX0KICAgICAgICAgICAgICAgICAgPC9TZWxlY3RDb250ZW50PgogICAgICAgICAgICAgICAgPC9TZWxlY3Q+CiAgICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICAgICl9CgogICAgICAgICAgICB7LyogUHJpY2UgKi99CiAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJtYi02Ij4KICAgICAgICAgICAgICA8cCBjbGFzc05hbWU9InRleHQtM3hsIGZvbnQtYm9sZCI+wqN7Y3VycmVudFByaWNlLnRvRml4ZWQoMil9PC9wPgogICAgICAgICAgICA8L2Rpdj4KCiAgICAgICAgICAgIHsvKiBBZGQgdG8gQ2FydCBCdXR0b24gKi99CiAgICAgICAgICAgIDxCdXR0b24KICAgICAgICAgICAgICBvbkNsaWNrPXtoYW5kbGVBZGRUb0NhcnR9CiAgICAgICAgICAgICAgZGlzYWJsZWQ9eyFwcm9kdWN0LmluU3RvY2t9CiAgICAgICAgICAgICAgc2l6ZT0ibGciCiAgICAgICAgICAgICAgY2xhc3NOYW1lPSJ3LWZ1bGwgbWQ6dy1hdXRvIG1kOm1pbi13LVsyMDBweF0gYmctYW1iZXItNDAwIGhvdmVyOmJnLWFtYmVyLTUwMCB0ZXh0LWJsYWNrIGZvbnQtc2VtaWJvbGQiCiAgICAgICAgICAgID4KICAgICAgICAgICAgICB7cHJvZHVjdC5pblN0b2NrID8gJ0FkZCB0byBDYXJ0JyA6ICdPdXQgb2YgU3RvY2snfQogICAgICAgICAgICA8L0J1dHRvbj4KCiAgICAgICAgICAgIHsvKiBBZGRpdGlvbmFsIEluZm8gKi99CiAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJtdC04IHB0LTggYm9yZGVyLXQiPgogICAgICAgICAgICAgIDxoMyBjbGFzc05hbWU9ImZvbnQtc2VtaWJvbGQgbWItMyI+UHJvZHVjdCBEZXRhaWxzPC9oMz4KICAgICAgICAgICAgICA8dWwgY2xhc3NOYW1lPSJzcGFjZS15LTIgdGV4dC1ncmF5LTYwMCI+CiAgICAgICAgICAgICAgICA8bGk+4oCiIDEwMCUgQXV0aGVudGljIGZyYWdyYW5jZSBzYW1wbGVzPC9saT4KICAgICAgICAgICAgICAgIDxsaT7igKIgUGVyZmVjdCBmb3IgdGVzdGluZyBiZWZvcmUgYnV5aW5nIGEgZnVsbCBib3R0bGU8L2xpPgogICAgICAgICAgICAgICAgPGxpPuKAoiBTZWN1cmVseSBwYWNrYWdlZCBhbmQgc2hpcHBlZCB3aXRoIGNhcmU8L2xpPgogICAgICAgICAgICAgICAgPGxpPuKAoiBBbGwgc2FtcGxlcyBhcmUgZGVjYW50ZWQgZnJvbSBnZW51aW5lIHBlcmZ1bWVzPC9saT4KICAgICAgICAgICAgICA8L3VsPgogICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgIDwvZGl2PgogICAgICAgIDwvZGl2PgogICAgICA8L2Rpdj4KICAgIDwvZGl2PgogICk7Cn0K"}
+import { useState } from 'react';
+import { useParams, Link, useNavigate } from 'react-router';
+import { useProducts } from '../../context/ProductsContext';
+import { Button } from '../components/ui/button';
+import { Badge } from '../components/ui/badge';
+import { ImageWithFallback } from '../components/figma/ImageWithFallback';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
+import { useCart } from '../../context/CartContext';
+import { toast } from 'sonner';
+import { ArrowLeft } from 'lucide-react';
+
+export function ProductDetail() {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { products } = useProducts();
+  const product = products.find((p) => p.id === id);
+  const { addToCart } = useCart();
+  const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0]?.size || product?.size || '5ml');
+
+  if (!product) {
+    return (
+      <div className="min-h-screen py-12">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <h1 className="text-4xl mb-4">Product Not Found</h1>
+            <Link to="/shop">
+              <Button>Return to Shop</Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const selectedPriceData = product.sizes?.find(s => s.size === selectedSize);
+  const currentPrice = selectedPriceData?.price || product.price;
+
+  const handleAddToCart = () => {
+    if (!product.inStock) {
+      toast.error('Sorry, this item is currently out of stock');
+      return;
+    }
+    
+    // Create a modified product with selected size and price
+    const productToAdd = {
+      ...product,
+      size: selectedSize,
+      price: currentPrice
+    };
+    
+    addToCart(productToAdd);
+    toast.success(`${product.name} (${selectedSize}) added to cart!`, {
+      action: {
+        label: 'View Basket',
+        onClick: () => navigate('/cart'),
+      },
+    });
+  };
+
+  return (
+    <div className="min-h-screen py-8 md:py-12">
+      <div className="container mx-auto px-4">
+        {/* Back button */}
+        <Link to="/shop" className="inline-flex items-center text-gray-600 hover:text-black mb-6 transition-colors">
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to Shop
+        </Link>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+          {/* Image */}
+          <div className="relative">
+            <div className="aspect-square rounded-lg overflow-hidden bg-white flex items-center justify-center p-6 sticky top-24">
+              <ImageWithFallback
+                src={product.image}
+                alt={product.name}
+                className="w-full h-full object-contain"
+              />
+            </div>
+            {/* Badges */}
+            <div className="absolute top-4 right-4 flex flex-col gap-2">
+              {product.isBestSeller && (
+                <Badge className="bg-black text-white">Best Seller</Badge>
+              )}
+              {!product.inStock && (
+                <Badge variant="destructive">Sold Out</Badge>
+              )}
+            </div>
+          </div>
+
+          {/* Product Info */}
+          <div className="flex flex-col">
+            <div className="mb-6">
+              <p className="text-gray-600 mb-2">{product.brand}</p>
+              <h1 className="text-3xl md:text-4xl mb-4">{product.name}</h1>
+              <p className="text-gray-700 text-lg">{product.description}</p>
+            </div>
+
+            {/* Notes */}
+            {product.notes && (
+              <div className="mb-8 p-6 bg-gray-50 rounded-lg">
+                <h2 className="text-xl font-semibold mb-4">Fragrance Notes</h2>
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-sm font-semibold text-gray-600 mb-1">Top Notes</p>
+                    <p className="text-gray-800">{product.notes.top.join(', ')}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-600 mb-1">Middle Notes</p>
+                    <p className="text-gray-800">{product.notes.middle.join(', ')}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-600 mb-1">Base Notes</p>
+                    <p className="text-gray-800">{product.notes.base.join(', ')}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Size Selection */}
+            {product.sizes && product.sizes.length > 0 && (
+              <div className="mb-6">
+                <label className="block text-sm font-semibold mb-2">Select Size</label>
+                <Select value={selectedSize} onValueChange={setSelectedSize}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select size" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {product.sizes.map((sizeOption) => (
+                      <SelectItem key={sizeOption.size} value={sizeOption.size}>
+                        {sizeOption.size} - £{sizeOption.price.toFixed(2)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            {/* Price */}
+            <div className="mb-6">
+              <p className="text-3xl font-bold">£{currentPrice.toFixed(2)}</p>
+            </div>
+
+            {/* Add to Cart Button */}
+            <Button
+              onClick={handleAddToCart}
+              disabled={!product.inStock}
+              size="lg"
+              className="w-full md:w-auto md:min-w-[200px] bg-amber-400 hover:bg-amber-500 text-black font-semibold"
+            >
+              {product.inStock ? 'Add to Cart' : 'Out of Stock'}
+            </Button>
+
+            {/* Additional Info */}
+            <div className="mt-8 pt-8 border-t">
+              <h3 className="font-semibold mb-3">Product Details</h3>
+              <ul className="space-y-2 text-gray-600">
+                <li>• 100% Authentic fragrance samples</li>
+                <li>• Perfect for testing before buying a full bottle</li>
+                <li>• Securely packaged and shipped with care</li>
+                <li>• All samples are decanted from genuine perfumes</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,1 +1,186 @@
-{"data":"aW1wb3J0IHsgdXNlU3RhdGUgfSBmcm9tICdyZWFjdCc7CmltcG9ydCB7IExpbmssIHVzZU5hdmlnYXRlIH0gZnJvbSAncmVhY3Qtcm91dGVyJzsKaW1wb3J0IHsgTWVudSwgU2hvcHBpbmdDYXJ0LCBDaGV2cm9uRG93biwgQ2hldnJvblVwLCBVc2VyIH0gZnJvbSAnbHVjaWRlLXJlYWN0JzsKaW1wb3J0IHsgdXNlQ2FydCB9IGZyb20gJy4uLy4uL2NvbnRleHQvQ2FydENvbnRleHQnOwppbXBvcnQgeyB1c2VBdXRoIH0gZnJvbSAnLi4vLi4vY29udGV4dC9BdXRoQ29udGV4dCc7CmltcG9ydCB7IEJ1dHRvbiB9IGZyb20gJy4vdWkvYnV0dG9uJzsKaW1wb3J0IHsgU2hlZXQsIFNoZWV0Q29udGVudCwgU2hlZXRUcmlnZ2VyLCBTaGVldFRpdGxlLCBTaGVldERlc2NyaXB0aW9uIH0gZnJvbSAnLi91aS9zaGVldCc7CmltcG9ydCB7IGJyYW5kcyB9IGZyb20gJy4uLy4uL2RhdGEvcHJvZHVjdHMnOwppbXBvcnQgeyBJbWFnZVdpdGhGYWxsYmFjayB9IGZyb20gJy4vZmlnbWEvSW1hZ2VXaXRoRmFsbGJhY2snOwoKZXhwb3J0IGZ1bmN0aW9uIEhlYWRlcigpIHsKICBjb25zdCB7IGdldENhcnRDb3VudCB9ID0gdXNlQ2FydCgpOwogIGNvbnN0IHsgdXNlciwgbG9nb3V0IH0gPSB1c2VBdXRoKCk7CiAgY29uc3QgbmF2aWdhdGUgPSB1c2VOYXZpZ2F0ZSgpOwogIGNvbnN0IFttb2JpbGVNZW51T3Blbiwgc2V0TW9iaWxlTWVudU9wZW5dID0gdXNlU3RhdGUoZmFsc2UpOwogIGNvbnN0IFticmFuZHNFeHBhbmRlZCwgc2V0QnJhbmRzRXhwYW5kZWRdID0gdXNlU3RhdGUoZmFsc2UpOwogIGNvbnN0IGNhcnRDb3VudCA9IGdldENhcnRDb3VudCgpOwoKICBjb25zdCBoYW5kbGVMb2dvdXQgPSBhc3luYyAoKSA9PiB7CiAgICBhd2FpdCBsb2dvdXQoKTsKICAgIHNldE1vYmlsZU1lbnVPcGVuKGZhbHNlKTsKICAgIG5hdmlnYXRlKCcvJyk7CiAgfTsKCiAgcmV0dXJuICgKICAgIDxoZWFkZXIgY2xhc3NOYW1lPSJzdGlja3kgdG9wLTAgei01MCB3LWZ1bGwgYm9yZGVyLWIgYmctd2hpdGUiPgogICAgICA8ZGl2IGNsYXNzTmFtZT0iY29udGFpbmVyIG14LWF1dG8gcHgtNCI+CiAgICAgICAgPGRpdiBjbGFzc05hbWU9ImZsZXggaC0xNiBpdGVtcy1jZW50ZXIganVzdGlmeS1iZXR3ZWVuIj4KICAgICAgICAgIHsvKiBMb2dvICovfQogICAgICAgICAgPExpbmsgdG89Ii8iIGNsYXNzTmFtZT0iZmxleCBpdGVtcy1jZW50ZXIgc3BhY2UteC0zIj4KICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9InctMTAgaC0xMCBiZy1ibGFjayByb3VuZGVkIGZsZXggaXRlbXMtY2VudGVyIGp1c3RpZnktY2VudGVyIj4KICAgICAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9InRleHQtd2hpdGUgZm9udC1ib2xkIHRleHQteGwiPk1BPC9zcGFuPgogICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9InRleHQteGwgbWQ6dGV4dC0yeGwgZm9udC1zZW1pYm9sZCI+U2FtcGxlczwvZGl2PgogICAgICAgICAgPC9MaW5rPgoKICAgICAgICAgIHsvKiBEZXNrdG9wIE5hdmlnYXRpb24gKi99CiAgICAgICAgICA8bmF2IGNsYXNzTmFtZT0iaGlkZGVuIG1kOmZsZXggaXRlbXMtY2VudGVyIHNwYWNlLXgtNiI+CiAgICAgICAgICAgIDxMaW5rIHRvPSIvc2hvcCIgY2xhc3NOYW1lPSJob3Zlcjp0ZXh0LWFtYmVyLTYwMCB0cmFuc2l0aW9uLWNvbG9ycyI+CiAgICAgICAgICAgICAgQWxsIFBlcmZ1bWVzCiAgICAgICAgICAgIDwvTGluaz4KICAgICAgICAgICAgPExpbmsgdG89Ii9pbnNwaXJlZCIgY2xhc3NOYW1lPSJob3Zlcjp0ZXh0LWFtYmVyLTYwMCB0cmFuc2l0aW9uLWNvbG9ycyI+CiAgICAgICAgICAgICAgSW5zcGlyZWQgQnkKICAgICAgICAgICAgPC9MaW5rPgogICAgICAgICAgICA8TGluayB0bz0iL25ldy1hcnJpdmFscyIgY2xhc3NOYW1lPSJob3Zlcjp0ZXh0LWFtYmVyLTYwMCB0cmFuc2l0aW9uLWNvbG9ycyI+CiAgICAgICAgICAgICAgTmV3IEFycml2YWxzCiAgICAgICAgICAgIDwvTGluaz4KICAgICAgICAgICAge3VzZXIgPyAoCiAgICAgICAgICAgICAgPExpbmsgdG89Ii9hY2NvdW50IiBjbGFzc05hbWU9ImhvdmVyOnRleHQtYW1iZXItNjAwIHRyYW5zaXRpb24tY29sb3JzIGZsZXggaXRlbXMtY2VudGVyIGdhcC0xIj4KICAgICAgICAgICAgICAgIDxVc2VyIGNsYXNzTmFtZT0iaC00IHctNCIgLz4KICAgICAgICAgICAgICAgIEFjY291bnQKICAgICAgICAgICAgICA8L0xpbms+CiAgICAgICAgICAgICkgOiAoCiAgICAgICAgICAgICAgPExpbmsgdG89Ii9sb2dpbiIgY2xhc3NOYW1lPSJob3Zlcjp0ZXh0LWFtYmVyLTYwMCB0cmFuc2l0aW9uLWNvbG9ycyI+CiAgICAgICAgICAgICAgICBTaWduIEluCiAgICAgICAgICAgICAgPC9MaW5rPgogICAgICAgICAgICApfQogICAgICAgICAgPC9uYXY+CgogICAgICAgICAgey8qIENhcnQgJiBNb2JpbGUgTWVudSAqL30KICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJmbGV4IGl0ZW1zLWNlbnRlciBzcGFjZS14LTQiPgogICAgICAgICAgICA8TGluayB0bz0iL2NhcnQiPgogICAgICAgICAgICAgIDxCdXR0b24gdmFyaWFudD0iZ2hvc3QiIHNpemU9Imljb24iIGNsYXNzTmFtZT0icmVsYXRpdmUiPgogICAgICAgICAgICAgICAgPFNob3BwaW5nQ2FydCBjbGFzc05hbWU9ImgtNSB3LTUiIC8+CiAgICAgICAgICAgICAgICB7Y2FydENvdW50ID4gMCAmJiAoCiAgICAgICAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT0iYWJzb2x1dGUgLXRvcC0xIC1yaWdodC0xIGgtNSB3LTUgcm91bmRlZC1mdWxsIGJnLWFtYmVyLTUwMCB0ZXh0LXdoaXRlIHRleHQteHMgZmxleCBpdGVtcy1jZW50ZXIganVzdGlmeS1jZW50ZXIgZm9udC1zZW1pYm9sZCI+CiAgICAgICAgICAgICAgICAgICAge2NhcnRDb3VudH0KICAgICAgICAgICAgICAgICAgPC9zcGFuPgogICAgICAgICAgICAgICAgKX0KICAgICAgICAgICAgICA8L0J1dHRvbj4KICAgICAgICAgICAgPC9MaW5rPgoKICAgICAgICAgICAgey8qIE1vYmlsZSBNZW51IEJ1dHRvbiAqL30KICAgICAgICAgICAgPFNoZWV0IG9wZW49e21vYmlsZU1lbnVPcGVufSBvbk9wZW5DaGFuZ2U9e3NldE1vYmlsZU1lbnVPcGVufT4KICAgICAgICAgICAgICA8U2hlZXRUcmlnZ2VyIGFzQ2hpbGQ+CiAgICAgICAgICAgICAgICA8QnV0dG9uIHZhcmlhbnQ9Imdob3N0IiBzaXplPSJpY29uIiBjbGFzc05hbWU9Im1kOmhpZGRlbiI+CiAgICAgICAgICAgICAgICAgIDxNZW51IGNsYXNzTmFtZT0iaC02IHctNiIgLz4KICAgICAgICAgICAgICAgIDwvQnV0dG9uPgogICAgICAgICAgICAgIDwvU2hlZXRUcmlnZ2VyPgogICAgICAgICAgICAgIDxTaGVldENvbnRlbnQgc2lkZT0icmlnaHQiIGNsYXNzTmFtZT0idy1bMjgwcHhdIGJnLWJsYWNrIHRleHQtd2hpdGUgYm9yZGVyLWwgYm9yZGVyLWdyYXktODAwIj4KICAgICAgICAgICAgICAgIDxTaGVldFRpdGxlIGNsYXNzTmFtZT0ic3Itb25seSI+TmF2aWdhdGlvbiBNZW51PC9TaGVldFRpdGxlPgogICAgICAgICAgICAgICAgPFNoZWV0RGVzY3JpcHRpb24gY2xhc3NOYW1lPSJzci1vbmx5Ij4KICAgICAgICAgICAgICAgICAgQnJvd3NlIG91ciBmcmFncmFuY2UgY2F0ZWdvcmllcyBhbmQgYnJhbmRzCiAgICAgICAgICAgICAgICA8L1NoZWV0RGVzY3JpcHRpb24+CiAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT0iZmxleCBmbGV4LWNvbCBzcGFjZS15LTYgbXQtMTYgcHgtMiI+CiAgICAgICAgICAgICAgICAgIHsvKiBNYWluIE1lbnUgSXRlbXMgKi99CiAgICAgICAgICAgICAgICAgIDxkaXY+CiAgICAgICAgICAgICAgICAgICAgPExpbmsKICAgICAgICAgICAgICAgICAgICAgIHRvPSIvc2hvcCIKICAgICAgICAgICAgICAgICAgICAgIGNsYXNzTmFtZT0iYmxvY2sgcHktMyBweC00IG1iLTMgdGV4dC1jZW50ZXIgYmctYW1iZXItNDAwIHRleHQtYmxhY2sgZm9udC1zZW1pYm9sZCByb3VuZGVkIGhvdmVyOmJnLWFtYmVyLTUwMCB0cmFuc2l0aW9uLWNvbG9ycyIKICAgICAgICAgICAgICAgICAgICAgIG9uQ2xpY2s9eygpID0+IHNldE1vYmlsZU1lbnVPcGVuKGZhbHNlKX0KICAgICAgICAgICAgICAgICAgICA+CiAgICAgICAgICAgICAgICAgICAgICBBbGwgUGVyZnVtZXMKICAgICAgICAgICAgICAgICAgICA8L0xpbms+CgogICAgICAgICAgICAgICAgICAgIHsvKiBCcmFuZHMgQWNjb3JkaW9uICovfQogICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJtYi0zIj4KICAgICAgICAgICAgICAgICAgICAgIDxidXR0b24KICAgICAgICAgICAgICAgICAgICAgICAgb25DbGljaz17KCkgPT4gc2V0QnJhbmRzRXhwYW5kZWQoIWJyYW5kc0V4cGFuZGVkKX0KICAgICAgICAgICAgICAgICAgICAgICAgY2xhc3NOYW1lPSJ3LWZ1bGwgZmxleCBpdGVtcy1jZW50ZXIganVzdGlmeS1iZXR3ZWVuIHB5LTMgcHgtNCBiZy1ncmF5LTkwMCByb3VuZGVkIGhvdmVyOmJnLWdyYXktODAwIHRyYW5zaXRpb24tY29sb3JzIgogICAgICAgICAgICAgICAgICAgICAgPgogICAgICAgICAgICAgICAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9ImZvbnQtc2VtaWJvbGQgdGV4dC1hbWJlci00MDAiPkJyYW5kczwvc3Bhbj4KICAgICAgICAgICAgICAgICAgICAgICAge2JyYW5kc0V4cGFuZGVkID8gKAogICAgICAgICAgICAgICAgICAgICAgICAgIDxDaGV2cm9uVXAgY2xhc3NOYW1lPSJoLTQgdy00IHRleHQtYW1iZXItNDAwIiAvPgogICAgICAgICAgICAgICAgICAgICAgICApIDogKAogICAgICAgICAgICAgICAgICAgICAgICAgIDxDaGV2cm9uRG93biBjbGFzc05hbWU9ImgtNCB3LTQgdGV4dC1hbWJlci00MDAiIC8+CiAgICAgICAgICAgICAgICAgICAgICAgICl9CiAgICAgICAgICAgICAgICAgICAgICA8L2J1dHRvbj4KICAgICAgICAgICAgICAgICAgICAgIHticmFuZHNFeHBhbmRlZCAmJiAoCiAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPSJtdC0yIHBsLTQgcHItMiBzcGFjZS15LTIgbWF4LWgtNjAgb3ZlcmZsb3cteS1hdXRvIj4KICAgICAgICAgICAgICAgICAgICAgICAgICB7YnJhbmRzLm1hcCgoYnJhbmQpID0+ICgKICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxMaW5rCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGtleT17YnJhbmR9CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHRvPXtgL2JyYW5kLyR7YnJhbmQudG9Mb3dlckNhc2UoKS5yZXBsYWNlKC9ccysvZywgJy0nKX1gfQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjbGFzc05hbWU9ImJsb2NrIHRleHQtZ3JheS0yMDAgaG92ZXI6dGV4dC1hbWJlci00MDAgdHJhbnNpdGlvbi1jb2xvcnMgcHktMiIKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgb25DbGljaz17KCkgPT4gc2V0TW9iaWxlTWVudU9wZW4oZmFsc2UpfQogICAgICAgICAgICAgICAgICAgICAgICAgICAgPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICB7YnJhbmR9CiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L0xpbms+CiAgICAgICAgICAgICAgICAgICAgICAgICAgKSl9CiAgICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgICAgICAgICAgICAgKX0KICAgICAgICAgICAgICAgICAgICA8L2Rpdj4KCiAgICAgICAgICAgICAgICAgICAgPExpbmsKICAgICAgICAgICAgICAgICAgICAgIHRvPSIvaW5zcGlyZWQiCiAgICAgICAgICAgICAgICAgICAgICBjbGFzc05hbWU9ImJsb2NrIHB5LTMgcHgtNCBtYi0zIHRleHQtZ3JheS0yMDAgaG92ZXI6dGV4dC1hbWJlci00MDAgdHJhbnNpdGlvbi1jb2xvcnMgYm9yZGVyIGJvcmRlci1ncmF5LTcwMCByb3VuZGVkIgogICAgICAgICAgICAgICAgICAgICAgb25DbGljaz17KCkgPT4gc2V0TW9iaWxlTWVudU9wZW4oZmFsc2UpfQogICAgICAgICAgICAgICAgICAgID4KICAgICAgICAgICAgICAgICAgICAgIEluc3BpcmVkIEJ5CiAgICAgICAgICAgICAgICAgICAgPC9MaW5rPgoKICAgICAgICAgICAgICAgICAgICA8TGluawogICAgICAgICAgICAgICAgICAgICAgdG89Ii9uZXctYXJyaXZhbHMiCiAgICAgICAgICAgICAgICAgICAgICBjbGFzc05hbWU9ImJsb2NrIHB5LTMgcHgtNCBtYi0zIHRleHQtZ3JheS0yMDAgaG92ZXI6dGV4dC1hbWJlci00MDAgdHJhbnNpdGlvbi1jb2xvcnMgYm9yZGVyIGJvcmRlci1ncmF5LTcwMCByb3VuZGVkIgogICAgICAgICAgICAgICAgICAgICAgb25DbGljaz17KCkgPT4gc2V0TW9iaWxlTWVudU9wZW4oZmFsc2UpfQogICAgICAgICAgICAgICAgICAgID4KICAgICAgICAgICAgICAgICAgICAgIE5ldyBBcnJpdmFscwogICAgICAgICAgICAgICAgICAgIDwvTGluaz4KCiAgICAgICAgICAgICAgICAgICAgey8qIEF1dGggTGlua3MgKi99CiAgICAgICAgICAgICAgICAgICAge3VzZXIgPyAoCiAgICAgICAgICAgICAgICAgICAgICA8PgogICAgICAgICAgICAgICAgICAgICAgICA8TGluawogICAgICAgICAgICAgICAgICAgICAgICAgIHRvPSIvYWNjb3VudCIKICAgICAgICAgICAgICAgICAgICAgICAgICBjbGFzc05hbWU9ImJsb2NrIHB5LTMgcHgtNCBtYi0zIHRleHQtZ3JheS0yMDAgaG92ZXI6dGV4dC1hbWJlci00MDAgdHJhbnNpdGlvbi1jb2xvcnMgYm9yZGVyIGJvcmRlci1ncmF5LTcwMCByb3VuZGVkIGZsZXggaXRlbXMtY2VudGVyIGdhcC0yIgogICAgICAgICAgICAgICAgICAgICAgICAgIG9uQ2xpY2s9eygpID0+IHNldE1vYmlsZU1lbnVPcGVuKGZhbHNlKX0KICAgICAgICAgICAgICAgICAgICAgICAgPgogICAgICAgICAgICAgICAgICAgICAgICAgIDxVc2VyIGNsYXNzTmFtZT0iaC00IHctNCIgLz4KICAgICAgICAgICAgICAgICAgICAgICAgICBNeSBBY2NvdW50CiAgICAgICAgICAgICAgICAgICAgICAgIDwvTGluaz4KICAgICAgICAgICAgICAgICAgICAgICAgPGJ1dHRvbgogICAgICAgICAgICAgICAgICAgICAgICAgIG9uQ2xpY2s9e2hhbmRsZUxvZ291dH0KICAgICAgICAgICAgICAgICAgICAgICAgICBjbGFzc05hbWU9InctZnVsbCB0ZXh0LWxlZnQgcHktMyBweC00IHRleHQtZ3JheS00MDAgaG92ZXI6dGV4dC13aGl0ZSB0cmFuc2l0aW9uLWNvbG9ycyBib3JkZXIgYm9yZGVyLWdyYXktODAwIHJvdW5kZWQgdGV4dC1zbSIKICAgICAgICAgICAgICAgICAgICAgICAgPgogICAgICAgICAgICAgICAgICAgICAgICAgIFNpZ24gT3V0CiAgICAgICAgICAgICAgICAgICAgICAgIDwvYnV0dG9uPgogICAgICAgICAgICAgICAgICAgICAgPC8+CiAgICAgICAgICAgICAgICAgICAgKSA6ICgKICAgICAgICAgICAgICAgICAgICAgIDw+CiAgICAgICAgICAgICAgICAgICAgICAgIDxMaW5rCiAgICAgICAgICAgICAgICAgICAgICAgICAgdG89Ii9sb2dpbiIKICAgICAgICAgICAgICAgICAgICAgICAgICBjbGFzc05hbWU9ImJsb2NrIHB5LTMgcHgtNCBtYi0zIHRleHQtZ3JheS0yMDAgaG92ZXI6dGV4dC1hbWJlci00MDAgdHJhbnNpdGlvbi1jb2xvcnMgYm9yZGVyIGJvcmRlci1ncmF5LTcwMCByb3VuZGVkIgogICAgICAgICAgICAgICAgICAgICAgICAgIG9uQ2xpY2s9eygpID0+IHNldE1vYmlsZU1lbnVPcGVuKGZhbHNlKX0KICAgICAgICAgICAgICAgICAgICAgICAgPgogICAgICAgICAgICAgICAgICAgICAgICAgIFNpZ24gSW4KICAgICAgICAgICAgICAgICAgICAgICAgPC9MaW5rPgogICAgICAgICAgICAgICAgICAgICAgICA8TGluawogICAgICAgICAgICAgICAgICAgICAgICAgIHRvPSIvc2lnbnVwIgogICAgICAgICAgICAgICAgICAgICAgICAgIGNsYXNzTmFtZT0iYmxvY2sgcHktMyBweC00IHRleHQtZ3JheS0yMDAgaG92ZXI6dGV4dC1hbWJlci00MDAgdHJhbnNpdGlvbi1jb2xvcnMgYm9yZGVyIGJvcmRlci1ncmF5LTcwMCByb3VuZGVkIgogICAgICAgICAgICAgICAgICAgICAgICAgIG9uQ2xpY2s9eygpID0+IHNldE1vYmlsZU1lbnVPcGVuKGZhbHNlKX0KICAgICAgICAgICAgICAgICAgICAgICAgPgogICAgICAgICAgICAgICAgICAgICAgICAgIENyZWF0ZSBBY2NvdW50CiAgICAgICAgICAgICAgICAgICAgICAgIDwvTGluaz4KICAgICAgICAgICAgICAgICAgICAgIDwvPgogICAgICAgICAgICAgICAgICAgICl9CiAgICAgICAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICAgICAgPC9TaGVldENvbnRlbnQ+CiAgICAgICAgICAgIDwvU2hlZXQ+CiAgICAgICAgICA8L2Rpdj4KICAgICAgICA8L2Rpdj4KICAgICAgPC9kaXY+CiAgICA8L2hlYWRlcj4KICApOwp9Cg=="}
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router';
+import { Menu, ShoppingCart, ChevronDown, ChevronUp, User } from 'lucide-react';
+import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
+import { Button } from './ui/button';
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from './ui/sheet';
+import { brands } from '../../data/products';
+import { ImageWithFallback } from './figma/ImageWithFallback';
+
+export function Header() {
+  const { getCartCount } = useCart();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [brandsExpanded, setBrandsExpanded] = useState(false);
+  const cartCount = getCartCount();
+
+  const handleLogout = async () => {
+    await logout();
+    setMobileMenuOpen(false);
+    navigate('/');
+  };
+
+  return (
+    <header className="sticky top-0 z-50 w-full border-b bg-white">
+      <div className="container mx-auto px-4">
+        <div className="flex h-16 items-center justify-between">
+          {/* Logo */}
+          <Link to="/" className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-black rounded flex items-center justify-center">
+              <span className="text-white font-bold text-xl">MA</span>
+            </div>
+            <div className="text-xl md:text-2xl font-semibold">Samples</div>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-6">
+            <Link to="/shop" className="hover:text-amber-600 transition-colors">
+              All Perfumes
+            </Link>
+            <Link to="/inspired" className="hover:text-amber-600 transition-colors">
+              Inspired By
+            </Link>
+            <Link to="/new-arrivals" className="hover:text-amber-600 transition-colors">
+              New Arrivals
+            </Link>
+            {user ? (
+              <Link to="/account" className="hover:text-amber-600 transition-colors flex items-center gap-1">
+                <User className="h-4 w-4" />
+                Account
+              </Link>
+            ) : (
+              <Link to="/login" className="hover:text-amber-600 transition-colors">
+                Sign In
+              </Link>
+            )}
+          </nav>
+
+          {/* Cart & Mobile Menu */}
+          <div className="flex items-center space-x-4">
+            <Link to="/cart">
+              <Button variant="ghost" size="icon" className="relative">
+                <ShoppingCart className="h-5 w-5" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-amber-500 text-white text-xs flex items-center justify-center font-semibold">
+                    {cartCount}
+                  </span>
+                )}
+              </Button>
+            </Link>
+
+            {/* Mobile Menu Button */}
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="md:hidden">
+                  <Menu className="h-6 w-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[280px] bg-black text-white border-l border-gray-800">
+                <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+                <SheetDescription className="sr-only">
+                  Browse our fragrance categories and brands
+                </SheetDescription>
+                <div className="flex flex-col space-y-6 mt-16 px-2">
+                  {/* Main Menu Items */}
+                  <div>
+                    <Link
+                      to="/shop"
+                      className="block py-3 px-4 mb-3 text-center bg-amber-400 text-black font-semibold rounded hover:bg-amber-500 transition-colors"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      All Perfumes
+                    </Link>
+
+                    {/* Brands Accordion */}
+                    <div className="mb-3">
+                      <button
+                        onClick={() => setBrandsExpanded(!brandsExpanded)}
+                        className="w-full flex items-center justify-between py-3 px-4 bg-gray-900 rounded hover:bg-gray-800 transition-colors"
+                      >
+                        <span className="font-semibold text-amber-400">Brands</span>
+                        {brandsExpanded ? (
+                          <ChevronUp className="h-4 w-4 text-amber-400" />
+                        ) : (
+                          <ChevronDown className="h-4 w-4 text-amber-400" />
+                        )}
+                      </button>
+                      {brandsExpanded && (
+                        <div className="mt-2 pl-4 pr-2 space-y-2 max-h-60 overflow-y-auto">
+                          {brands.map((brand) => (
+                            <Link
+                              key={brand}
+                              to={`/brand/${brand.toLowerCase().replace(/\s+/g, '-')}`}
+                              className="block text-gray-200 hover:text-amber-400 transition-colors py-2"
+                              onClick={() => setMobileMenuOpen(false)}
+                            >
+                              {brand}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <Link
+                      to="/inspired"
+                      className="block py-3 px-4 mb-3 text-gray-200 hover:text-amber-400 transition-colors border border-gray-700 rounded"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Inspired By
+                    </Link>
+
+                    <Link
+                      to="/new-arrivals"
+                      className="block py-3 px-4 mb-3 text-gray-200 hover:text-amber-400 transition-colors border border-gray-700 rounded"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      New Arrivals
+                    </Link>
+
+                    {/* Auth Links */}
+                    {user ? (
+                      <>
+                        <Link
+                          to="/account"
+                          className="block py-3 px-4 mb-3 text-gray-200 hover:text-amber-400 transition-colors border border-gray-700 rounded flex items-center gap-2"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          <User className="h-4 w-4" />
+                          My Account
+                        </Link>
+                        <button
+                          onClick={handleLogout}
+                          className="w-full text-left py-3 px-4 text-gray-400 hover:text-white transition-colors border border-gray-800 rounded text-sm"
+                        >
+                          Sign Out
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <Link
+                          to="/login"
+                          className="block py-3 px-4 mb-3 text-gray-200 hover:text-amber-400 transition-colors border border-gray-700 rounded"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          Sign In
+                        </Link>
+                        <Link
+                          to="/signup"
+                          className="block py-3 px-4 text-gray-200 hover:text-amber-400 transition-colors border border-gray-700 rounded"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          Create Account
+                        </Link>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
